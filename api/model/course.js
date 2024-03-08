@@ -28,7 +28,7 @@ const schema = new mongoose.Schema({
     required: true,
   },
   start_time_in_hours: {
-    type: Date, 
+    type: Number, 
     required: true,
   },
   createdAt: {

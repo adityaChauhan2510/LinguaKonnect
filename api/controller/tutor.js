@@ -22,9 +22,9 @@ export const login = async (req, res, next) => {
   }
 };
 
-export const register = async (req, res,next) => {
+export const register = async (req, res, next) => {
   try {
-    const { name, email,experience, password } = req.body;
+    const { name, email, experience, password } = req.body;
 
     let tutor = await Tutor.findOne({ email });
 
@@ -32,30 +32,27 @@ export const register = async (req, res,next) => {
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    tutor = await Tutor.create({ name, email,experience, password: hashedPassword });
+    tutor = await Tutor.create({ name, email, experience, password: hashedPassword });
 
     sendCookie(tutor, res, "Registered Successfully", 201);
   } catch (error) {
     next(error);
-    
   }
 };
 
-export const getProfile= async(req,res,next)=>{
-  try{
-    const id= req.params.id;
-    const data= await Tutor.findById(id)
-    if(!data) return next(new ErrorHandler("Tutor doesn't Exist",400))
+export const getProfile = async (req, res, next) => {
+  try {
+    const id = req.params.id;
+    const data = await Tutor.findById(id);
+    if (!data) return next(new ErrorHandler("Tutor doesn't Exist", 400));
     res.status(200).json({
-      success:true,
+      success: true,
       result: data,
-    })
+    });
+  } catch (err) {
+    next(err);
   }
-  catch(err){
-    next(err)
-  }
-}
-
+};
 
 export const getMyProfile = (req, res) => {
   res.status(200).json({
@@ -64,42 +61,37 @@ export const getMyProfile = (req, res) => {
   });
 };
 
-
 export const logout = (req, res) => {
   res
     .status(200)
     .cookie("token", "", {
       expires: new Date(Date.now()),
-      sameSite: process.env.NODE_ENV === "Develpoment" ? "lax" : "none",
-      secure: process.env.NODE_ENV === "Develpoment" ? false : true,
+      sameSite: process.env.NODE_ENV === "development" ? "lax" : "none",
+      secure: process.env.NODE_ENV === "development" ? false : true,
     })
     .json({
       success: true,
-      message:"logged out successfully",
+      message: "Logged out successfully",
     });
 };
 
+export const editProfile = async (req, res, next) => {
+  try {
+    const { name, email, experience } = req.body;
+    const tutorId = req.tutor._id; // Assuming you have the tutor ID in the request
 
-export const editProfile = async (req, res,next) => {
-    try {
-      const { name, email,experience } = req.body;
-  
-      // let tutor = await Tutor.findOne({ email });
-  
-      // if (tutor) return next(new ErrorHandler("Tutor Already Exist", 400));
-  
-    //   const hashedPassword = await bcrypt.hash(password, 10);
-  
-      let tutor = await Tutor.updateMany({ name, email,experience });
-      console.log(tutor)
-    
-      // sendCookie(tutor, res, "Updated Successfully", 201);
-      res.status(200).json({
-        success: true,
-        message:"Updated Successfully",
-      })
-    } catch (error) {
-      next(error);
-      
+    let tutor = await Tutor.findByIdAndUpdate(tutorId, { name, email, experience }, { new: true });
+
+    if (!tutor) {
+      return next(new ErrorHandler("Tutor not found", 404));
     }
-  };
+
+    res.status(200).json({
+      success: true,
+      message: "Updated Successfully",
+      tutor: tutor,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
