@@ -1,7 +1,13 @@
 import React from 'react'
+import Navbar from '../components/Navbar'
+import SearchField from '../components/SearchField'
+
 
 export default function StudentHome() {
   return (
-    <div>StudentHome</div>
+    <>
+      <Navbar />
+      <SearchField />
+    </>
   )
 }
