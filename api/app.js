@@ -2,7 +2,7 @@ import express from 'express';
 import dotenv from 'dotenv'
 import cookieParser from 'cookie-parser';
 import cors from "cors";
-// import userRouter from './routes/user.js'
+import userRouter from './route/user.js'
 // import shopKeeperRouter from './routes/shopKeeper.js'
 export const app= express();
 
@@ -15,7 +15,7 @@ app.use(cookieParser());
 app.use(cors({ credentials: true, origin: 'http://localhost:3000', methods: ["GET", "POST", "PUT", "DELETE"] }));
 
 
-// app.use("/api/v1/users", userRouter);
+app.use("/api/v1/user", userRouter);
 // app.use("/api/v1/shopKeepers", shopKeeperRouter);
 
 app.get("/", (req, res) => {
