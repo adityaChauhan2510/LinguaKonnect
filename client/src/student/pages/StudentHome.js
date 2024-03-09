@@ -6,6 +6,7 @@ import Experience from "../components/Experience";
 import axios from "axios";
 import StudentCard from "../components/StudentCard";
 import NotificationReceiver from "../components/Notification";
+
 export default function StudentHome() {
   const [mergedData, setMergedData] = useState({});
   const [searchQuery, setSearchQuery] = useState("");
@@ -71,7 +72,7 @@ export default function StudentHome() {
   return (
     <>
       <Navbar />
-      <NotificationReceiver/>
+      <NotificationReceiver />
       <SearchField searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
 
       <div className="flex flex-row gap-5">

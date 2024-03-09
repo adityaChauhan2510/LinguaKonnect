@@ -42,7 +42,7 @@ export default function SignUp() {
     }
   };
 
-  if (isAuthenticated) return <Navigate to={"/studenthome"} />;
+  if (isAuthenticated) return <Navigate to={"/tutorhome"} />;
 
   return (
     <div className="text-center my-2">
