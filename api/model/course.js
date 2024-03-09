@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 
 const schema = new mongoose.Schema({
-  name: {
+  name:{
     type: String,
     required: true,
   },
@@ -23,22 +23,38 @@ const schema = new mongoose.Schema({
     type: Number,
     required: true,
   },
-  slot_time_in_min: {
-    type: Number,
-    required: true,
-  },
-  rating: {
-    type: Number, 
-    default:5,
-  },
-  reviews:[{
-    user_name:{
-      type:String,
+  slot_time_in_min: [
+    {
+      type: Number,
+      required: true,
     },
-    user_comment:{
-      type:String,
-    }
-  }],
+  ],
+  time_durations: [
+    {
+      start_time: {
+        type: String,
+        required: true,
+      },
+      end_time: {
+        type: String,
+        required: true,
+      },
+    },
+  ],
+  rating: {
+    type: Number,
+    default: 5,
+  },
+  reviews: [
+    {
+      user_name: {
+        type: String,
+      },
+      user_comment: {
+        type: String,
+      },
+    },
+  ],
   createdAt: {
     type: Date,
     default: Date.now,
@@ -46,4 +62,3 @@ const schema = new mongoose.Schema({
 });
 
 export const Course = mongoose.model("Course", schema);
-
