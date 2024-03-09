@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
-import { useParams,Navigate } from "react-router-dom";
+import { useParams, Navigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import SelectDuration from "../components/SelectDuration";
 import { Button } from "@mui/material";
@@ -9,14 +9,13 @@ import Notes from "../components/Notes";
 import axios from "axios";
 import { Context } from "../../index.js";
 
-
 export default function CourseDetails() {
   const [courseDetails, setCourseDetails] = useState({});
-  const [isEnrolled, setIsEnrolled] = useState(false);
-  const { user,isAuthenticated } = useContext(Context);
+  const [isEnrolled, setIsEnrolled] = useState(true);
+  const { user } = useContext(Context);
   const { id } = useParams();
 
-  console.log(`Hello ${user}`)
+  console.log(`Hello ${user}`);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -28,9 +27,12 @@ export default function CourseDetails() {
           }
         );
 
-        const enrolledCourse =await user.courses.find((course) => course.courseId === id);
-        
-        setIsEnrolled(!!enrolledCourse);
+        const enrolledCourse = user.courses.find(
+          (course) => course.courseId === id
+        );
+
+        if (enrolledCourse) setIsEnrolled(true);
+        //setIsEnrolled(!!enrolledCourse);
         setCourseDetails(response.data.result);
       } catch (err) {
         console.error("Error fetching data:", err.message);
@@ -40,7 +42,7 @@ export default function CourseDetails() {
     fetchData();
   }, [id, user.courses]);
 
-  if (!isAuthenticated) return <Navigate to={"/login"} />;
+  //if (!isAuthenticated) return <Navigate to={"/login"} />;
 
   return (
     <>

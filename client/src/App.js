@@ -65,8 +65,8 @@ export default function App() {
         <Route path="/" element={<Landing />} />
         <Route path="login" element={<Login />} />
         <Route path="signup" element={<Signup />} />
-        <Route path="tutorLogin" element={<TutorLogin />} />
-        <Route path="tutorSignup" element={<TutorSignUp />} />
+        <Route path="tutorlogin" element={<TutorLogin />} />
+        <Route path="tutorsignup" element={<TutorSignUp />} />
         <Route path="tutorhome" element={<TutorHome />} />
         <Route path="tutorprofile" element={<TutorProfile />} />
         <Route path="studenthome" element={<StudentHome />} />

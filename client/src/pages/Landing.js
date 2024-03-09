@@ -1,14 +1,15 @@
-import React from "react";
 import { Link } from "react-router-dom";
-import Dropdown from "../comp/Dropdown";
-
-// import "../path-to-your-stylesheet.css"; // Add the path to your stylesheet if you have one
+import * as React from "react";
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import FormControl from "@mui/material/FormControl";
+import Select from "@mui/material/Select";
 
 const BackgroundImage = "/images/bg.png";
 
 const HeaderStyle = {
   width: "100%",
-  height: "100vh",
+  height: "70vh",
   background: `url(${BackgroundImage})`,
   backgroundPosition: "center",
   backgroundRepeat: "no-repeat",
@@ -17,27 +18,38 @@ const HeaderStyle = {
 
 export default function LandingPage() {
   return (
-    <header style={HeaderStyle}>
-      <h1 className="main-title text-center">Lingua-Konnect</h1>
-      <p className="main-para text-center">Join us now and don't waste time</p>
-      <div className="buttons text-center">
-        <Link to="/login">
-          <button className="primary-button">Log in as Student</button>
-        </Link>
-        <Link to="/tutorLogin">
-          <button className="primary-button">Log in as Tutor</button>
-        </Link>
-        <Link to="/signup">
-          <button className="primary-button">Register as Student</button>
-        </Link>
-        <Link to="/tutorSignup">
-          <button className="primary-button">Register as Tutor</button>
-        </Link>
+    <>
+      <header style={HeaderStyle}>
+        <h1 className="main-title text-center">Lingua-Konnect</h1>
+        <p className="main-para text-center">
+          Knowledge of languages is the doorway to wisdom
+        </p>
+      </header>
 
-        {/* <button className="bg-white">
-          <Dropdown />
-        </button> */}
+      <div className="my-10 mx-auto flex flex-row justify-center gap-5">
+        <FormControl sx={{ minWidth: 120 }} size="small">
+          <InputLabel id="demo-select-small-label">Login</InputLabel>
+          <Select labelId="demo-select-small-label" id="demo-select-small">
+            <MenuItem component={Link} to="/login">
+              Student
+            </MenuItem>
+            <MenuItem component={Link} to="/tutorlogin">
+              Tutor
+            </MenuItem>
+          </Select>
+        </FormControl>
+        <FormControl sx={{ minWidth: 120 }} size="small">
+          <InputLabel id="demo-select-small-label">Register</InputLabel>
+          <Select labelId="demo-select-small-label" id="demo-select-small">
+            <MenuItem component={Link} to="/signup">
+              Student
+            </MenuItem>
+            <MenuItem component={Link} to="/tutorsignup">
+              Tutor
+            </MenuItem>
+          </Select>
+        </FormControl>
       </div>
-    </header>
+    </>
   );
 }

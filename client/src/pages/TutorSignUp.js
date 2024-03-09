@@ -1,15 +1,13 @@
 import React, { useState, useContext } from "react";
 import toast, { Toaster } from "react-hot-toast";
-import { useNavigate, Link, Navigate } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import axios from "axios";
 import { Context } from "../index";
-
-const backgroundImage = "/images/bg2.jpg"; // Update with the actual path
 
 export default function SignUp() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
-  const [experience, setExperience] = useState(0);
+  const [experience, setExperience] = useState();
   const [password, setPassword] = useState("");
   const { isAuthenticated, setIsAuthenticated, loading, setLoading } =
     useContext(Context);
@@ -46,23 +44,17 @@ export default function SignUp() {
 
   if (isAuthenticated) return <Navigate to={"/studenthome"} />;
 
-  const containerStyle = {
-    backgroundImage: `url(${backgroundImage})`,
-    backgroundPosition: "center",
-    backgroundRepeat: "no-repeat",
-    backgroundSize: "cover",
-    minHeight: "100vh",
-  };
-
   return (
-    <div style={containerStyle} className="text-center m-auto">
-      <h1>Join us</h1>
-      <h5>Create your personal account</h5>
+    <div className="text-center my-2">
+      <h2 className="text-2xl font-bold">Create your personal account</h2>
       <form onSubmit={submitHandler}>
         <div>
-          <label htmlFor="name">UserName</label>
+          <label htmlFor="name" className="text-lg font-bold">
+            UserName
+          </label>
           <br />
           <input
+            className="my-2"
             type="text"
             id="name"
             onChange={(e) => setName(e.target.value)}
@@ -71,9 +63,12 @@ export default function SignUp() {
         </div>
 
         <div>
-          <label htmlFor="email">Email address</label>
+          <label htmlFor="email" className="text-lg font-bold py-2">
+            Email address
+          </label>
           <br />
           <input
+            className="my-2"
             type="email"
             id="email"
             onChange={(e) => setEmail(e.target.value)}
@@ -82,9 +77,12 @@ export default function SignUp() {
         </div>
 
         <div>
-          <label htmlFor="email">Experience</label>
+          <label htmlFor="email" className="text-lg font-bold py-2">
+            Experience
+          </label>
           <br />
           <input
+            className="my-2"
             type="experience"
             id="experience"
             onChange={(e) => setExperience(e.target.value)}
@@ -93,9 +91,12 @@ export default function SignUp() {
         </div>
 
         <div>
-          <label htmlFor="password">Password</label>
+          <label htmlFor="password" className="text-lg font-bold py-2">
+            Password
+          </label>
           <br />
           <input
+            className="my-2"
             type="password"
             id="password"
             onChange={(e) => setPassword(e.target.value)}
@@ -108,15 +109,21 @@ export default function SignUp() {
           <span>I agree to all statements in terms of service</span>.
         </p>
 
-        <div>
-          <button type="submit">Register</button>
+        <div className="my-3">
+          <button
+            type="submit"
+            type="submit"
+            className="bg-green-800 px-10 py-2 text-white rounded-lg"
+          >
+            Register
+          </button>
         </div>
       </form>
 
       <footer>
-        <p>
-          <Link to="/">Back to Homepage</Link>.
-        </p>
+        <Link to="/" className="bg-yellow-600 px-10 py-2 text-white rounded-lg">
+          Back to Homepage
+        </Link>
       </footer>
       <Toaster />
     </div>

@@ -5,11 +5,12 @@ import { Context } from "../index";
 import axios from "axios";
 import { Navigate } from "react-router-dom";
 
-const backgroundImage = "/images/bg2.jpg"; // Update with the actual path
-
 export default function Login() {
   const { isAuthenticated, setIsAuthenticated, loading, setLoading } =
     useContext(Context);
+
+  const [student, setStudent] = useState(false);
+  const [tutor, setTutor] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -44,23 +45,18 @@ export default function Login() {
 
   if (isAuthenticated) return <Navigate to={"/studenthome"} />;
 
-  const containerStyle = {
-    backgroundImage: `url(${backgroundImage})`,
-    backgroundPosition: "center",
-    backgroundRepeat: "no-repeat",
-    backgroundSize: "cover",
-    minHeight: "100vh",
-  };
-
   return (
-    <div style={containerStyle} className="text-center m-auto">
-      <h2>Login</h2>
+    <div className="text-center my-20">
+      <h2 className="text-2xl font-bold">Login</h2>
 
       <form onSubmit={submitHandler}>
-        <div>
-          <label htmlFor="email">Email Address</label>
+        <div className="my-2 px-2">
+          <label htmlFor="email" className="text-lg font-bold py-2">
+            Email Address
+          </label>
           <br />
           <input
+            className="my-4"
             type="email"
             id="email"
             onChange={(e) => setEmail(e.target.value)}
@@ -69,9 +65,12 @@ export default function Login() {
         </div>
 
         <div>
-          <label htmlFor="password">Password</label>
+          <label htmlFor="password" className="text-lg font-bold py-2">
+            Password
+          </label>
           <br />
           <input
+            className="my-4"
             type="password"
             id="password"
             onChange={(e) => setPassword(e.target.value)}
@@ -80,7 +79,12 @@ export default function Login() {
         </div>
 
         <div>
-          <button id="sub_btn" type="submit" disabled={loading}>
+          <button
+            id="sub_btn"
+            type="submit"
+            disabled={loading}
+            className="bg-green-800 px-10 py-2 text-white rounded-lg"
+          >
             {loading ? "Logging in..." : "Login"}
           </button>
         </div>
