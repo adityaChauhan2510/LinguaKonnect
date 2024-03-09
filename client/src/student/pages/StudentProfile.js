@@ -8,7 +8,9 @@ export default function StudentProfile() {
   const [data, setData] = useState([]);
   const { user, isAuthenticated } = useContext(Context);
 
-  console.log(user)
+  
+
+  console.log(user);
 
   useEffect(() => {
     const fetchData = async () => {

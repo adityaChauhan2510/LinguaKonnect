@@ -16,7 +16,8 @@ import axios from "axios";
 import { Context } from "./index";
 
 export default function App() {
-  const { setUser, setIsAuthenticated, setLoading,setTutor,user,tutor } = useContext(Context);
+  const { setUser, setIsAuthenticated, setLoading, setTutor, user, tutor } =
+    useContext(Context);
 
   useEffect(() => {
     setLoading(true);
@@ -25,9 +26,8 @@ export default function App() {
         withCredentials: true,
       })
       .then((res) => {
-        
         setUser(res.data.user);
-       
+
         setIsAuthenticated(true);
         setLoading(false);
       })
@@ -45,7 +45,7 @@ export default function App() {
         withCredentials: true,
       })
       .then((res) => {
-        setTutor(res.data.tutor);
+        setTutor(() => res.data.tutor);
         console.log(tutor);
         setIsAuthenticated(true);
         setLoading(false);
@@ -56,8 +56,6 @@ export default function App() {
         setLoading(false);
       });
   }, []);
-
-
 
   return (
     <BrowserRouter>

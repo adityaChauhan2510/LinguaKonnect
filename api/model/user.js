@@ -23,8 +23,8 @@ const schema = new mongoose.Schema({
       },
       notes: [
         {
-          type: String, 
-          required: true,
+          type: String,
+          required: false,
         },
       ],
     },
