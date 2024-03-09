@@ -32,7 +32,7 @@ export default function StudentCard({ course }) {
           Language : {course.language}
         </p>
         <p className="mx-3 text-md font-semibold">
-          TutorName : {course.tutor.name}
+          {/* TutorName : {course.tutor.name} */}
         </p>
         <p className="mx-3 text-md font-semibold py-2">
           Ratings: <Rating name="half-rating" defaultValue={course.rating} />
