@@ -11,7 +11,7 @@ export default function StudentCard({ key, course }) {
   const navigate = useNavigate();
 
   function handleClick() {
-    navigate(`/course/${course._id}`); 
+    navigate(`/course/${course._id}`);
   }
 
   return (
