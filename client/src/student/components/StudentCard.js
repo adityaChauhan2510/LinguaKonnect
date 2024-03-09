@@ -9,21 +9,19 @@ import { useNavigate } from "react-router-dom";
 export default function StudentCard({ key, course }) {
   const navigate = useNavigate();
 
-  function handleClick() {
+  function handleClick(e) {
+    console.log(e);
     navigate(`/course/${course._id}`);
   }
 
   return (
     <div className="shadow-5xl my-7 px-5">
-      <Card
-        sx={{ backgroundColor: "#ccc", cursor: "pointer" }}
-        onClick={handleClick}
-      >
+      <Card sx={{ cursor: "pointer" }} onClick={handleClick}>
         <CardHeader title={course.name} />
         <CardMedia
           component="img"
           height="60"
-          image="images/images.jpeg"
+          image="images/bg2.jpg"
           alt="Image"
         />
 

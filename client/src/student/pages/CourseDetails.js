@@ -7,6 +7,7 @@ import Review from "../components/Review";
 import TimeSlots from "../components/TimeSlots";
 import Notes from "../components/Notes";
 import axios from "axios";
+import StudentVideo from "../components/StudentVideo.js";
 import { Context } from "../../index.js";
 
 export default function CourseDetails() {
@@ -26,8 +27,14 @@ export default function CourseDetails() {
         );
 
         // Ensure that user is available and not an empty object
-        if (user && Object.keys(user).length !== 0 && Array.isArray(user.courses)) {
-          const enrolledCourse = user.courses.find((course) => course.courseId === id);
+        if (
+          user &&
+          Object.keys(user).length !== 0 &&
+          Array.isArray(user.courses)
+        ) {
+          const enrolledCourse = user.courses.find(
+            (course) => course.courseId === id
+          );
           setIsEnrolled(!!enrolledCourse);
           setCourseDetails(response.data.result);
         }
@@ -42,7 +49,6 @@ export default function CourseDetails() {
   console.log(`Hello ${user}`);
 
   if (!isAuthenticated || !user || Object.keys(user).length === 0) {
-    
     return <Navigate to={"/login"} />;
   }
 
@@ -52,18 +58,20 @@ export default function CourseDetails() {
       <h1 className="mt-5 mx-10 text-3xl font-bold">{courseDetails.name}</h1>
 
       {isEnrolled ? (
-        <div className="flex gap-4">
+        <div className="flex gap-5">
           <div className="mx-10 mt-10 h-[20rem] w-[30rem] bg-gray-200">
-            live-class-video
+            {/* <StudentVideo /> */}
           </div>
-          <div className="mx-10 mt-10">
+          <div className="mx-10 px-10 mt-10">
             <Notes />
           </div>
         </div>
       ) : (
         <>
           <div className="flex gap-4">
-            <div className="mx-10 mt-10 h-[20rem] w-[30rem] bg-gray-200"></div>
+            <div className="mx-10 mt-10 h-[20rem] w-[30rem] bg-gray-200">
+              <img src="/images/bg2.jpg" alt="Background" />
+            </div>
             <div className="mx-10 mt-10">
               <p className="my-3 py-2">TutorName</p>
               <p className="my-3 py-2">
