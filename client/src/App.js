@@ -6,6 +6,7 @@ import Signup from "./pages/Signup";
 import TutorHome from "./tutor/pages/TutorHome";
 import StudentHome from "./student/pages/StudentHome";
 import StudentProfile from "./student/pages/StudentProfile";
+import CourseDetails from "./student/pages/CourseDetails";
 
 export default function App() {
   return (
@@ -18,6 +19,7 @@ export default function App() {
         <Route path="tutorhome" element={<TutorHome />} />
         <Route path="studenthome" element={<StudentHome />} />
         <Route path="studentprofile" element={<StudentProfile />} />
+        <Route path="course/:id" element={<CourseDetails />} />
       </Routes>
     </BrowserRouter>
   );
