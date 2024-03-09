@@ -1,36 +1,62 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useContext } from "react";
 import toast, { Toaster } from "react-hot-toast";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, Link, Navigate } from "react-router-dom";
+import axios from "axios";
+import { Context } from "../index";
+
+const backgroundImage = "/images/bg2.jpg"; // Update with the actual path
 
 export default function SignUp() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const navigate = useNavigate();
+  const { isAuthenticated, setIsAuthenticated, loading, setLoading } =
+    useContext(Context);
 
-  function handleSubmit(e) {
-    // e.preventDefault();
-    // if (name && email && password) {
-    //   signup(name, email, password);
-    // } else {
-    //   toast.error("Fill signup details.");
-    // }
-  }
+  const submitHandler = async (e) => {
+    setLoading(true);
+    e.preventDefault();
+    try {
+      const { data } = await axios.post(
+        "http://localhost:8000/api/v1/user/new",
+        {
+          name,
+          email,
+          password,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+          withCredentials: true,
+        }
+      );
 
-  // useEffect(
-  //   function () {
-  //     if (isVerified) {
-  //       navigate("/home", { replace: true });
-  //     }
-  //   },
-  //   [isVerified, navigate]
-  // );
+      toast.success(data.message);
+      setIsAuthenticated(true);
+      setLoading(false);
+    } catch (error) {
+      toast.error(error.response.data.message);
+      setIsAuthenticated(false);
+      setLoading(false);
+    }
+  };
+
+  if (isAuthenticated) return <Navigate to={"/studenthome"} />;
+
+  const containerStyle = {
+    backgroundImage: `url(${backgroundImage})`,
+    backgroundPosition: "center",
+    backgroundRepeat: "no-repeat",
+    backgroundSize: "cover",
+    minHeight: "100vh",
+  };
 
   return (
-    <div className="text-center m-5-auto">
+    <div style={containerStyle} className="text-center m-auto">
       <h1>Join us</h1>
       <h5>Create your personal account</h5>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={submitHandler}>
         <div>
           <label htmlFor="name">UserName</label>
           <br />
@@ -66,7 +92,7 @@ export default function SignUp() {
 
         <p>
           <input type="checkbox" name="checkbox" id="checkbox" required />{" "}
-          <span>I agree all statements in terms of service</span>.
+          <span>I agree to all statements in terms of service</span>.
         </p>
 
         <div>

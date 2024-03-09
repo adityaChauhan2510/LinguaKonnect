@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from "react";
+import React, { useState,useEffect,useContext } from "react";
 import { useParams } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import SelectDuration from "../components/SelectDuration";
@@ -7,6 +7,8 @@ import Review from "../components/Review";
 import TimeSlots from "../components/TimeSlots";
 import Notes from "../components/Notes";
 import axios from "axios"
+
+import {Context} from "../../index.js"
 
 
 export default function CourseDetails() {
@@ -17,8 +19,10 @@ export default function CourseDetails() {
   const [price, setPrice] = useState();
   const [isEnrolled, setIsEnrolled] = useState(false);
 
+  const {user,tutor}=useContext(Context)
+
   const { id } = useParams();
-  console.log(id)
+  
 
   useEffect(() => {
     const fetchData = async () => {
@@ -29,6 +33,8 @@ export default function CourseDetails() {
             withCredentials: true,
           }
         );
+
+        console.log(tutor)
       
     // const userId="65ec319acc1045217409f901"
 
