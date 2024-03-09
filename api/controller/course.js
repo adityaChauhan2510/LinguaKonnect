@@ -169,3 +169,23 @@ export const addReview = async (req, res, next) => {
     next(err);
   }
 };
+export const checkEnroll = async (req, res, next) => {
+  try {
+    const { course_id } = req.body;
+    const userData = await User.findById(req.user._id);
+
+    if (userData && userData.courses && userData.courses.find(course => course.courseId === course_id)) {
+      return res.status(200).json({
+        success: true,
+        message: "User Enrolled",
+      });
+    } else {
+      return res.status(200).json({
+        success: true,
+        message: "User not enrolled",
+      });
+    }
+  } catch (err) {
+    next(err);
+  }
+};
