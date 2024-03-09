@@ -15,6 +15,7 @@ const studentposts = [
      language:"Hindi",
      duration:"45",
      name:"Mohit Tyagi",
+     rating:2,
      author: {
         profilePicture: {
            url: 'https://images.unsplash.com/photo-1518791841217-8f162f1e1131?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=800&q=60',
@@ -49,7 +50,11 @@ return (
                          <p className="text-lg description">Instructor :{blogPost.name}</p>
                          <p className="text-lg description">Language :{blogPost.language}</p>
                          <p className="text-lg description">Duration :{blogPost.duration}</p>
-
+                         <p className="text-lg description">
+                                        <Stack spacing={1}>
+                            <Rating name="half-rating" defaultValue={blogPost.rating} />
+                    </Stack>
+                           </p>
                          <a
                             href={blogPost.postUrl}
                             target="_blank"
