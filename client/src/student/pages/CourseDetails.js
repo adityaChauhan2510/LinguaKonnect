@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
-import { useParams,Navigate } from "react-router-dom";
+import { useParams, Navigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import SelectDuration from "../components/SelectDuration";
 import { Button } from "@mui/material";
@@ -9,14 +9,11 @@ import Notes from "../components/Notes";
 import axios from "axios";
 import { Context } from "../../index.js";
 
-
 export default function CourseDetails() {
   const [courseDetails, setCourseDetails] = useState({});
   const [isEnrolled, setIsEnrolled] = useState(false);
-  const { user,isAuthenticated } = useContext(Context);
+  const { user, isAuthenticated } = useContext(Context);
   const { id } = useParams();
-
-  console.log(`Hello ${user}`)
 
   useEffect(() => {
     const fetchData = async () => {
@@ -28,19 +25,26 @@ export default function CourseDetails() {
           }
         );
 
-        const enrolledCourse =await user.courses.find((course) => course.courseId === id);
-        
-        setIsEnrolled(!!enrolledCourse);
-        setCourseDetails(response.data.result);
+        // Ensure that user is available and not an empty object
+        if (user && Object.keys(user).length !== 0 && Array.isArray(user.courses)) {
+          const enrolledCourse = user.courses.find((course) => course.courseId === id);
+          setIsEnrolled(!!enrolledCourse);
+          setCourseDetails(response.data.result);
+        }
       } catch (err) {
         console.error("Error fetching data:", err.message);
       }
     };
 
     fetchData();
-  }, [id, user.courses]);
+  }, [id, user]);
 
-  if (!isAuthenticated) return <Navigate to={"/login"} />;
+  console.log(`Hello ${user}`);
+
+  if (!isAuthenticated || !user || Object.keys(user).length === 0) {
+    
+    return <Navigate to={"/login"} />;
+  }
 
   return (
     <>
