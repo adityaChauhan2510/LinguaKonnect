@@ -26,7 +26,7 @@ export default function App() {
         withCredentials: true,
       })
       .then((res) => {
-        setUser(res.data.user);
+        setUser(() => res.data.user);
         console.log(user);
         setIsAuthenticated(true);
         setLoading(false);
@@ -45,7 +45,7 @@ export default function App() {
         withCredentials: true,
       })
       .then((res) => {
-        setTutor(res.data.tutor);
+        setTutor(() => res.data.tutor);
         console.log(tutor);
         setIsAuthenticated(true);
         setLoading(false);
