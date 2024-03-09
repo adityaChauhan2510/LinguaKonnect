@@ -10,7 +10,7 @@ export default function TutorCard({ course }) {
   const navigate = useNavigate();
 
   function handleClick() {
-    navigate(`/course/${course._id}`);
+    navigate(`/tutorcourse/${course._id}`);
   }
 
   return (

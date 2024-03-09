@@ -13,6 +13,7 @@ import CourseDetails from "./student/pages/CourseDetails";
 import { Toaster } from "react-hot-toast";
 import axios from "axios";
 import { Context } from "./index";
+import TutorCourseDetails from "./tutor/pages/TutorCourseDetails.js";
 
 export default function App() {
   const { setUser, setIsAuthenticated, setLoading, setTutor, user } =
@@ -22,9 +23,12 @@ export default function App() {
     const fetchUserData = async () => {
       try {
         setLoading(true);
-        const response = await axios.get("http://localhost:8000/api/v1/user/me", {
-          withCredentials: true,
-        });
+        const response = await axios.get(
+          "http://localhost:8000/api/v1/user/me",
+          {
+            withCredentials: true,
+          }
+        );
         console.log("User data response:", response.data);
         setUser(response.data.user);
         setIsAuthenticated(true);
@@ -36,7 +40,6 @@ export default function App() {
         setLoading(false);
       }
     };
-    
 
     fetchUserData();
   }, [setUser, setIsAuthenticated, setLoading]);
@@ -45,9 +48,12 @@ export default function App() {
     const fetchTutorData = async () => {
       try {
         setLoading(true);
-        const response = await axios.get("http://localhost:8000/api/v1/tutor/me", {
-          withCredentials: true,
-        });
+        const response = await axios.get(
+          "http://localhost:8000/api/v1/tutor/me",
+          {
+            withCredentials: true,
+          }
+        );
         setTutor(response.data.tutor);
         setIsAuthenticated(true);
       } catch (error) {
@@ -60,7 +66,6 @@ export default function App() {
 
     fetchTutorData();
   }, [setTutor, setIsAuthenticated, setLoading]);
-
 
   return (
     <BrowserRouter>
@@ -75,6 +80,7 @@ export default function App() {
         <Route path="studenthome" element={<StudentHome />} />
         <Route path="studentprofile" element={<StudentProfile />} />
         <Route path="course/:id" element={<CourseDetails />} />
+        <Route path="tutorcourse/:id" element={<TutorCourseDetails />} />
       </Routes>
       <Toaster />
     </BrowserRouter>
