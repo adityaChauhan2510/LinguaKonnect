@@ -25,6 +25,12 @@ export const addCourse = async (req, res, next) => {
       { new: true }
     );
 
+    return res.status(200).json({
+      success: true,
+      message: "User already enrolled in the course",
+      result: course
+    });
+
     sendCookie(tutor, res, `Course added successfully`, 200);
   } catch (error) {
     next(error);
