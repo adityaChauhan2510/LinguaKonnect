@@ -27,7 +27,7 @@ export default function CourseDetails() {
           }
         );
 
-        //console.log(tutor);
+        console.log(user);
 
         // const userId="65ec319acc1045217409f901"
 

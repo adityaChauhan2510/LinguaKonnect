@@ -13,20 +13,21 @@ import CourseDetails from "./student/pages/CourseDetails";
 import { Toaster } from "react-hot-toast";
 import { useContext, useEffect } from "react";
 import axios from "axios";
-import { Context} from "./index";
-
+import { Context } from "./index";
 
 export default function App() {
-  const { setUser, setIsAuthenticated, setLoading,setTutor } = useContext(Context);
+  const { setUser, setIsAuthenticated, setLoading, setTutor, user, tutor } =
+    useContext(Context);
 
   useEffect(() => {
     setLoading(true);
     axios
-      .get("http://localhost:4000/api/v1/user/me", {
+      .get("http://localhost:8000/api/v1/user/me", {
         withCredentials: true,
       })
       .then((res) => {
         setUser(res.data.user);
+        console.log(user);
         setIsAuthenticated(true);
         setLoading(false);
       })
@@ -40,11 +41,12 @@ export default function App() {
   useEffect(() => {
     setLoading(true);
     axios
-      .get("http://localhost:4000/api/v1/tutor/me", {
+      .get("http://localhost:8000/api/v1/tutor/me", {
         withCredentials: true,
       })
       .then((res) => {
         setTutor(res.data.tutor);
+        console.log(tutor);
         setIsAuthenticated(true);
         setLoading(false);
       })
@@ -55,8 +57,6 @@ export default function App() {
       });
   }, []);
 
-
-
   return (
     <BrowserRouter>
       <Routes>
@@ -66,7 +66,7 @@ export default function App() {
         <Route path="tutorLogin" element={<TutorLogin />} />
         <Route path="tutorSignup" element={<TutorSignUp />} />
         <Route path="tutorhome" element={<TutorHome />} />
-        <Route path="tutorprofile" element={<TutorProfile/>}/>
+        <Route path="tutorprofile" element={<TutorProfile />} />
         <Route path="studenthome" element={<StudentHome />} />
         <Route path="studentprofile" element={<StudentProfile />} />
         <Route path="course/:id" element={<CourseDetails />} />
