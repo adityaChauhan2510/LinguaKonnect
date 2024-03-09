@@ -9,7 +9,7 @@ import StudentCard from "../components/StudentCard";
 export default function StudentHome() {
   const [mergedData, setMergedData] = useState({});
   const [searchQuery, setSearchQuery] = useState("");
-  const [price, setPrice] = useState("");
+  const [price, setPrice] = useState(0);
   const [experience, setExperience] = useState("");
 
   const searchedCourses =
@@ -20,7 +20,7 @@ export default function StudentHome() {
       : mergedData;
 
   const filteredCourses =
-    price !== "" || experience !== ""
+    price !== 0 || experience !== ""
       ? searchedCourses.filter(
           (course) =>
             (price !== "" ? course.pricing <= parseInt(price) : true) &&
@@ -81,7 +81,9 @@ export default function StudentHome() {
       <div className="mt-10">
         <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 my-10">
           {filteredCourses.length > 0 ? (
-            filteredCourses.map((course) => <StudentCard course={course} />)
+            filteredCourses.map((course) => (
+              <StudentCard key={course._id} course={course} />
+            ))
           ) : (
             <h1 className="text-3xl font-bold">No courses found</h1>
           )}
