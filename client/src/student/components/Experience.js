@@ -24,7 +24,7 @@ export default function Experience({ experience, setExperience }) {
         </MenuItem>
         <MenuItem value={1}>1 year</MenuItem>
         <MenuItem value={3}>3 years</MenuItem>
-        <MenuItem value={5}>{">"}5 years</MenuItem>
+        <MenuItem value={15}>{">"}5 years</MenuItem>
       </Select>
     </FormControl>
   );

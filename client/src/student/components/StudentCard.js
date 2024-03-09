@@ -2,8 +2,7 @@ import * as React from "react";
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
 import CardMedia from "@mui/material/CardMedia";
-import CardContent from "@mui/material/CardContent";
-import Typography from "@mui/material/Typography";
+import Rating from "@mui/material/Rating";
 
 import { useNavigate } from "react-router-dom";
 
@@ -35,21 +34,16 @@ export default function StudentCard({ course }) {
           image="images/images.jpeg"
           alt="Image"
         />
-        <CardContent>
-          <Typography variant="body2" color="text.secondary">
-            {course.language}
-          </Typography>
-        </CardContent>
-        {/* <CardContent>
-          <Typography variant="body2" color="text.secondary">
-            {course.rating}
-          </Typography>
-        </CardContent> */}
-        <CardContent>
-          <Typography variant="body2" color="text.secondary">
-            {course.tutor.name}
-          </Typography>
-        </CardContent>
+
+        <p className="mx-3 text-md font-semibold">
+          Language : {course.language}
+        </p>
+        <p className="mx-3 text-md font-semibold">
+          TutorName : {course.tutor.name}
+        </p>
+        <p className="mx-3 text-md font-semibold py-2">
+          Ratings: <Rating name="half-rating" defaultValue={course.rating} />
+        </p>
       </Card>
     </div>
   );
