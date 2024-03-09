@@ -4,9 +4,7 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 
-export default function Experience() {
-  const [experience, setExperience] = React.useState("");
-
+export default function Experience({ experience, setExperience }) {
   const handleChange = (event) => {
     setExperience(event.target.value);
   };
