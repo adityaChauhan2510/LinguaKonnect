@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import SelectDuration from "../components/SelectDuration";
 import { Button } from "@mui/material";
+import Review from "../components/Review";
 
 /**
  *
@@ -41,8 +42,9 @@ export default function CourseDetails() {
           Purchase
         </Button>
       </div>
-      <div>
-        <h1 className="text-3xl mt-10 mx-12">Reviews</h1>
+      <div className="mt-10 mx-10">
+        <h1 className="text-3xl mt-20 mb-10 mx-12">Reviews</h1>
+        <Review />
       </div>
     </>
   );
