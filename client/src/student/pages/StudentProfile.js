@@ -1,13 +1,16 @@
 import React, { useState, useContext } from "react";
 import Navbar from "../components/Navbar";
 import StudentCard from "../components/StudentCard";
-import { Context } from "../../index.js";
+import { Context } from "../../index";
 
 export default function StudentProfile() {
   const [data, setData] = useState({});
-  const { user } = useContext(Context);
 
   //const data = user.courses;
+
+  const { user, isAuthenticated } = useContext(Context);
+
+  console.log(user);
 
   return (
     <>

@@ -1,38 +1,42 @@
-import * as React from 'react';
-import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
-import CardMedia from '@mui/material/CardMedia';
-import Typography from '@mui/material/Typography';
-import { Button, CardActionArea, CardActions } from '@mui/material';
+import * as React from "react";
+import Card from "@mui/material/Card";
+import CardHeader from "@mui/material/CardHeader";
+import CardMedia from "@mui/material/CardMedia";
+import Rating from "@mui/material/Rating";
 
-export default function TutorCard() {
+import { useNavigate } from "react-router-dom";
+
+export default function TutorCard({ course }) {
+  const navigate = useNavigate();
+
+  function handleClick() {
+    navigate(`/course/${course._id}`);
+  }
+
   return (
-    <Card className="mt-4 ml-4" sx={{ maxWidth: 345 }}>
-      <CardActionArea >
+    <div className="shadom-5xl my-7 px-5">
+      <Card
+        sx={{ backgroundColor: "#ccc", cursor: "pointer" }}
+        onClick={handleClick}
+      >
+        <CardHeader title={course.name} />
         <CardMedia
           component="img"
-          height="140"
-          image="https://fastly.picsum.photos/id/58/536/354.jpg?hmac=cppRiVuWOOtzPge0W1IzlYRhxFq3twU8yANlJroIeX4"
-          alt="green iguana"
+          height="60"
+          image="images/images.jpeg"
+          alt="Image"
         />
-        <CardContent>
-          <Typography gutterBottom variant="h5" component="div">
-            Lizard
-          </Typography>
-          <Typography variant="body2" color="text.secondary">
-            Lizards are a widespread group of squamate reptiles, with over 6,000
-            species, ranging across all continents except Antarctica
-          </Typography>
-        </CardContent>
-      </CardActionArea>
-      <CardActions>
-      <button class="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded">
-  Subsribe
-</button>
-        <Button size="small" color="primary">
-          Share
-        </Button>
-      </CardActions>
-    </Card>
+
+        <p className="mx-3 text-md font-semibold">
+          Language : {course.language}
+        </p>
+        <p className="mx-3 text-md font-semibold">
+          TutorName : {course.tutor.name}
+        </p>
+        <p className="mx-3 text-md font-semibold py-2">
+          Ratings: <Rating name="half-rating" defaultValue={course.rating} />
+        </p>
+      </Card>
+    </div>
   );
 }
