@@ -25,15 +25,18 @@ export default function App() {
         const response = await axios.get("http://localhost:8000/api/v1/user/me", {
           withCredentials: true,
         });
+        console.log("User data response:", response.data);
         setUser(response.data.user);
         setIsAuthenticated(true);
       } catch (error) {
+        console.error("Error fetching user data:", error);
         setUser({});
         setIsAuthenticated(false);
       } finally {
         setLoading(false);
       }
     };
+    
 
     fetchUserData();
   }, [setUser, setIsAuthenticated, setLoading]);
