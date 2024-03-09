@@ -1,11 +1,16 @@
-import React, { useState } from "react";
+import React, { useState,useContext } from "react";
 import Navbar from "../components/Navbar";
 import StudentCard from "../components/StudentCard";
+import {Context} from "../../index"
 
 export default function StudentProfile() {
   const [data, setData] = useState({});
 
-  //write req to fetch all courses taken by this student
+  const {user,isAuthenticated}=useContext(Context)
+
+  console.log(isAuthenticated)
+
+  
   return (
     <>
       <Navbar />

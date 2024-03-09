@@ -17,15 +17,18 @@ import { Context} from "./index";
 
 
 export default function App() {
-  const { setUser, setIsAuthenticated, setLoading,setTutor } = useContext(Context);
+  const { user,setUser, setIsAuthenticated, setLoading,setTutor } = useContext(Context);
+  
+  console.log("kksjdkfd")
 
   useEffect(() => {
     setLoading(true);
     axios
-      .get("http://localhost:4000/api/v1/user/me", {
+      .get("http://localhost:8000/api/v1/user/me", {
         withCredentials: true,
       })
       .then((res) => {
+        console.log(res.data.user)
         setUser(res.data.user);
         setIsAuthenticated(true);
         setLoading(false);
@@ -35,12 +38,12 @@ export default function App() {
         setIsAuthenticated(false);
         setLoading(false);
       });
-  }, []);
+  }, [user]);
 
   useEffect(() => {
     setLoading(true);
     axios
-      .get("http://localhost:4000/api/v1/tutor/me", {
+      .get("http://localhost:8000/api/v1/tutor/me", {
         withCredentials: true,
       })
       .then((res) => {
@@ -53,7 +56,7 @@ export default function App() {
         setIsAuthenticated(false);
         setLoading(false);
       });
-  }, []);
+  }, [tutor]);
 
 
 
