@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext, useEffect } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Landing from "./pages/Landing";
 import Login from "./pages/Login";
@@ -11,51 +11,53 @@ import StudentProfile from "./student/pages/StudentProfile";
 import TutorProfile from "./tutor/pages/TutorProfile";
 import CourseDetails from "./student/pages/CourseDetails";
 import { Toaster } from "react-hot-toast";
-import { useContext, useEffect } from "react";
 import axios from "axios";
 import { Context } from "./index";
 
 export default function App() {
-  const { setUser, setIsAuthenticated, setLoading, setTutor, user, tutor } =
+  const { setUser, setIsAuthenticated, setLoading, setTutor, user } =
     useContext(Context);
 
   useEffect(() => {
-    setLoading(true);
-    axios
-      .get("http://localhost:8000/api/v1/user/me", {
-        withCredentials: true,
-      })
-      .then((res) => {
-        setUser(res.data.user);
-
+    const fetchUserData = async () => {
+      try {
+        setLoading(true);
+        const response = await axios.get("http://localhost:8000/api/v1/user/me", {
+          withCredentials: true,
+        });
+        setUser(response.data.user);
         setIsAuthenticated(true);
-        setLoading(false);
-      })
-      .catch((error) => {
+      } catch (error) {
         setUser({});
         setIsAuthenticated(false);
+      } finally {
         setLoading(false);
-      });
-  }, []);
+      }
+    };
+
+    fetchUserData();
+  }, [setUser, setIsAuthenticated, setLoading]);
 
   useEffect(() => {
-    setLoading(true);
-    axios
-      .get("http://localhost:8000/api/v1/tutor/me", {
-        withCredentials: true,
-      })
-      .then((res) => {
-        setTutor(() => res.data.tutor);
-        console.log(tutor);
+    const fetchTutorData = async () => {
+      try {
+        setLoading(true);
+        const response = await axios.get("http://localhost:8000/api/v1/tutor/me", {
+          withCredentials: true,
+        });
+        setTutor(response.data.tutor);
         setIsAuthenticated(true);
-        setLoading(false);
-      })
-      .catch((error) => {
+      } catch (error) {
         setTutor({});
         setIsAuthenticated(false);
+      } finally {
         setLoading(false);
-      });
-  }, []);
+      }
+    };
+
+    fetchTutorData();
+  }, [setTutor, setIsAuthenticated, setLoading]);
+
 
   return (
     <BrowserRouter>

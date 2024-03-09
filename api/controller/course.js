@@ -1,13 +1,13 @@
+// controllers/courseController.js
 import { Course } from "../model/course.js";
 import { User } from "../model/user.js";
-import { Tutor } from "../model/tutor.js";
+import {Tutor} from "../model/tutor.js";
 import { sendCookie } from "../utils/feature.js";
 import ErrorHandler from "../middleware/error.js";
 
 export const addCourse = async (req, res, next) => {
   try {
-    const { name, language, pricing, slot_time_in_min } = req.body;
-
+    const { name, language, pricing, slot_time_in_min, time_durations } = req.body;
     const tutorId = req.tutor._id;
 
     const course = await Course.create({
@@ -16,9 +16,8 @@ export const addCourse = async (req, res, next) => {
       tutor_id: tutorId,
       pricing,
       slot_time_in_min,
+      time_durations,
     });
-
-    console.log(course);
 
     const tutor = await Tutor.findByIdAndUpdate(
       tutorId,
@@ -36,19 +35,6 @@ export const enrollCourse = async (req, res, next) => {
   try {
     const { course_id } = req.body;
     const userId = req.user._id;
-
-    // const user = await User.findByIdAndUpdate(
-    //   { userId, "courses.courseId": { $ne: course_id } },
-    //   {
-    //     $addToSet: {
-    //       courses: {
-    //         courseId: course_id,
-    //         notes: [],
-    //       },
-    //     },
-    //   },
-    //   { new: true }
-    // );
 
     const user = await User.findByIdAndUpdate(
       userId,
@@ -70,7 +56,6 @@ export const enrollCourse = async (req, res, next) => {
       });
     }
 
-    // Update the course's enrolled_students count
     const updatedCourse = await Course.findByIdAndUpdate(
       course_id,
       { $inc: { enrolled_students: 1 } },
@@ -129,6 +114,7 @@ export const getAllCourse = async (req, res, next) => {
     if (!data || data.length === 0) {
       return next(new ErrorHandler("No courses found", 404));
     }
+
     res.status(200).json({
       success: true,
       result: data,
@@ -137,10 +123,10 @@ export const getAllCourse = async (req, res, next) => {
     next(err);
   }
 };
+
 export const addReview = async (req, res, next) => {
   try {
     const { course_id, review } = req.body;
-
     const name = req.user.name;
 
     const updatedCourse = await Course.findByIdAndUpdate(

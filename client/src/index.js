@@ -1,13 +1,8 @@
 import React from "react";
-import ReactDOM from "react-dom/client";
+import ReactDOM from "react-dom";
 import "./index.css";
 import App from "./App";
 import { createContext, useState } from "react";
-
-/*
-vaib1@gmail.com
-vaib123
-*/
 
 export const Context = createContext();
 
@@ -16,6 +11,7 @@ const AppWrapper = () => {
   const [loading, setLoading] = useState(false);
   const [user, setUser] = useState({});
   const [tutor, setTutor] = useState({});
+
   return (
     <Context.Provider
       value={{

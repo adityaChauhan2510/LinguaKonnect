@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
-import { useParams } from "react-router-dom";
+import { useParams,Navigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import SelectDuration from "../components/SelectDuration";
 import { Button } from "@mui/material";
@@ -9,11 +9,14 @@ import Notes from "../components/Notes";
 import axios from "axios";
 import { Context } from "../../index.js";
 
+
 export default function CourseDetails() {
   const [courseDetails, setCourseDetails] = useState({});
   const [isEnrolled, setIsEnrolled] = useState(false);
-  const { user } = useContext(Context);
+  const { user,isAuthenticated } = useContext(Context);
   const { id } = useParams();
+
+  console.log(`Hello ${user}`)
 
   useEffect(() => {
     const fetchData = async () => {
@@ -25,7 +28,7 @@ export default function CourseDetails() {
           }
         );
 
-        const enrolledCourse = user.courses.find((course) => course.courseId === id);
+        const enrolledCourse =await user.courses.find((course) => course.courseId === id);
         
         setIsEnrolled(!!enrolledCourse);
         setCourseDetails(response.data.result);
@@ -36,6 +39,8 @@ export default function CourseDetails() {
 
     fetchData();
   }, [id, user.courses]);
+
+  if (!isAuthenticated) return <Navigate to={"/login"} />;
 
   return (
     <>
