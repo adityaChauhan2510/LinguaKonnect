@@ -27,7 +27,7 @@ export default function App() {
       .then((res) => {
         
         setUser(res.data.user);
-        console.log(user);
+       
         setIsAuthenticated(true);
         setLoading(false);
       })
