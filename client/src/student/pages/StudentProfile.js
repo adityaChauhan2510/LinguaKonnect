@@ -8,7 +8,7 @@ export default function StudentProfile() {
 
   const {user,isAuthenticated}=useContext(Context)
 
-  console.log(isAuthenticated)
+  console.log(user)
 
   
   return (
