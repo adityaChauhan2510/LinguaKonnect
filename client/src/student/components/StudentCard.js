@@ -6,6 +6,7 @@ import Rating from "@mui/material/Rating";
 
 import { useNavigate } from "react-router-dom";
 
+
 export default function StudentCard({ key, course }) {
   const navigate = useNavigate();
 

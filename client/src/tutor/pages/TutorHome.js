@@ -1,8 +1,7 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import Navbar from "../components/TNavbar.js";
 import TutorCard from "../components/TutorCard.js";
 import axios from "axios";
-import VideoChat from "../components/VideoChat.js";
 import {
   Button,
   Dialog,
@@ -16,23 +15,11 @@ import {
 } from "@mui/material";
 import { Context } from "../../index.js";
 
-/*
-{
-    "name": "Advanced Hindi",
-    "language": "Hindi",
-    "tutor_id": "65ecac98d8beb7095a7f3c60", 
-    "pricing": 2021,
-    "slot_time_in_min": [45, 60, 90],
-    "time_durations": [{"start_time": "12am", "end_time": "12:30am"}]
-}
-
-*/
-
 function TutorHome() {
   const { tutor, isAuthenticated } = useContext(Context);
   const [data, setData] = useState([]);
   const tutor_id = tutor._id;
-  console.log(tutor);
+  const [loading, setLoading] = useState(true);
 
   const [openForm, setOpenForm] = useState(false);
   const [formData, setFormData] = useState({
@@ -43,7 +30,28 @@ function TutorHome() {
     timings: [],
   });
 
-  const handleSubmit = (event) => {
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost:8000/api/v1/tutor/getCourses`,
+          {
+            withCredentials: true,
+          }
+        );
+        console.log(response.data)
+        setData(response.data.enrolledCourses);
+      } catch (err) {
+        console.error("Error fetching data:", err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  const handleSubmit = async (event) => {
     event.preventDefault();
 
     const { courseName, language, price, duration, timings } = formData;
@@ -51,33 +59,35 @@ function TutorHome() {
     const requestData = {
       name: courseName,
       language: language,
-      tutor_id: tutor_id, // Assuming tutor_id is already defined
-      pricing: parseInt(price), // Assuming price is a string, convert it to a number
-      slot_time_in_min: duration, // Assuming duration is an array of numbers
-      time_durations: timings, // Assuming timings is an array of objects containing start_time and end_time
+      tutor_id: tutor_id,
+      pricing: parseInt(price),
+      slot_time_in_min: duration,
+      time_durations: timings,
     };
 
-    console.log(requestData);
-    // axios
-    //   .post("http://example.com/api/submit", formData)
-    //   .then((response) => {
-    //     const newCourseId = response.data.id;
+    try {
+      const response = await axios.post(
+        "http://localhost:8000/api/v1/course/add",
+        requestData,
+        { withCredentials: true }
+      );
 
-    //     setData([...data, { id: newCourseId, ...formData }]);
+      const newCourseId = response.data.result._id;
 
-    //     setFormData({
-    //       courseName: "",
-    //       language: "",
-    //       duration: [],
-    //       price: "",
-    //       timings: [],
-    //     });
+      setData([...data, { id: newCourseId, ...requestData }]);
 
-    //     setOpenForm(false);
-    //   })
-    //   .catch((error) => {
-    //     console.error("Error submitting form:", error);
-    //   });
+      setFormData({
+        courseName: "",
+        language: "",
+        duration: [],
+        price: "",
+        timings: [],
+      });
+
+      setOpenForm(false);
+    } catch (error) {
+      console.error("Error submitting form:", error);
+    }
   };
 
   const handleChange = (event) => {
@@ -94,8 +104,8 @@ function TutorHome() {
       ...formData,
       duration: value,
       timings: Array.from({ length: value.length }, () => ({
-        startTime: "",
-        endTime: "",
+        start_time: "",
+        end_time: "",
       })),
     });
   };
@@ -113,12 +123,13 @@ function TutorHome() {
   return (
     <div>
       <Navbar />
-      {/* <VideoChat/> */}
       <div className="my-10 mx-10">
         <h1 className="text-3xl font-bold">My Courses</h1>
         <div className="mt-10">
           <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 my-10">
-            {data.length > 0 ? (
+            {loading ? (
+              <p>Loading...</p>
+            ) : data.length > 0 ? (
               data.map((course, index) => (
                 <TutorCard key={index} course={course} />
               ))
@@ -172,15 +183,15 @@ function TutorHome() {
                   <div key={index}>
                     <TextField
                       label={`Start Time ${index + 1}`}
-                      value={timing.startTime}
-                      onChange={handleTimeChange(index, "startTime")}
+                      value={timing.start_time}
+                      onChange={handleTimeChange(index, "start_time")}
                       fullWidth
                       margin="normal"
                     />
                     <TextField
                       label={`End Time ${index + 1}`}
-                      value={timing.endTime}
-                      onChange={handleTimeChange(index, "endTime")}
+                      value={timing.end_time}
+                      onChange={handleTimeChange(index, "end_time")}
                       fullWidth
                       margin="normal"
                     />

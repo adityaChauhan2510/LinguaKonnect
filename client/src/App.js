@@ -48,12 +48,10 @@ export default function App() {
     const fetchTutorData = async () => {
       try {
         setLoading(true);
-        const response = await axios.get(
-          "http://localhost:8000/api/v1/tutor/me",
-          {
-            withCredentials: true,
-          }
-        );
+        const response = await axios.get("http://localhost:8000/api/v1/tutor/me", {
+          withCredentials: true,
+        });
+        console.log("Tutor data response:", response.data);
         setTutor(response.data.tutor);
         setIsAuthenticated(true);
       } catch (error) {
