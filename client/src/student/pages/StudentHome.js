@@ -21,7 +21,7 @@ export default function StudentHome() {
         const data1 = response.data.result;
         console.log(data1);
 
-        // Make requests to the second route for each tutor_id
+       
         const tutorDataPromises = data1.map(async (element) => {
           const tutor_id = element.tutor_id;
           const response2 = await axios.get(
@@ -30,10 +30,10 @@ export default function StudentHome() {
           return response2.data.result;
         });
 
-        // Wait for all requests to complete
+        
         const tutorDataArray = await Promise.all(tutorDataPromises);
 
-        // Merge data1 and tutorDataArray
+       
         const mergedData = data1.map((element, index) => ({
           ...element,
           tutor: tutorDataArray[index],
