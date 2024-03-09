@@ -4,9 +4,7 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 
-export default function Experience() {
-  const [experience, setExperience] = React.useState("");
-
+export default function Experience({ experience, setExperience }) {
   const handleChange = (event) => {
     setExperience(event.target.value);
   };
@@ -26,7 +24,7 @@ export default function Experience() {
         </MenuItem>
         <MenuItem value={1}>1 year</MenuItem>
         <MenuItem value={3}>3 years</MenuItem>
-        <MenuItem value={5}>{">"}5 years</MenuItem>
+        <MenuItem value={15}>{">"}5 years</MenuItem>
       </Select>
     </FormControl>
   );

@@ -4,10 +4,13 @@ import SearchField from "../components/SearchField";
 import DiscreteSlider from "../components/DiscreteSlider";
 import Experience from "../components/Experience";
 import axios from "axios";
+import StudentCard from "../components/StudentCard";
 
 export default function StudentHome() {
   const [mergedData, setMergedData] = useState({});
   const [searchQuery, setSearchQuery] = useState("");
+  const [price, setPrice] = useState("");
+  const [experience, setExperience] = useState("");
 
   const searchedCourses =
     searchQuery.length > 0
@@ -15,6 +18,17 @@ export default function StudentHome() {
           `${course.language}`.toLowerCase().includes(searchQuery.toLowerCase())
         )
       : mergedData;
+
+  const filteredCourses =
+    price !== "" || experience !== ""
+      ? searchedCourses.filter(
+          (course) =>
+            (price !== "" ? course.pricing <= parseInt(price) : true) &&
+            (experience !== ""
+              ? course.tutor.experience <= parseInt(experience)
+              : true)
+        )
+      : searchedCourses;
 
   useEffect(() => {
     const fetchData = async () => {
@@ -29,7 +43,6 @@ export default function StudentHome() {
         const data1 = response.data.result;
         //console.log(data1);
 
-        // Make requests to the second route for each tutor_id
         const tutorDataPromises = data1.map(async (element) => {
           const tutor_id = element.tutor_id;
           const response2 = await axios.get(
@@ -38,10 +51,8 @@ export default function StudentHome() {
           return response2.data.result;
         });
 
-        // Wait for all requests to complete
         const tutorDataArray = await Promise.all(tutorDataPromises);
 
-        // Merge data1 and tutorDataArray
         const mergedData = data1.map((element, index) => ({
           ...element,
           tutor: tutorDataArray[index],
@@ -63,22 +74,18 @@ export default function StudentHome() {
       <SearchField searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
 
       <div className="flex flex-row gap-5">
-        <DiscreteSlider />
-        <Experience />
+        <DiscreteSlider price={price} setPrice={setPrice} />
+        <Experience experience={experience} setExperience={setExperience} />
       </div>
 
       <div className="mt-10">
-        {searchedCourses.length > 0 ? (
-          searchedCourses.map((course) => (
-            <div key={course._id}>
-              <h3>{course.name}</h3>
-              <p>{course.language}</p>
-              {/* Render other course details here */}
-            </div>
-          ))
-        ) : (
-          <p>No courses found</p>
-        )}
+        <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 my-10">
+          {filteredCourses.length > 0 ? (
+            filteredCourses.map((course) => <StudentCard course={course} />)
+          ) : (
+            <h1 className="text-3xl font-bold">No courses found</h1>
+          )}
+        </section>
       </div>
     </>
   );
