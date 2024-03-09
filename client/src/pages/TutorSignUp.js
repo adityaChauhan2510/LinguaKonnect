@@ -112,7 +112,6 @@ export default function SignUp() {
         <div className="my-3">
           <button
             type="submit"
-            type="submit"
             className="bg-green-800 px-10 py-2 text-white rounded-lg"
           >
             Register

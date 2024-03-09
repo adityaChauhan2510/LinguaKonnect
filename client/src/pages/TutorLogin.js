@@ -89,7 +89,7 @@ export default function TutorLogin() {
 
       <footer>
         <p>
-          First time? <Link to="/signup">Create an account</Link>.
+          First time? <Link to="/tutorsignup">Create an account</Link>.
         </p>
         <p>
           <Link to="/">Back to Homepage</Link>.
