@@ -27,10 +27,18 @@ const schema = new mongoose.Schema({
     type: Number,
     required: true,
   },
-  start_time_in_hours: {
+  rating: {
     type: Number, 
-    required: true,
+    default:5,
   },
+  reviews:[{
+    user_name:{
+      type:String,
+    },
+    user_comment:{
+      type:String,
+    }
+  }],
   createdAt: {
     type: Date,
     default: Date.now,
