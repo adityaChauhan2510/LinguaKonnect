@@ -1,33 +1,7 @@
-import React, { useContext } from "react";
+import React from "react";
 import { NavLink } from "react-router-dom";
-import axios from "axios";
-import { toast } from "react-hot-toast";
-import { Navigate } from "react-router-dom";
 
 const Navbar = () => {
-  // const { isAuthenticated, setIsAuthenticated} =
-  // useContext(Context);
-
-  // const handleClick = async (e) => {
-
-  //   try {
-  //     const {data}=await axios.get("http://localhost:4000/api/v1/artist/logout", {
-  //       withCredentials: true,
-  //     });
-
-  //     toast.success(data.message);
-  //     setIsAuthenticated(false);
-
-  //   } catch (error) {
-  //     toast.error(error.response.data.message);
-  //     setIsAuthenticated(true);
-
-  //   }
-
-  // };
-
-  // if (!isAuthenticated) return <Navigate to={"/login"} />;
-
   return (
     <div className="bg-black flex justify-between items-center h-24 w-[100%] mx-auto px-4 text-white">
       {/* Logo */}

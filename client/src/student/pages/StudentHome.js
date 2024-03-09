@@ -7,6 +7,14 @@ import axios from "axios";
 
 export default function StudentHome() {
   const [mergedData, setMergedData] = useState({});
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const searchedCourses =
+    searchQuery.length > 0
+      ? mergedData.filter((course) =>
+          `${course.language}`.toLowerCase().includes(searchQuery.toLowerCase())
+        )
+      : mergedData;
 
   useEffect(() => {
     const fetchData = async () => {
@@ -19,7 +27,7 @@ export default function StudentHome() {
         );
 
         const data1 = response.data.result;
-        console.log(data1);
+        //console.log(data1);
 
        
         const tutorDataPromises = data1.map(async (element) => {
@@ -47,15 +55,30 @@ export default function StudentHome() {
     };
 
     fetchData();
-  }, []); 
+  }, []);
 
   return (
     <>
       <Navbar />
-      <SearchField />
+      <SearchField searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
+
       <div className="flex flex-row gap-5">
         <DiscreteSlider />
         <Experience />
+      </div>
+
+      <div className="mt-10">
+        {searchedCourses.length > 0 ? (
+          searchedCourses.map((course) => (
+            <div key={course._id}>
+              <h3>{course.name}</h3>
+              <p>{course.language}</p>
+              {/* Render other course details here */}
+            </div>
+          ))
+        ) : (
+          <p>No courses found</p>
+        )}
       </div>
     </>
   );
