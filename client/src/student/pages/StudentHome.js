@@ -6,7 +6,15 @@ import Experience from "../components/Experience";
 import axios from "axios";
 
 export default function StudentHome() {
-  const [data, setData] = useState({});
+  const [data, setData] = useState([]);
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const searchedCourses =
+    searchQuery.length > 0
+      ? data.filter((course) =>
+          `${course.language}`.toLowerCase().includes(searchQuery.toLowerCase())
+        )
+      : data;
 
   useEffect(() => {
     const fetchData = async () => {
@@ -25,16 +33,19 @@ export default function StudentHome() {
     };
 
     fetchData();
-  }, []); 
+  }, []);
 
   return (
     <>
       <Navbar />
-      <SearchField />
+      <SearchField searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
+
       <div className="flex flex-row gap-5">
         <DiscreteSlider />
         <Experience />
       </div>
+
+      <div className="mt-10">{searchedCourses}</div>
     </>
   );
 }
