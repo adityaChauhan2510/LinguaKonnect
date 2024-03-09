@@ -7,19 +7,12 @@ import Typography from "@mui/material/Typography";
 
 import { useNavigate } from "react-router-dom";
 
-/*
-courseName,
-language,
-instructorName,
-rating,
-
-*/
 
 export default function StudentCard({ course }) {
   const navigate = useNavigate();
 
   function handleClick() {
-    navigate(`/course/${course._id}`); // Assuming 'item' has an '_id' property
+    navigate(`/course/${course._id}`); 
   }
 
   return (
