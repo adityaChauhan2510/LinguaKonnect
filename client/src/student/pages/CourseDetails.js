@@ -19,7 +19,7 @@ export default function CourseDetails() {
   const [studentEnrolled, setStudentEnrolled] = useState("");
   const [ratings, setRatings] = useState("");
   const [price, setPrice] = useState();
-  const [isEnrolled, setIsEnrolled] = useState(true);
+  const [isEnrolled, setIsEnrolled] = useState(false);
 
   const { id } = useParams();
 
