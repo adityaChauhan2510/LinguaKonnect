@@ -7,7 +7,7 @@ import Rating from "@mui/material/Rating";
 import { useNavigate } from "react-router-dom";
 
 
-export default function StudentCard({ course }) {
+export default function StudentCard({ key, course }) {
   const navigate = useNavigate();
 
   function handleClick() {
@@ -15,7 +15,7 @@ export default function StudentCard({ course }) {
   }
 
   return (
-    <div className="shadom-5xl my-7 px-5">
+    <div className="shadow-5xl my-7 px-5">
       <Card
         sx={{ backgroundColor: "#ccc", cursor: "pointer" }}
         onClick={handleClick}
