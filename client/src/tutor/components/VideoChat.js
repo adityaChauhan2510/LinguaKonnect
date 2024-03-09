@@ -1,6 +1,30 @@
 import * as React from "react";
 import { ZegoUIKitPrebuilt } from "@zegocloud/zego-uikit-prebuilt";
 
+/*
+router.post('/send-video-chat-link/:courseId', async (req, res) => {
+  try {
+    const { courseId } = req.params;
+    const { videoChatId } = req.body;
+
+    // Logic to find all students enrolled in the course with courseId
+    // This could be querying your database or any other method
+    const students = await Student.find({ courseId });
+
+    // Send the video chat link to each student
+    students.forEach(async (student) => {
+      // Assuming you have a method in your Student model to send the video chat link
+      await student.sendVideoChatLink(videoChatId);
+    });
+
+    res.status(200).json({ message: 'Video chat link sent to all students' });
+  } catch (error) {
+    console.error('Error sending video chat link:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+*/
 function VideoChat(len) {
   let result = "";
   if (result) return result;
