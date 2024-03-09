@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import Navbar from "../components/TNavbar.js";
 import TutorCard from "../components/TutorCard.js";
 import axios from "axios";
+import VideoChat from "../components/VideoChat.js"
 import {
   Button,
   Dialog,
@@ -83,7 +84,7 @@ function TutorHome() {
   return (
     <div>
       <Navbar />
-
+      <VideoChat/>
       <div className="my-10 mx-10">
         <h1 className="text-3xl font-bold">My Courses</h1>
         <div className="mt-10">
