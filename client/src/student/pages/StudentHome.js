@@ -72,7 +72,8 @@ export default function StudentHome() {
     fetchData();
   }, []);
 
-  if (loading) return <div></div>;
+  if (loading)
+    return <div className="mt-10 mx-10 text-xl font-semibold">Loading...</div>;
 
   return (
     <>
@@ -91,7 +92,7 @@ export default function StudentHome() {
               <StudentCard key={course._id} course={course} />
             ))
           ) : (
-            <h1 className="text-3xl font-bold">No courses found</h1>
+            <h1 className="text-3xl font-bold mx-10">No courses found</h1>
           )}
         </section>
       </div>

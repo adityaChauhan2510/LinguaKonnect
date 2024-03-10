@@ -7,7 +7,7 @@ import Signup from "./pages/Signup";
 import TutorSignUp from "./pages/TutorSignUp.js";
 import TutorHome from "./tutor/pages/TutorHome";
 import StudentHome from "./student/pages/StudentHome";
-import StudentProfile from "./student/pages/StudentProfile";
+import MyCart from "./student/pages/MyCart.js";
 import TutorProfile from "./tutor/pages/TutorProfile";
 import CourseDetails from "./student/pages/CourseDetails";
 import TutorCourseDetails from "./tutor/pages/TutorCourseDetails.js";
@@ -22,11 +22,11 @@ export default function App() {
         <Route path="signup" element={<Signup />} />
         <Route path="tutorlogin" element={<TutorLogin />} />
         <Route path="tutorsignup" element={<TutorSignUp />} />
-
         <Route path="tutorhome" element={<TutorHome />} />
         <Route path="tutorprofile" element={<TutorProfile />} />
+
         <Route path="studenthome" element={<StudentHome />} />
-        <Route path="studentprofile" element={<StudentProfile />} />
+        <Route path="mycart" element={<MyCart />} />
         <Route path="course/:id" element={<CourseDetails />} />
         <Route path="tutorcourse/:id" element={<TutorCourseDetails />} />
       </Routes>

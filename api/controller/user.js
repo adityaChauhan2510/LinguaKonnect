@@ -2,7 +2,7 @@ import { User } from "../model/user.js";
 import bcrypt from "bcrypt";
 import { sendCookie } from "../utils/feature.js";
 import ErrorHandler from "../middleware/error.js";
-import axios from "axios"
+import axios from "axios";
 
 export const login = async (req, res, next) => {
   try {
@@ -81,7 +81,11 @@ export const editProfile = async (req, res, next) => {
     const { name, email } = req.body;
     const userId = req.user._id; // Assuming you have the user ID in the request
 
-    let user = await User.findByIdAndUpdate(userId, { name, email }, { new: true });
+    let user = await User.findByIdAndUpdate(
+      userId,
+      { name, email },
+      { new: true }
+    );
 
     if (!user) {
       return next(new ErrorHandler("User not found", 404));
@@ -99,27 +103,11 @@ export const editProfile = async (req, res, next) => {
 
 export const getEnrolledCourses = async (req, res, next) => {
   try {
-    const enrolledCourses = req.user.courses || [];
-
-    const coursesData = await Promise.all(
-      enrolledCourses.map(async (course) => {
-        const courseId = course.courseId;
-        // Assuming there's a route to get course details by courseId
-        const courseDetailsResponse = await axios.get(
-          `http://localhost:8000/api/v1/course/${courseId}`,
-          {
-            withCredentials: true,
-          }
-        );
-
-        // Assuming course details are available in courseDetailsResponse.data.result
-        return courseDetailsResponse.data.result;
-      })
-    );
-
+    const user = await User.findById(req.user._id).populate("courses.courseId");
+    //console.log(user);
     res.status(200).json({
       success: true,
-      enrolledCourses: coursesData,
+      enrolledCourses: user.courses,
     });
   } catch (err) {
     next(err);

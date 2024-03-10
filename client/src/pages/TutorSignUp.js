@@ -15,19 +15,20 @@ export default function SignUp() {
     setLoading(true);
     e.preventDefault();
     try {
-      const { data } = await axios.post(
+      const response = await axios.post(
         "http://localhost:8000/api/v1/tutor/new",
         {
           name,
           email,
           experience,
           password,
-        }
+        },
+        { withCredentials: true }
       );
 
-      toast.success(data.message);
-
-      setLoading(false);
+      const { token } = response.data;
+      sessionStorage.setItem("token", token);
+      toast.success(response.data.message);
     } catch (error) {
       toast.error(error.response.data.message);
     }

@@ -13,6 +13,7 @@ import {
   FormControl,
   InputLabel,
 } from "@mui/material";
+import toast, { Toaster } from "react-hot-toast";
 
 function TutorHome() {
   const [data, setData] = useState([]);
@@ -28,15 +29,16 @@ function TutorHome() {
 
   useEffect(() => {
     const fetchData = async () => {
+      setLoading(true);
       try {
         const response = await axios.get(
-          `http://localhost:8000/api/v1/tutor/getCourses`,
+          `http://localhost:8000/api/v1/tutor/tutorcourses`,
           {
             withCredentials: true,
           }
         );
         console.log(response.data);
-        setData(response.data.enrolledCourses);
+        setData(response.data.takingCourses);
       } catch (err) {
         console.error("Error fetching data:", err.message);
       } finally {
@@ -55,7 +57,6 @@ function TutorHome() {
     const requestData = {
       name: courseName,
       language: language,
-      // tutor_id: tutor_id,
       pricing: parseInt(price),
       slot_time_in_min: duration,
       time_durations: timings,
@@ -81,6 +82,7 @@ function TutorHome() {
       });
 
       setOpenForm(false);
+      toast.success(response.data.message);
     } catch (error) {
       console.error("Error submitting form:", error);
     }
@@ -120,27 +122,27 @@ function TutorHome() {
     <div>
       <Navbar />
       <div className="my-10 mx-10">
-        <h1 className="text-3xl font-bold">My Courses</h1>
+        <h1 className="text-3xl font-bold mx-5 px-5">My Courses</h1>
         <div className="mt-10">
           <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 my-10">
             {loading ? (
-              <p>Loading...</p>
-            ) : data.length > 0 ? (
+              <p className="mt-10 mx-10">Loading...</p>
+            ) : (
               data.map((course, index) => (
                 <TutorCard key={index} course={course} />
               ))
-            ) : (
-              <h1 className="text-sm font-bold">Click to add courses</h1>
             )}
           </section>
 
-          <Button
-            variant="contained"
-            color="success"
-            onClick={() => setOpenForm(true)}
-          >
-            Click to add courses
-          </Button>
+          <div className="mx-5 px-5">
+            <Button
+              variant="contained"
+              color="success"
+              onClick={() => setOpenForm(true)}
+            >
+              Click to add courses
+            </Button>
+          </div>
 
           <Dialog open={openForm} onClose={() => setOpenForm(false)}>
             <DialogTitle>Add Course</DialogTitle>
@@ -209,6 +211,7 @@ function TutorHome() {
           </Dialog>
         </div>
       </div>
+      <Toaster />
     </div>
   );
 }

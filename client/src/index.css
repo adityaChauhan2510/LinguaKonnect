@@ -17,58 +17,9 @@ code {
     monospace;
 }
 
-.app-header {
-  display: flex;
-  align-items: center;
-  /* flex-flow: column wrap; */
-}
 
-.app-header__title {
-  text-align: center;
-  margin: 10px 20px 20px;
-}
 
-.app-header__controls {
-  margin: 10px 0 0 10px;
-}
-
-.search,
-.add-new {
-  font-size: 14px;
-  padding: 5px;
-  margin: 2px;
-}
-
-.search {
-  flex-grow: 1;
-  max-width: 300px;
-}
-
-.add-new {
-  border-radius: 5px;
-  cursor: pointer;
-  padding: 8px;
-  font-weight: bolder;
-  background-color: #d1ed58;
-  outline: none;
-}
-
-.add-new:hover {
-  background-color: #abce15;
-}
-
-.notes-list {
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
-  margin: 0;
-  padding-top: 30px;
-}
-
-ul {
-  padding-inline-start: 0;
-}
-
+/*CSS for notes- Don't delete*/
 .note {
   font-family: "Oooh Baby", cursive;
   width: 200px;
@@ -78,7 +29,6 @@ ul {
   border-radius: 5px;
   display: flex;
   flex-direction: column;
- 
 }
 
 .note__title,
@@ -91,7 +41,7 @@ ul {
 }
 
 
-/***    Landing Page     ***/
+/***    Landing Page-CSS     ***/
 .main-title,
 .main-para {
   color: #f1f1f1

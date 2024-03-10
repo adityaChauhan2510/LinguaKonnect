@@ -1,14 +1,14 @@
 import mongoose from "mongoose";
 
 const schema = new mongoose.Schema({
-  name:{
+  name: {
     type: String,
     required: true,
+    unique: true,
   },
   language: {
     type: String,
     required: true,
-    unique: true,
   },
   tutor_id: {
     type: mongoose.Schema.Types.ObjectId,
@@ -43,7 +43,7 @@ const schema = new mongoose.Schema({
   ],
   rating: {
     type: Number,
-    default: 5,
+    default: 0,
   },
   reviews: [
     {

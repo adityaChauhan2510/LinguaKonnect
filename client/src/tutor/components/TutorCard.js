@@ -14,7 +14,7 @@ export default function TutorCard({ course }) {
   }
 
   return (
-    <div className="shadom-5xl my-7 px-5">
+    <div className="shadow-4xl my-7 px-5 mx-5 rounded-xl">
       <Card
         sx={{ backgroundColor: "#ccc", cursor: "pointer" }}
         onClick={handleClick}

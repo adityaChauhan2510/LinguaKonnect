@@ -1,4 +1,3 @@
-// controllers/courseController.js
 import { Course } from "../model/course.js";
 import { User } from "../model/user.js";
 import { Tutor } from "../model/tutor.js";
@@ -28,11 +27,10 @@ export const addCourse = async (req, res, next) => {
 
     return res.status(200).json({
       success: true,
-      message: "User already enrolled in the course",
+      message: "Course added by tutor is successful",
       result: course,
     });
-
-    sendCookie(tutor, res, `Course added successfully`, 200);
+    sendCookie(res, `Course added successfully`, 200);
   } catch (error) {
     next(error);
   }
@@ -114,6 +112,7 @@ export const addRating = async (req, res, next) => {
   }
 };
 
+//using this in studentHome
 export const getAllCourse = async (req, res, next) => {
   try {
     const data = await Course.find();
@@ -181,5 +180,18 @@ export const checkEnroll = async (req, res, next) => {
     }
   } catch (err) {
     next(err);
+  }
+};
+
+export const deleteCourse = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const course = await Course.findByIdAndDelete(id);
+
+    if (!course) return next(new ErrorHandler("Course doesn't exist", 404));
+
+    res.status(200).json({ message: "Course deleted successfully" });
+  } catch (error) {
+    next(error);
   }
 };

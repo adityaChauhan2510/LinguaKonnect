@@ -14,16 +14,19 @@ export default function SignUp() {
     e.preventDefault();
     setLoading(true);
     try {
-      const { data } = await axios.post(
+      const response = await axios.post(
         "http://localhost:8000/api/v1/user/new",
         {
           name,
           email,
           password,
-        }
+        },
+        { withCredentials: true }
       );
 
-      toast.success(data.message);
+      const { token } = response.data;
+      sessionStorage.setItem("token", token);
+      toast.success(response.data.message);
     } catch (error) {
       toast.error(error.response.data.message);
     }

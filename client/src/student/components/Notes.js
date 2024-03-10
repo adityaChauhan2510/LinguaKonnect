@@ -18,7 +18,7 @@ const Note = ({ note, onType, removeNote }) => {
   };
 
   return (
-    <li className="w-[15rem] h-[15rem] my-10 mx-2 bg-yellow-200 rounded-lg flex flex-col">
+    <li className="w-[15rem] h-[15rem] my-2 bg-yellow-200 rounded-lg">
       <input
         className="note__title"
         type="text"
@@ -32,9 +32,9 @@ const Note = ({ note, onType, removeNote }) => {
         value={note.description}
         onChange={updateDescription}
       />
-      <span className="note__delete" onClick={clickDelete}>
+      <button className="pl-2 font-bold" onClick={clickDelete}>
         X
-      </span>
+      </button>
     </li>
   );
 };
@@ -44,7 +44,7 @@ const NotesList = ({ notes, removeNote, onType }) => {
   const searchMatches = notes.filter(keepSearchMatches);
 
   return (
-    <ul className="notes-list">
+    <ul className="grid grid-cols-2 gap-4 justify-center pt-5">
       {searchMatches.map((note) => (
         <Note
           removeNote={removeNote}
@@ -62,19 +62,20 @@ const Header = ({ onSearch, addNote, searchText }) => {
     onSearch(e.target.value);
   };
   return (
-    <header className="app-header">
-      <aside className="app-header__control">
-        <button className="add-new" onClick={addNote}>
-          + New Note
-        </button>
-        <input
-          className="search"
-          type="text"
-          placeholder="Type here to search..."
-          value={searchText}
-          onChange={callSearch}
-        />
-      </aside>
+    <header className="flex items-center">
+      <button
+        className="rounded-md cursor-pointer px-3 py-2 font-semibold bg-yellow-300 outline-none"
+        onClick={addNote}
+      >
+        + New Note
+      </button>
+      <input
+        className="w-[200px] mx-2 py-2 px-3 outline-2 rounded-lg"
+        type="text"
+        placeholder="Type here to search..."
+        value={searchText}
+        onChange={callSearch}
+      />
     </header>
   );
 };
@@ -152,7 +153,7 @@ const Notes = () => {
   }, []);
 
   return (
-    <div className="">
+    <div>
       <Header onSearch={onSearch} addNote={addNote} searchText={searchText} />
       <NotesList removeNote={removeNote} onType={onType} notes={notes} />
     </div>

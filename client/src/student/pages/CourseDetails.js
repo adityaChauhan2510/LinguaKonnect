@@ -25,8 +25,22 @@ export default function CourseDetails() {
           }
         );
 
-        console.log(response.data.result);
+        //console.log(response.data.result);
         setCourseDetails(response.data.result);
+
+        const enrolledCourses = await axios.get(
+          `http://localhost:8000/api/v1/user/getcourses`,
+          {
+            withCredentials: true,
+          }
+        );
+
+        const enrolledCourseIds = enrolledCourses.data.enrolledCourses.map(
+          (course) => course.courseId._id
+        );
+
+        setIsEnrolled(enrolledCourseIds.includes(id));
+        //console.log(isEnrolled);
       } catch (err) {
         console.error("Error fetching data:", err.message);
       } finally {
@@ -35,7 +49,7 @@ export default function CourseDetails() {
     };
 
     fetchData();
-  }, []);
+  }, [id]);
 
   if (loading) return <div className="mt-5 mx-10">Loading...</div>;
 
@@ -47,6 +61,7 @@ export default function CourseDetails() {
       {isEnrolled ? (
         <div className="flex gap-5">
           <div className="mx-10 mt-10 h-[20rem] w-[30rem] bg-gray-200">
+            video-link-to-class
             {/* <StudentVideo /> */}
           </div>
           <div className="mx-10 px-10 mt-10">
@@ -91,7 +106,7 @@ export default function CourseDetails() {
             </Button>
           </div>
           <div className="mt-10 mx-10">
-            <h1 className="text-3xl mt-20 mb-10 mx-12">Reviews</h1>
+            <h1 className="text-3xl mt-20 mb-10">What Others Say!!</h1>
             <Review />
           </div>
         </>

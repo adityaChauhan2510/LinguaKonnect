@@ -37,9 +37,9 @@ const Navbar = () => {
             Home
           </li>
         </NavLink>
-        <NavLink to="/studentprofile">
+        <NavLink to="/mycart">
           <li className="p-4 hover:bg-[#00df9a] rounded-xl m-2 cursor-pointer duration-300 hover:text-black">
-            Profile
+            MyCart
           </li>
         </NavLink>
         <button

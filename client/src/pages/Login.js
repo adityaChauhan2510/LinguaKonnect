@@ -14,14 +14,18 @@ export default function Login() {
     setLoading(true);
 
     try {
-      const { data } = await axios.post(
+      const response = await axios.post(
         "http://localhost:8000/api/v1/user/login",
         {
           email,
           password,
-        }
+        },
+        { withCredentials: true }
       );
-      toast.success(data.message);
+
+      const { token } = response.data;
+      sessionStorage.setItem("token", token);
+      toast.success(response.data.message);
     } catch (error) {
       toast.error(error.response?.data?.message || "An error occurred");
     }
