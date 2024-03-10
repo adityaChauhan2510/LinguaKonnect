@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import Navbar from "../components/TNavbar.js";
 import TutorCard from "../components/TutorCard.js";
 import axios from "axios";
@@ -13,14 +13,10 @@ import {
   FormControl,
   InputLabel,
 } from "@mui/material";
-import { Context } from "../../index.js";
 
 function TutorHome() {
-  const { tutor, isAuthenticated } = useContext(Context);
   const [data, setData] = useState([]);
-  const tutor_id = tutor._id;
-  const [loading, setLoading] = useState(true);
-
+  const [loading, setLoading] = useState(false);
   const [openForm, setOpenForm] = useState(false);
   const [formData, setFormData] = useState({
     courseName: "",
@@ -39,7 +35,7 @@ function TutorHome() {
             withCredentials: true,
           }
         );
-        console.log(response.data)
+        console.log(response.data);
         setData(response.data.enrolledCourses);
       } catch (err) {
         console.error("Error fetching data:", err.message);
@@ -59,7 +55,7 @@ function TutorHome() {
     const requestData = {
       name: courseName,
       language: language,
-      tutor_id: tutor_id,
+      // tutor_id: tutor_id,
       pricing: parseInt(price),
       slot_time_in_min: duration,
       time_durations: timings,

@@ -2,12 +2,10 @@ import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import Navbar from "../components/Navbar";
 import StudentCard from "../components/StudentCard";
-import { Context } from "../../index";
 
 export default function StudentProfile() {
   const [data, setData] = useState([]);
-  const [loading, setLoading] = useState(true); 
-  const { user, isAuthenticated } = useContext(Context);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -19,13 +17,12 @@ export default function StudentProfile() {
           }
         );
 
-        console.log("API Response:", user);
-
+        console.log(response);
         setData(response.data.enrolledCourses);
       } catch (err) {
         console.error("Error fetching data:", err.message);
       } finally {
-        setLoading(false); 
+        setLoading(false);
       }
     };
 
@@ -49,7 +46,9 @@ export default function StudentProfile() {
                 <StudentCard key={course._id} course={course} />
               ))
             ) : (
-              <h1 className="text-1xl font-semibold">No courses purchased!!!</h1>
+              <h1 className="text-1xl font-semibold">
+                No courses purchased!!!
+              </h1>
             )}
           </section>
         )}

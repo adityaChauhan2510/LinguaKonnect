@@ -1,19 +1,18 @@
-import React, { useState, useContext } from "react";
+import React, { useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import { useNavigate, Link, Navigate } from "react-router-dom";
 import axios from "axios";
-import { Context } from "../index";
 
 export default function SignUp() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const { isAuthenticated, setIsAuthenticated, loading, setLoading } =
-    useContext(Context);
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
   const submitHandler = async (e) => {
-    setLoading(true);
     e.preventDefault();
+    setLoading(true);
     try {
       const { data } = await axios.post(
         "http://localhost:8000/api/v1/user/new",
@@ -21,30 +20,22 @@ export default function SignUp() {
           name,
           email,
           password,
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-          withCredentials: true,
         }
       );
 
       toast.success(data.message);
-      setIsAuthenticated(true);
-      setLoading(false);
     } catch (error) {
       toast.error(error.response.data.message);
-      setIsAuthenticated(false);
-      setLoading(false);
     }
+    setLoading(false);
+    navigate("/studenthome");
   };
 
-  if (isAuthenticated) return <Navigate to={"/studenthome"} />;
+  if (loading) return <div>Loading...</div>;
 
   return (
     <div className="text-center my-5">
-      <h2 className="text-2xl font-bold">Create your personal account</h2>
+      <h2 className="text-2xl font-bold">Student Register</h2>
       <form onSubmit={submitHandler}>
         <div>
           <label htmlFor="name" className="text-lg font-bold py-2">

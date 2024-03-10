@@ -5,7 +5,6 @@ import { Button } from "@mui/material";
 import VideoChat from "../components/VideoChat.js";
 
 import axios from "axios";
-import { Context } from "../../index.js";
 
 /*
 router.post('/send-video-chat-link/:courseId', async (req, res) => {
@@ -35,7 +34,6 @@ router.post('/send-video-chat-link/:courseId', async (req, res) => {
 
 export default function TutorCourseDetails() {
   const [courseDetails, setCourseDetails] = useState({});
-  const { tutor, isAuthenticated } = useContext(Context);
   const [videoChatId, setVideoChatId] = useState("");
   const { id } = useParams();
 

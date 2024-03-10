@@ -1,13 +1,14 @@
 // controllers/courseController.js
 import { Course } from "../model/course.js";
 import { User } from "../model/user.js";
-import {Tutor} from "../model/tutor.js";
+import { Tutor } from "../model/tutor.js";
 import { sendCookie } from "../utils/feature.js";
 import ErrorHandler from "../middleware/error.js";
 
 export const addCourse = async (req, res, next) => {
   try {
-    const { name, language, pricing, slot_time_in_min, time_durations } = req.body;
+    const { name, language, pricing, slot_time_in_min, time_durations } =
+      req.body;
     const tutorId = req.tutor._id;
 
     const course = await Course.create({
@@ -28,7 +29,7 @@ export const addCourse = async (req, res, next) => {
     return res.status(200).json({
       success: true,
       message: "User already enrolled in the course",
-      result: course
+      result: course,
     });
 
     sendCookie(tutor, res, `Course added successfully`, 200);
@@ -77,7 +78,7 @@ export const enrollCourse = async (req, res, next) => {
 export const getCourseData = async (req, res, next) => {
   try {
     const id = req.params.id;
-    const data = await Course.findById(id);
+    const data = await Course.findById(id).populate("tutor_id", "name");
     if (!data) return next(new ErrorHandler("Course doesn't exist", 404));
     res.status(200).json({
       success: true,

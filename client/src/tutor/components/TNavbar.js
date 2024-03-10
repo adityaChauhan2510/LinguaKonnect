@@ -1,31 +1,28 @@
 import { NavLink, useNavigate } from "react-router-dom";
 import axios from "axios";
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import { toast } from "react-hot-toast";
-import { Context } from "../../index";
 
 const Navbar = () => {
-  const { isAuthenticated, setIsAuthenticated, setLoading } = useContext(Context);
   const navigate = useNavigate();
   const [logoutLoading, setLogoutLoading] = useState(false);
 
   const logoutHandler = async () => {
     setLogoutLoading(true);
     try {
-      const { data } = await axios.get("http://localhost:8000/api/v1/tutor/logout", {
-        withCredentials: true,
-      });
+      const { data } = await axios.get(
+        "http://localhost:8000/api/v1/tutor/logout",
+        {
+          withCredentials: true,
+        }
+      );
 
       toast.success(data.message);
-      setIsAuthenticated(false);
-      setLoading(false);
-      setLogoutLoading(false);
-      // Redirect to the home page after logout
-      navigate("/");
     } catch (error) {
       toast.error(error.response?.data?.message || "An error occurred");
-      setLogoutLoading(false);
     }
+    setLogoutLoading(false);
+    navigate("/");
   };
 
   return (

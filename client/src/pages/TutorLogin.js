@@ -1,15 +1,13 @@
-import React, { useState, useContext } from "react";
+import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import toast, { Toaster } from "react-hot-toast";
-import { Context } from "../index";
 import axios from "axios";
-import { Navigate } from "react-router-dom";
 
 export default function TutorLogin() {
-  const { isAuthenticated, setIsAuthenticated, loading, setLoading } =
-    useContext(Context);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
   const submitHandler = async (e) => {
     e.preventDefault();
@@ -21,26 +19,17 @@ export default function TutorLogin() {
         {
           email,
           password,
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-          withCredentials: true,
         }
       );
 
       toast.success(data.message);
-      setIsAuthenticated(true);
-      setLoading(false);
     } catch (error) {
       toast.error(error.response?.data?.message || "An error occurred");
-      setLoading(false);
-      setIsAuthenticated(false);
     }
-  };
 
-  if (isAuthenticated) return <Navigate to={"/tutorhome"} />;
+    setLoading(false);
+    navigate("/tutorhome");
+  };
 
   return (
     <div className="text-center my-20">

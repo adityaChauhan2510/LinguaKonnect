@@ -4,8 +4,8 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 
-export default function TimeSlots() {
-  const [slot, setSlot] = React.useState(1);
+export default function TimeSlots({ time_durations }) {
+  const [slot, setSlot] = React.useState("");
 
   const handleChange = (event) => {
     setSlot(event.target.value);
@@ -13,17 +13,20 @@ export default function TimeSlots() {
 
   return (
     <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
-      <InputLabel id="demo-select-small-label">slot</InputLabel>
+      <InputLabel id="demo-select-small-label">Slot</InputLabel>
       <Select
         labelId="demo-select-small-label"
         id="demo-select-small"
         value={slot}
-        label="slot"
+        label="Slot"
         onChange={handleChange}
       >
-        <MenuItem value={1}>3-3.45 pm</MenuItem>
-        <MenuItem value={2}>4-5.00 pm</MenuItem>
-        <MenuItem value={3}>7-8.30pm</MenuItem>
+        {time_durations &&
+          time_durations.map((time) => (
+            <MenuItem key={time._id} value={time._id}>
+              {time.start_time} - {time.end_time}
+            </MenuItem>
+          ))}
       </Select>
     </FormControl>
   );

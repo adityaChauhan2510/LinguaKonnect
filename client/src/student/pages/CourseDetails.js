@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
-import { useParams, Navigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import SelectDuration from "../components/SelectDuration";
 import { Button } from "@mui/material";
@@ -7,16 +7,15 @@ import Review from "../components/Review";
 import TimeSlots from "../components/TimeSlots";
 import Notes from "../components/Notes";
 import axios from "axios";
-import StudentVideo from "../components/StudentVideo.js";
-import { Context } from "../../index.js";
 
 export default function CourseDetails() {
   const [courseDetails, setCourseDetails] = useState({});
   const [isEnrolled, setIsEnrolled] = useState(false);
-  const { user, isAuthenticated } = useContext(Context);
+  const [loading, setLoading] = useState(false);
   const { id } = useParams();
 
   useEffect(() => {
+    setLoading(true);
     const fetchData = async () => {
       try {
         const response = await axios.get(
@@ -26,37 +25,25 @@ export default function CourseDetails() {
           }
         );
 
-        // Ensure that user is available and not an empty object
-        if (
-          user &&
-          Object.keys(user).length !== 0 &&
-          Array.isArray(user.courses)
-        ) {
-          const enrolledCourse = user.courses.find(
-            (course) => course.courseId === id
-          );
-          setIsEnrolled(!!enrolledCourse);
-          setCourseDetails(response.data.result);
-        }
+        console.log(response.data.result);
+        setCourseDetails(response.data.result);
       } catch (err) {
         console.error("Error fetching data:", err.message);
+      } finally {
+        setLoading(false);
       }
     };
 
     fetchData();
-  }, [id, user]);
+  }, []);
 
-  console.log(`Hello ${user}`);
-
-  if (!isAuthenticated || !user || Object.keys(user).length === 0) {
-    return <Navigate to={"/login"} />;
-  }
+  if (loading) return <div className="mt-5 mx-10">Loading...</div>;
 
   return (
     <>
       <Navbar />
-      <h1 className="mt-5 mx-10 text-3xl font-bold">{courseDetails.name}</h1>
 
+      <h1 className="mt-5 mx-10 text-3xl font-bold">{courseDetails.name}</h1>
       {isEnrolled ? (
         <div className="flex gap-5">
           <div className="mx-10 mt-10 h-[20rem] w-[30rem] bg-gray-200">
@@ -70,24 +57,35 @@ export default function CourseDetails() {
         <>
           <div className="flex gap-4">
             <div className="mx-10 mt-10 h-[20rem] w-[30rem] bg-gray-200">
-              <img src="/images/bg2.jpg" alt="Background" />
+              <img src="/images/bg2.jpg" alt="background-image" />
             </div>
             <div className="mx-10 mt-10">
-              <p className="my-3 py-2">TutorName</p>
+              <p className="my-3 py-2">
+                TutorName :{" "}
+                {courseDetails.tutor_id ? courseDetails.tutor_id.name : ""}
+              </p>
               <p className="my-3 py-2">
                 Enrolled-students : {courseDetails.enrolled_students}
               </p>
               <p className="my-3 py-2">Ratings : {courseDetails.rating}</p>
               <p className="my-3 py-2">
-                Starting on : {courseDetails.createdAt}
+                Starting on :{" "}
+                {courseDetails.createdAt
+                  ? new Date(courseDetails.createdAt).toLocaleDateString(
+                      "en-GB"
+                    )
+                  : ""}
               </p>
-              <p className="my-3 py-2">Price : {courseDetails.pricing}</p>
+              <p className="my-3 py-2">
+                Price : {"$ "}
+                {courseDetails.pricing}
+              </p>
             </div>
           </div>
 
           <div className="mt-10 mx-10 flex flex-row justify-between">
-            <SelectDuration />
-            <TimeSlots />
+            <SelectDuration Duration={courseDetails.slot_time_in_min} />
+            <TimeSlots time_durations={courseDetails.time_durations} />
             <Button variant="contained" color="success">
               Purchase
             </Button>

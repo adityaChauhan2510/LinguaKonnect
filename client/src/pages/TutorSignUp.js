@@ -1,16 +1,15 @@
-import React, { useState, useContext } from "react";
+import React, { useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
-import { Link, Navigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
-import { Context } from "../index";
 
 export default function SignUp() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [experience, setExperience] = useState();
   const [password, setPassword] = useState("");
-  const { isAuthenticated, setIsAuthenticated, loading, setLoading } =
-    useContext(Context);
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
   const submitHandler = async (e) => {
     setLoading(true);
@@ -23,26 +22,18 @@ export default function SignUp() {
           email,
           experience,
           password,
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-          withCredentials: true,
         }
       );
 
       toast.success(data.message);
-      setIsAuthenticated(true);
+
       setLoading(false);
     } catch (error) {
       toast.error(error.response.data.message);
-      setIsAuthenticated(false);
-      setLoading(false);
     }
+    setLoading(false);
+    navigate("/tutorhome");
   };
-
-  if (isAuthenticated) return <Navigate to={"/tutorhome"} />;
 
   return (
     <div className="text-center my-2">
@@ -77,13 +68,13 @@ export default function SignUp() {
         </div>
 
         <div>
-          <label htmlFor="email" className="text-lg font-bold py-2">
+          <label htmlFor="experience" className="text-lg font-bold py-2">
             Experience
           </label>
           <br />
           <input
             className="my-2"
-            type="experience"
+            type="number"
             id="experience"
             onChange={(e) => setExperience(e.target.value)}
             value={experience}

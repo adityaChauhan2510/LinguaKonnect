@@ -9,8 +9,9 @@ import StudentCard from "../components/StudentCard";
 export default function StudentHome() {
   const [mergedData, setMergedData] = useState({});
   const [searchQuery, setSearchQuery] = useState("");
-  const [price, setPrice] = useState(0);
+  const [price, setPrice] = useState("");
   const [experience, setExperience] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const searchedCourses =
     searchQuery.length > 0
@@ -20,7 +21,7 @@ export default function StudentHome() {
       : mergedData;
 
   const filteredCourses =
-    price !== 0 || experience !== ""
+    price !== "" || experience !== ""
       ? searchedCourses.filter(
           (course) =>
             (price !== "" ? course.pricing <= parseInt(price) : true) &&
@@ -32,6 +33,7 @@ export default function StudentHome() {
 
   useEffect(() => {
     const fetchData = async () => {
+      setLoading(true);
       try {
         const response = await axios.get(
           `http://localhost:8000/api/v1/course/getAll`,
@@ -59,21 +61,25 @@ export default function StudentHome() {
         }));
 
         setMergedData(mergedData);
-        console.log(mergedData);
+        //console.log(mergedData);
       } catch (err) {
         console.error("Error fetching data:", err.message);
+      } finally {
+        setLoading(false);
       }
     };
 
     fetchData();
   }, []);
 
+  if (loading) return <div></div>;
+
   return (
     <>
       <Navbar />
       <SearchField searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
 
-      <div className="flex flex-row gap-5">
+      <div className="flex flex-row gap-2">
         <DiscreteSlider price={price} setPrice={setPrice} />
         <Experience experience={experience} setExperience={setExperience} />
       </div>

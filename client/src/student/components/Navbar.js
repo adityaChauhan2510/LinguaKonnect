@@ -2,35 +2,31 @@ import { NavLink, useNavigate } from "react-router-dom";
 import axios from "axios";
 import React, { useContext, useState } from "react";
 import { toast } from "react-hot-toast";
-import { Context } from "../../index";
 
 const Navbar = () => {
-  const { isAuthenticated, setIsAuthenticated, setLoading } = useContext(Context);
-  const navigate = useNavigate();
   const [logoutLoading, setLogoutLoading] = useState(false);
+  const navigate = useNavigate();
 
   const logoutHandler = async () => {
     setLogoutLoading(true);
     try {
-      const { data } = await axios.get("http://localhost:8000/api/v1/user/logout", {
-        withCredentials: true,
-      });
+      const { data } = await axios.get(
+        "http://localhost:8000/api/v1/user/logout",
+        {
+          withCredentials: true,
+        }
+      );
 
       toast.success(data.message);
-      setIsAuthenticated(false);
-      setLoading(false);
-      setLogoutLoading(false);
-      // Redirect to the home page after logout
-      navigate("/");
     } catch (error) {
       toast.error(error.response?.data?.message || "An error occurred");
-      setLogoutLoading(false);
     }
+    setLogoutLoading(false);
+    navigate("/");
   };
 
   return (
     <div className="bg-black flex justify-between items-center h-24 w-[100%] mx-auto px-4 text-white">
-      {/* Logo */}
       <h1 className="w-full text-3xl font-bold text-[#00df9a]">
         LinguaKonnect
       </h1>
