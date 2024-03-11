@@ -7,9 +7,15 @@ import Review from "../components/Review";
 import TimeSlots from "../components/TimeSlots";
 import Notes from "../components/Notes";
 import axios from "axios";
+import io from "socket.io-client";
+
+const socket = io.connect("http://localhost:5000");
 
 export default function CourseDetails() {
   const [courseDetails, setCourseDetails] = useState({});
+  const [message, setMessage] = useState("");
+  const [userName, setUserName] = useState("");
+  const [chat, setChat] = useState([]);
   const [isEnrolled, setIsEnrolled] = useState(false);
   const [loading, setLoading] = useState(false);
   const { id } = useParams();
@@ -25,7 +31,7 @@ export default function CourseDetails() {
           }
         );
 
-        //console.log(response.data.result);
+        console.log(response.data.result);
         setCourseDetails(response.data.result);
 
         const enrolledCourses = await axios.get(
@@ -41,6 +47,16 @@ export default function CourseDetails() {
 
         setIsEnrolled(enrolledCourseIds.includes(id));
         //console.log(isEnrolled);
+
+        const { data } = await axios.get(
+          `http://localhost:8000/api/v1/user/me`,
+          {
+            withCredentials: true,
+          }
+        );
+
+        console.log(data.user.name);
+        setUserName(data.user.name);
       } catch (err) {
         console.error("Error fetching data:", err.message);
       } finally {
@@ -51,6 +67,18 @@ export default function CourseDetails() {
     fetchData();
   }, [id]);
 
+  useEffect(() => {
+    socket.on("chat", (payload) => {
+      setChat([...chat, payload]);
+    });
+  }, [chat, setChat]);
+
+  const handleFormSubmit = (e) => {
+    e.preventDefault();
+    socket.emit("chat", { message, userName });
+    setMessage("");
+  };
+
   if (loading) return <div className="mt-5 mx-10">Loading...</div>;
 
   return (
@@ -59,15 +87,43 @@ export default function CourseDetails() {
 
       <h1 className="mt-5 mx-10 text-3xl font-bold">{courseDetails.name}</h1>
       {isEnrolled ? (
-        <div className="flex gap-5">
-          <div className="mx-10 mt-10 h-[20rem] w-[30rem] bg-gray-200">
-            video-link-to-class
-            {/* <StudentVideo /> */}
+        <>
+          <div className="flex gap-5">
+            <div className="mx-10 mt-10 h-[20rem] w-[30rem] bg-gray-200">
+              video-link-to-class
+              {/* <StudentVideo /> */}
+            </div>
+            <div className="mx-10 px-10 mt-10">
+              <Notes />
+            </div>
           </div>
-          <div className="mx-10 px-10 mt-10">
-            <Notes />
+
+          <div className="mx-10 my-10">
+            <h2 className="text-2xl">Ask your tutor</h2>
+            <form onSubmit={handleFormSubmit}>
+              <div className="flex flex-row gap-4">
+                <input
+                  type="text"
+                  placeholder="Message"
+                  value={message}
+                  onChange={(e) => setMessage(e.target.value)}
+                  className="border border-gray-300 rounded px-2 my-3"
+                />
+                <div className="px-2 my-3">
+                  <Button variant="contained" color="primary" type="submit">
+                    Send Message
+                  </Button>
+                </div>
+              </div>
+            </form>
+            {chat.map((payload, index) => (
+              <p key={index}>
+                {payload.message} :{" "}
+                <span className="font-bold px-5">{payload.userName}</span>
+              </p>
+            ))}
           </div>
-        </div>
+        </>
       ) : (
         <>
           <div className="flex gap-4">

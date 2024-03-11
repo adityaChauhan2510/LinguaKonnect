@@ -39,7 +39,7 @@ export default function SignUp() {
   return (
     <div className="text-center my-2">
       <h2 className="text-2xl font-bold">Create your personal account</h2>
-      <form onSubmit={submitHandler}>
+      <form onSubmit={submitHandler} className="login-form">
         <div>
           <label htmlFor="name" className="text-lg font-bold">
             UserName

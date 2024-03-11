@@ -87,7 +87,7 @@ h2 {
   font-weight: 300
 }
 
-form {
+.login-form {
   display: inline-block;
   background: #f3f3f3;
   border: 1px solid #ddd;

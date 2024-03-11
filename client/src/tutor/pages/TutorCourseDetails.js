@@ -3,8 +3,11 @@ import { useParams, Navigate, useNavigate } from "react-router-dom";
 import Navbar from "../components/TNavbar.js";
 import { Button } from "@mui/material";
 import toast, { Toaster } from "react-hot-toast";
+import io from "socket.io-client";
 
 import axios from "axios";
+
+const socket = io.connect("http://localhost:5000");
 
 /*
 router.post('/send-video-chat-link/:courseId', async (req, res) => {
@@ -34,10 +37,14 @@ router.post('/send-video-chat-link/:courseId', async (req, res) => {
 
 export default function TutorCourseDetails() {
   const [courseDetails, setCourseDetails] = useState({});
-  const [videoChatId, setVideoChatId] = useState("");
+  const [message, setMessage] = useState("");
+  const [userName, setUserName] = useState("");
+  const [chat, setChat] = useState([]);
   const [loading, setLoading] = useState(false);
   const { id } = useParams();
   const navigate = useNavigate();
+
+  //console.log(userName);
 
   useEffect(() => {
     setLoading(true);
@@ -52,6 +59,7 @@ export default function TutorCourseDetails() {
 
         console.log(response.data.result);
         setCourseDetails(response.data.result);
+        setUserName(response.data.result.tutor_id.name);
       } catch (err) {
         console.error("Error fetching data:", err.message);
       } finally {
@@ -61,6 +69,18 @@ export default function TutorCourseDetails() {
 
     fetchData();
   }, []);
+
+  useEffect(() => {
+    socket.on("chat", (payload) => {
+      setChat([...chat, payload]);
+    });
+  }, [chat, setChat]);
+
+  const handleFormSubmit = (e) => {
+    e.preventDefault();
+    socket.emit("chat", { message, userName });
+    setMessage("");
+  };
 
   const handleDeleteCourse = async () => {
     setLoading(true);
@@ -102,32 +122,38 @@ export default function TutorCourseDetails() {
           <div className="mt-10 mx-10">
             <h1 className="text-3xl font-bold">{courseDetails.name}</h1>
             <div className="flex gap-4 mt-10">
-              {/* <VideoChat /> */}
               <div className="h-[20rem] w-[30rem] bg-gray-200">
                 video-call-to-all-feature
               </div>
 
-              <div className="mx-10 flex flex-col">
-                <h2 className="text-2xl">Send link to all students</h2>
-                <input
-                  type="text"
-                  placeholder="Paste video chat ID here"
-                  value={videoChatId}
-                  onChange={(e) => setVideoChatId(e.target.value)}
-                  className="border border-gray-300 rounded px-2 py-1 my-3"
-                />
-                <Button
-                  variant="contained"
-                  color="primary"
-                  // onClick={handleSendLink}
-                  className="mt-5 mx-3"
-                >
-                  Send Link
-                </Button>
+              <div className="mx-10">
+                <h2 className="text-2xl">Message to all enrolled students</h2>
+                <form onSubmit={handleFormSubmit}>
+                  <div className="flex flex-row gap-4">
+                    <input
+                      type="text"
+                      placeholder="Message"
+                      value={message}
+                      onChange={(e) => setMessage(e.target.value)}
+                      className="border border-gray-300 rounded px-2 my-3"
+                    />
+                    <div className="px-2 my-3">
+                      <Button variant="contained" color="primary" type="submit">
+                        Send Message
+                      </Button>
+                    </div>
+                  </div>
+                </form>
+                {chat.map((payload, index) => (
+                  <p key={index}>
+                    {payload.message} :{" "}
+                    <span className="font-bold px-5">{payload.userName}</span>
+                  </p>
+                ))}
               </div>
             </div>
 
-            <div className="mt-5">
+            <div className="my-5">
               <Button
                 variant="outlined"
                 color="error"

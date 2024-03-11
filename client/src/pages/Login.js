@@ -38,7 +38,7 @@ export default function Login() {
     <div className="text-center my-20">
       <h2 className="text-2xl font-bold">Login</h2>
 
-      <form onSubmit={submitHandler}>
+      <form onSubmit={submitHandler} className="login-form">
         <div className="my-2 px-2">
           <label htmlFor="email" className="text-lg font-bold py-2">
             Email Address
