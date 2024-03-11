@@ -29,7 +29,11 @@ export default function LandingPage() {
       <div className="my-10 mx-auto flex flex-row justify-center gap-5">
         <FormControl sx={{ minWidth: 120 }} size="small">
           <InputLabel id="demo-select-small-label">Login</InputLabel>
-          <Select labelId="demo-select-small-label" id="demo-select-small">
+          <Select
+            labelId="demo-select-small-label"
+            id="demo-select-small"
+            label="Login"
+          >
             <MenuItem component={Link} to="/login">
               Student
             </MenuItem>
@@ -40,7 +44,11 @@ export default function LandingPage() {
         </FormControl>
         <FormControl sx={{ minWidth: 120 }} size="small">
           <InputLabel id="demo-select-small-label">Register</InputLabel>
-          <Select labelId="demo-select-small-label" id="demo-select-small">
+          <Select
+            labelId="demo-select-small-label"
+            id="demo-select-small"
+            label="Register"
+          >
             <MenuItem component={Link} to="/signup">
               Student
             </MenuItem>
