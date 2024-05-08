@@ -4,8 +4,7 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 
-export default function SelectDuration({ Duration }) {
-  const [duration, setDuration] = React.useState("");
+export default function SelectDuration({ Duration, duration, setDuration }) {
 
   const handleChange = (event) => {
     setDuration(event.target.value);

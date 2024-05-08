@@ -26,12 +26,16 @@ export default function Login() {
       const { token } = response.data;
       sessionStorage.setItem("token", token);
       toast.success(response.data.message);
+      navigate("/studenthome");
     } catch (error) {
+      console.log(error)
       toast.error(error.response?.data?.message || "An error occurred");
     }
+    finally{
+      setLoading(false);
+    }
 
-    setLoading(false);
-    navigate("/studenthome");
+    
   };
 
   return (

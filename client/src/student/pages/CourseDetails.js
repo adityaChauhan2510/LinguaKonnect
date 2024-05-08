@@ -18,45 +18,70 @@ export default function CourseDetails() {
   const [chat, setChat] = useState([]);
   const [isEnrolled, setIsEnrolled] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [duration, setDuration] = useState("");
+  const [slot, setSlot] = useState("");
   const { id } = useParams();
+
+  const handleCoursePurchase = async (e) => {
+    e.preventDefault();
+    if (!slot || !duration) {
+      alert("Please select a duration and time slot before purchasing.");
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const response = await axios.post(
+        "http://localhost:8000/api/v1/course/enroll",
+        { course_id: id },
+        { withCredentials: true }
+      );
+      console.log(response.data);
+      setIsEnrolled(true);
+    } catch (error) {
+      console.error("Error enrolling in course:", error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
     setLoading(true);
     const fetchData = async () => {
       try {
-        const response = await axios.get(
-          `http://localhost:8000/api/v1/course/${id}`,
+        const [
           {
-            withCredentials: true,
-          }
-        );
-
-        console.log(response.data.result);
-        setCourseDetails(response.data.result);
-
-        const enrolledCourses = await axios.get(
-          `http://localhost:8000/api/v1/user/getcourses`,
+            data: { result: course },
+          },
           {
-            withCredentials: true,
-          }
-        );
-
-        const enrolledCourseIds = enrolledCourses.data.enrolledCourses.map(
-          (course) => course.courseId._id
-        );
-
-        setIsEnrolled(enrolledCourseIds.includes(id));
-        //console.log(isEnrolled);
-
-        const { data } = await axios.get(
-          `http://localhost:8000/api/v1/user/me`,
+            data: { enrolledCourses: enrolledCourses },
+          },
           {
+            data: { user: user },
+          },
+        ] = await Promise.all([
+          axios.get(`http://localhost:8000/api/v1/course/${id}`, {
             withCredentials: true,
-          }
-        );
+          }),
+          axios.get(`http://localhost:8000/api/v1/user/getcourses`, {
+            withCredentials: true,
+          }),
+          axios.get(`http://localhost:8000/api/v1/user/me`, {
+            withCredentials: true,
+          }),
+        ]);
 
-        console.log(data.user.name);
-        setUserName(data.user.name);
+        //console.log(course);
+        setCourseDetails(course);
+
+        //console.log(enrolledCourses);
+        const Ids = enrolledCourses.map((course) => course.courseId._id);
+
+        //console.log(Ids.includes(id));
+        setIsEnrolled(() => Ids.includes(id));
+
+        //console.log(user.name);
+        setUserName(() => user.name);
       } catch (err) {
         console.error("Error fetching data:", err.message);
       } finally {
@@ -65,7 +90,7 @@ export default function CourseDetails() {
     };
 
     fetchData();
-  }, [id]);
+  }, [id, setIsEnrolled, setCourseDetails]);
 
   useEffect(() => {
     socket.on("chat", (payload) => {
@@ -155,9 +180,21 @@ export default function CourseDetails() {
           </div>
 
           <div className="mt-10 mx-10 flex flex-row justify-between">
-            <SelectDuration Duration={courseDetails.slot_time_in_min} />
-            <TimeSlots time_durations={courseDetails.time_durations} />
-            <Button variant="contained" color="success">
+            <SelectDuration
+              Duration={courseDetails.slot_time_in_min}
+              duration={duration}
+              setDuration={setDuration}
+            />
+            <TimeSlots
+              time_durations={courseDetails.time_durations}
+              slot={slot}
+              setSlot={setSlot}
+            />
+            <Button
+              variant="contained"
+              color="success"
+              onClick={handleCoursePurchase}
+            >
               Purchase
             </Button>
           </div>

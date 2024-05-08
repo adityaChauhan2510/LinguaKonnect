@@ -54,19 +54,6 @@ export const enrollCourse = async (req, res, next) => {
       { new: true }
     );
 
-    if (!user) {
-      return res.status(200).json({
-        success: false,
-        message: "User already enrolled in the course",
-      });
-    }
-
-    const updatedCourse = await Course.findByIdAndUpdate(
-      course_id,
-      { $inc: { enrolled_students: 1 } },
-      { new: true }
-    );
-
     sendCookie(user, res, `Course enrolled successfully`, 200);
   } catch (error) {
     next(error);

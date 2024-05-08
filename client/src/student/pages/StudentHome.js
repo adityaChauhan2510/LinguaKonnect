@@ -7,7 +7,7 @@ import axios from "axios";
 import StudentCard from "../components/StudentCard";
 
 export default function StudentHome() {
-  const [mergedData, setMergedData] = useState({});
+  const [courses, setCourses] = useState({});
   const [searchQuery, setSearchQuery] = useState("");
   const [price, setPrice] = useState("");
   const [experience, setExperience] = useState("");
@@ -15,10 +15,10 @@ export default function StudentHome() {
 
   const searchedCourses =
     searchQuery.length > 0
-      ? mergedData.filter((course) =>
+      ? courses.filter((course) =>
           `${course.language}`.toLowerCase().includes(searchQuery.toLowerCase())
         )
-      : mergedData;
+      : courses;
 
   const filteredCourses =
     price !== "" || experience !== ""
@@ -35,33 +35,25 @@ export default function StudentHome() {
     const fetchData = async () => {
       setLoading(true);
       try {
-        const response = await axios.get(
-          `http://localhost:8000/api/v1/course/getAll`,
-          {
-            withCredentials: true,
-          }
-        );
-
-        const data1 = response.data.result;
-        //console.log(data1);
-
-        const tutorDataPromises = data1.map(async (element) => {
-          const tutor_id = element.tutor_id;
-          const response2 = await axios.get(
-            `http://localhost:8000/api/v1/tutor/${tutor_id}`
-          );
-          return response2.data.result;
+        const {
+          data: { result: coursesData },
+        } = await axios.get(`http://localhost:8000/api/v1/course/getAll`, {
+          withCredentials: true,
         });
 
-        const tutorDataArray = await Promise.all(tutorDataPromises);
+        const courses = await Promise.all(
+          coursesData.map(async (course) => {
+            const tutor_id = course.tutor_id;
+            const res = await axios.get(
+              `http://localhost:8000/api/v1/tutor/${tutor_id}`
+            );
+            const tutorData = res.data.result;
+            return { ...course, tutor: tutorData };
+          })
+        );
 
-        const mergedData = data1.map((element, index) => ({
-          ...element,
-          tutor: tutorDataArray[index],
-        }));
-
-        setMergedData(mergedData);
-        //console.log(mergedData);
+        setCourses(() => courses);
+        //console.log(courses);
       } catch (err) {
         console.error("Error fetching data:", err.message);
       } finally {

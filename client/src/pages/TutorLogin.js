@@ -26,12 +26,15 @@ export default function TutorLogin() {
       const { token } = response.data;
       sessionStorage.setItem("token", token);
       toast.success(response.data.message);
+      navigate("/tutorhome");
     } catch (error) {
       toast.error(error.response?.data?.message || "An error occurred");
     }
+    finally{
+      setLoading(false);
 
-    setLoading(false);
-    navigate("/tutorhome");
+    }
+
   };
 
   return (

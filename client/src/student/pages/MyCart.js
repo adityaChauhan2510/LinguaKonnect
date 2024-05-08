@@ -11,15 +11,14 @@ export default function MyCart() {
     const fetchData = async () => {
       setLoading(true);
       try {
-        const { data } = await axios.get(
-          `http://localhost:8000/api/v1/user/getcourses`,
-          {
-            withCredentials: true,
-          }
-        );
+        const {
+          data: { enrolledCourses },
+        } = await axios.get(`http://localhost:8000/api/v1/user/getcourses`, {
+          withCredentials: true,
+        });
 
-        console.log(data);
-        setEnrolledCourses(data.enrolledCourses);
+        //console.log(enrolledCourses);
+        setEnrolledCourses(enrolledCourses);
       } catch (err) {
         console.error("Error fetching data:", err.message);
       } finally {
@@ -45,8 +44,8 @@ export default function MyCart() {
                 <StudentCard key={course._id} course={course.courseId} />
               ))
             ) : (
-              <h1 className="text-1xl font-semibold">
-                No courses purchased!!!
+              <h1 className="text-2xl font-semibold mx-10">
+                No courses purchased !.
               </h1>
             )}
           </section>

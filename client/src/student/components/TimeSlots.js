@@ -4,9 +4,7 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 
-export default function TimeSlots({ time_durations }) {
-  const [slot, setSlot] = React.useState("");
-
+export default function TimeSlots({ time_durations, slot, setSlot }) {
   const handleChange = (event) => {
     setSlot(event.target.value);
   };

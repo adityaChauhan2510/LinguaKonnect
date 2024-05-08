@@ -7,13 +7,11 @@ import axios from "axios";
 export const login = async (req, res, next) => {
   try {
     const { email, password } = req.body;
-
     const user = await User.findOne({ email }).select("+password");
 
     if (!user) return next(new ErrorHandler("Invalid Email or Password", 400));
 
     const isMatch = await bcrypt.compare(password, user.password);
-
     if (!isMatch)
       return next(new ErrorHandler("Invalid Email or Password", 400));
 
