@@ -1,50 +1,33 @@
-import React, { useState, useEffect, useContext } from "react";
-import { useParams, Navigate, useNavigate } from "react-router-dom";
+import React, {
+  useState,
+  useEffect,
+  useContext,
+  useRef,
+  useCallback,
+} from "react";
+import { useParams, useNavigate, Outlet } from "react-router-dom";
 import Navbar from "../components/TNavbar.js";
-import { Button } from "@mui/material";
-import toast, { Toaster } from "react-hot-toast";
-import io from "socket.io-client";
 
+import io from "socket.io-client";
 import axios from "axios";
 
-const socket = io.connect("http://localhost:5000");
+import SidebarComp from "../components/SidebarComp.js";
+import { Footer } from "../components/Footer.js";
+const URI = "https://linguakonnect.onrender.com";
 
-/*
-router.post('/send-video-chat-link/:courseId', async (req, res) => {
-  try {
-    const { courseId } = req.params;
-    const { videoChatId } = req.body;
-
-    // Logic to find all students enrolled in the course with courseId
-    // This could be querying your database or any other method
-    const students = await Student.find({ courseId });
-
-    // Send the video chat link to each student
-    students.forEach(async (student) => {
-      // Assuming you have a method in your Student model to send the video chat link
-      await student.sendVideoChatLink(videoChatId);
-    });
-
-    res.status(200).json({ message: 'Video chat link sent to all students' });
-  } catch (error) {
-    console.error('Error sending video chat link:', error);
-    res.status(500).json({ error: 'Internal server error' });
-  }
+const socket = io("http://localhost:5000", {
+  autoConnect: false,
 });
 
-
-*/
-
 export default function TutorCourseDetails() {
-  const [courseDetails, setCourseDetails] = useState({});
+  const [course, setCourse] = useState({});
   const [message, setMessage] = useState("");
   const [userName, setUserName] = useState("");
   const [chat, setChat] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [started, setStarted] = useState(false);
   const { id } = useParams();
   const navigate = useNavigate();
-
-  //console.log(userName);
 
   useEffect(() => {
     setLoading(true);
@@ -57,8 +40,7 @@ export default function TutorCourseDetails() {
           }
         );
 
-        console.log(response.data.result);
-        setCourseDetails(response.data.result);
+        setCourse(response.data.result);
         setUserName(response.data.result.tutor_id.name);
       } catch (err) {
         console.error("Error fetching data:", err.message);
@@ -68,104 +50,87 @@ export default function TutorCourseDetails() {
     };
 
     fetchData();
-  }, []);
+  }, [id, setCourse]);
 
-  useEffect(() => {
-    socket.on("chat", (payload) => {
-      setChat([...chat, payload]);
-    });
-  }, [chat, setChat]);
+  const handleNavigate = useCallback(() => {
+    navigate(`/tutorcourse/${id}`);
+  }, [id, navigate]);
 
-  const handleFormSubmit = (e) => {
-    e.preventDefault();
-    socket.emit("chat", { message, userName });
-    setMessage("");
-  };
+  // useEffect(() => {
+  //   socket.on("chat", (payload) => {
+  //     setChat((prevChat) => [...prevChat, payload]);
+  //   });
 
-  const handleDeleteCourse = async () => {
-    setLoading(true);
-    try {
-      const { data } = await axios.delete(
-        `http://localhost:8000/api/v1/course/${id}`,
-        {
-          withCredentials: true,
-        }
-      );
+  //   return () => {
+  //     socket.off("chat");
+  //   };
+  // }, [chat, setChat]);
 
-      //console.log(data);
-      toast.success(data.message);
-    } catch (error) {
-      toast.error("Error deleting course:", error);
-    } finally {
-      setLoading(false);
-      navigate("/tutorhome");
-    }
-  };
-  // const handleSendLink = () => {
-
-  //   axios
-  //     .post("your_backend_url", { videoChatId })
-  //     .then((response) => {
-  //       console.log("Video chat ID sent to all students");
-  //     })
-  //     .catch((error) => {
-  //       console.error("Error sending video chat ID:", error);
-  //     });
+  // const handleFormSubmit = (e) => {
+  //   e.preventDefault();
+  //   socket.emit("chat", { message, userName, roomId: id });
+  //   setMessage("");
   // };
 
-  if (loading) return <div className="text-xl mx-10 mt-10">Loaading...</div>;
+  // const handleDeleteCourse = async () => {
+  //   setLoading(true);
+  //   try {
+  //     const { data } = await axios.delete(
+  //       `http://localhost:8000/api/v1/course/${id}`,
+  //       {
+  //         withCredentials: true,
+  //       }
+  //     );
+
+  //     //console.log(data);
+  //     toast.success(data.message);
+  //   } catch (error) {
+  //     toast.error("Error deleting course:", error);
+  //   } finally {
+  //     setLoading(false);
+  //     navigate("/tutorhome");
+  //   }
+  // };
+
+  // const handleChat = () => {
+  //   if (!started) {
+  //     socket.connect();
+  //     socket.emit("joinRoom", id);
+  //     toast.success("Class started. Students can now join the room.");
+  //   } else {
+  //     socket.emit("ec", id);
+  //     toast.success("Class ended.");
+  //   }
+  //   setStarted(!started);
+  // };
+
+  if (loading) return <div className="text-xl mx-10 mt-10">Loading...</div>;
   return (
     <>
-      <Navbar />
-      {courseDetails && (
+      {course && (
         <>
-          <div className="mt-10 mx-10">
-            <h1 className="text-3xl font-bold">{courseDetails.name}</h1>
-            <div className="flex gap-4 mt-10">
-              <div className="h-[20rem] w-[30rem] bg-gray-200">
-                video-call-to-all-feature
-              </div>
+          <Navbar />
+          <div className="mx-5">
+            <h1
+              className="text-3xl font-extrabold my-5 cursor-pointer"
+              onClick={handleNavigate}
+            >
+              {course.name}
+            </h1>
+            <hr className="my-2 border-t border-gray-300" />
 
-              <div className="mx-10">
-                <h2 className="text-2xl">Message to all enrolled students</h2>
-                <form onSubmit={handleFormSubmit}>
-                  <div className="flex flex-row gap-4">
-                    <input
-                      type="text"
-                      placeholder="Message"
-                      value={message}
-                      onChange={(e) => setMessage(e.target.value)}
-                      className="border border-gray-300 rounded px-2 my-3"
-                    />
-                    <div className="px-2 my-3">
-                      <Button variant="contained" color="primary" type="submit">
-                        Send Message
-                      </Button>
-                    </div>
-                  </div>
-                </form>
-                {chat.map((payload, index) => (
-                  <p key={index}>
-                    {payload.message} :{" "}
-                    <span className="font-bold px-5">{payload.userName}</span>
-                  </p>
-                ))}
-              </div>
+            <div className="flex flex-row gap-3  overflow-y-auto">
+              <SidebarComp id={id} course={course} />
+              <Outlet
+                context={{ id, course }}
+                className="overflow-y-auto sm:w-[100%]"
+              />
             </div>
-
-            <div className="my-5">
-              <Button
-                variant="outlined"
-                color="error"
-                onClick={handleDeleteCourse}
-              >
-                Delete Course
-              </Button>
-            </div>
+            <hr className="border-t border-gray-300" />
           </div>
+          <Footer />
         </>
       )}
-      <Toaster />
     </>
   );
 }

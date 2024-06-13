@@ -10,6 +10,7 @@ export default function SignUp() {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const URI = "https://linguakonnect.onrender.com";
 
   const submitHandler = async (e) => {
     setLoading(true);
@@ -37,8 +38,8 @@ export default function SignUp() {
   };
 
   return (
-    <div className="text-center my-2">
-      <h2 className="text-2xl font-bold">Create your personal account</h2>
+    <div className="text-center my-5">
+      <h2 className="text-2xl font-bold mt-5">Tutor Register</h2>
       <form onSubmit={submitHandler} className="login-form">
         <div>
           <label htmlFor="name" className="text-lg font-bold">
@@ -46,9 +47,10 @@ export default function SignUp() {
           </label>
           <br />
           <input
-            className="my-2"
+            className="my-4 px-2"
             type="text"
             id="name"
+            required
             onChange={(e) => setName(e.target.value)}
             value={name}
           />
@@ -60,9 +62,10 @@ export default function SignUp() {
           </label>
           <br />
           <input
-            className="my-2"
+            className="my-4 px-2"
             type="email"
             id="email"
+            required
             onChange={(e) => setEmail(e.target.value)}
             value={email}
           />
@@ -74,9 +77,10 @@ export default function SignUp() {
           </label>
           <br />
           <input
-            className="my-2"
+            className="my-4 px-2"
             type="number"
             id="experience"
+            required
             onChange={(e) => setExperience(e.target.value)}
             value={experience}
           />
@@ -88,9 +92,10 @@ export default function SignUp() {
           </label>
           <br />
           <input
-            className="my-2"
+            className="my-4 px-2"
             type="password"
             id="password"
+            required
             onChange={(e) => setPassword(e.target.value)}
             value={password}
           />

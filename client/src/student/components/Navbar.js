@@ -2,6 +2,7 @@ import { NavLink, useNavigate } from "react-router-dom";
 import axios from "axios";
 import React, { useContext, useState } from "react";
 import { toast } from "react-hot-toast";
+const URI = "https://linguakonnect.onrender.com";
 
 const Navbar = () => {
   const [logoutLoading, setLogoutLoading] = useState(false);
@@ -10,12 +11,9 @@ const Navbar = () => {
   const logoutHandler = async () => {
     setLogoutLoading(true);
     try {
-      const { data } = await axios.get(
-        "http://localhost:8000/api/v1/user/logout",
-        {
-          withCredentials: true,
-        }
-      );
+      const { data } = await axios.get(`${URI}/api/v1/user/logout`, {
+        withCredentials: true,
+      });
 
       toast.success(data.message);
     } catch (error) {
@@ -27,7 +25,7 @@ const Navbar = () => {
 
   return (
     <div className="bg-black flex justify-between items-center h-24 w-[100%] mx-auto px-4 text-white">
-      <h1 className="w-full text-3xl font-bold text-[#00df9a]">
+      <h1 className="w-full text-4xl font-bold p-2 text-[#00df9a] mx-5">
         LinguaKonnect
       </h1>
 

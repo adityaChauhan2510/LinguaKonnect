@@ -2,6 +2,8 @@ import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import Navbar from "../components/Navbar";
 import StudentCard from "../components/StudentCard";
+import toast, { Toaster } from "react-hot-toast";
+const URI = "https://linguakonnect.onrender.com"
 
 export default function MyCart() {
   const [enrolledCourses, setEnrolledCourses] = useState([]);
@@ -11,16 +13,15 @@ export default function MyCart() {
     const fetchData = async () => {
       setLoading(true);
       try {
-        const {
-          data: { enrolledCourses },
-        } = await axios.get(`http://localhost:8000/api/v1/user/getcourses`, {
+        const { data } = await axios.get(`http://localhost:8000/api/v1/user/getcourses`, {
           withCredentials: true,
         });
 
-        //console.log(enrolledCourses);
-        setEnrolledCourses(enrolledCourses);
+        setEnrolledCourses(data.enrolledCourses);
+        toast.success(data.message);
       } catch (err) {
         console.error("Error fetching data:", err.message);
+        toast.error(err.data?.message || "An error occurred");
       } finally {
         setLoading(false);
       }
@@ -45,12 +46,13 @@ export default function MyCart() {
               ))
             ) : (
               <h1 className="text-2xl font-semibold mx-10">
-                No courses purchased !.
+                No courses purchased !!.
               </h1>
             )}
           </section>
         )}
       </div>
+      <Toaster />
     </>
   );
 }

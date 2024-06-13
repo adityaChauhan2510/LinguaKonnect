@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import { unitSchema } from "./unit.js";
 
 const schema = new mongoose.Schema({
   name: {
@@ -10,11 +11,16 @@ const schema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  description: {
+    type: String,
+  },
+
   tutor_id: {
     type: mongoose.Schema.Types.ObjectId,
     required: true,
     ref: "Tutor",
   },
+
   enrolled_students: {
     type: Number,
     default: 0,
@@ -23,14 +29,12 @@ const schema = new mongoose.Schema({
     type: Number,
     required: true,
   },
-  slot_time_in_min: [
-    {
-      type: Number,
-      required: true,
-    },
-  ],
   time_durations: [
     {
+      duration: {
+        type: String,
+        required: true,
+      },
       start_time: {
         type: String,
         required: true,
@@ -55,10 +59,12 @@ const schema = new mongoose.Schema({
       },
     },
   ],
-  createdAt: {
-    type: Date,
-    default: Date.now,
+
+  image: {
+    type: String,
   },
+
+  units: [unitSchema],
 });
 
 export const Course = mongoose.model("Course", schema);

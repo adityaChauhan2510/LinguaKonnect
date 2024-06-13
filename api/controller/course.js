@@ -3,20 +3,29 @@ import { User } from "../model/user.js";
 import { Tutor } from "../model/tutor.js";
 import { sendCookie } from "../utils/feature.js";
 import ErrorHandler from "../middleware/error.js";
+import { uploadOnCloudinary } from "../middleware/cloudinary.js";
+import axios from "axios";
 
 export const addCourse = async (req, res, next) => {
   try {
-    const { name, language, pricing, slot_time_in_min, time_durations } =
+    const { name, language, pricing, duration, start_time, end_time } =
       req.body;
     const tutorId = req.tutor._id;
+
+    const imageFilePath = req.file.path;
+    const cloudinary_response = await uploadOnCloudinary(imageFilePath);
 
     const course = await Course.create({
       name,
       language,
       tutor_id: tutorId,
       pricing,
-      slot_time_in_min,
-      time_durations,
+      time_durations: {
+        duration,
+        start_time,
+        end_time,
+      },
+      image: cloudinary_response.url,
     });
 
     const tutor = await Tutor.findByIdAndUpdate(
@@ -30,12 +39,79 @@ export const addCourse = async (req, res, next) => {
       message: "Course added by tutor is successful",
       result: course,
     });
-    sendCookie(res, `Course added successfully`, 200);
   } catch (error) {
     next(error);
   }
 };
 
+export const addChapter = async (req, res, next) => {
+  try {
+    const { chapterName, video_url, pdf_url, id } = req.body;
+
+    const unit = {
+      name: chapterName,
+      video_url,
+      pdf_urls: [pdf_url],
+    };
+
+    const course = await Course.findByIdAndUpdate(
+      id,
+      { $push: { units: unit } },
+      { new: true }
+    );
+
+    res.status(200).json({
+      success: true,
+      message: "Unit added to course successfully",
+      course,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const addPDF = async (req, res, next) => {
+  try {
+    const { unit_id, pdf_url, id } = req.body;
+
+    const course = await Course.findOneAndUpdate(
+      { _id: id, "units._id": unit_id },
+      { $push: { "units.$.pdf_urls": pdf_url } },
+      { new: true }
+    );
+
+    res.status(200).json({
+      success: true,
+      message: "PDF added to course successfully",
+      course,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const updateDescription = async (req, res, next) => {
+  try {
+    const { description, id } = req.body;
+    console.log(id);
+
+    const course = await Course.findByIdAndUpdate(
+      id,
+      { $set: { description: description } },
+      { new: true }
+    );
+
+    res.status(200).json({
+      success: true,
+      message: "Description updated successfully",
+      result: course,
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
+//enroll in course and send mail to teacher.
 export const enrollCourse = async (req, res, next) => {
   try {
     const { course_id } = req.body;
@@ -54,7 +130,53 @@ export const enrollCourse = async (req, res, next) => {
       { new: true }
     );
 
-    sendCookie(user, res, `Course enrolled successfully`, 200);
+    const course = await Course.findByIdAndUpdate(
+      course_id,
+      {
+        $inc: { enrolled_students: 1 },
+      },
+      { new: true }
+    );
+
+    const tutorId = course.tutor_id;
+    const tutor = await Tutor.findById(tutorId);
+    const tutorEmail = tutor.email;
+
+    const response = await axios.post("http://localhost:6000/api/purchase", {
+      tutor_email: tutorEmail,
+      course_name: course.name,
+      student_name: user.name,
+    });
+    //console.log(response.data);
+
+    sendCookie(user, res, `Course enrolled successfully...Start learning`, 200);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const askDoubt = async (req, res, next) => {
+  try {
+    const { course_id, doubt } = req.body;
+    const userId = req.user._id;
+
+    const course = await Course.findById(course_id);
+    const user = await User.findById(userId);
+
+    const tutorId = course.tutor_id;
+    const tutor = await Tutor.findById(tutorId);
+    const tutorEmail = tutor.email;
+
+    const response = await axios.post("http://localhost:6000/api/ask-doubt", {
+      tutor_email: tutorEmail,
+      course_name: course.name,
+      student_name: user.name,
+      student_email: user.email,
+      doubt,
+    });
+    //console.log(response.data);
+
+    sendCookie(user, res, `Doubt was sent successfully`, 200);
   } catch (error) {
     next(error);
   }
@@ -77,17 +199,37 @@ export const getCourseData = async (req, res, next) => {
 export const addRating = async (req, res, next) => {
   try {
     const { course_id, rating } = req.body;
+    const userId = req.user._id;
 
-    const data = await Course.findById(course_id);
+    const course = await Course.findById(course_id);
+    if (!course) {
+      return res.status(404).json({ message: "Course not found" });
+    }
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    const courseIndex = user.courses.findIndex(
+      (course) => course.courseId.toString() === course_id
+    );
+
+    const oldRating = user.courses[courseIndex].rating;
+    user.courses[courseIndex].rating = rating;
+
+    await user.save();
+
     const nrating =
-      (data.rating * data.enrolled_students + rating) /
-      (data.enrolled_students + 1);
+      (course.rating * course.enrolled_students - oldRating + rating) /
+      course.enrolled_students;
 
     const updatedCourse = await Course.findByIdAndUpdate(
       course_id,
       { $set: { rating: nrating } },
       { new: true }
     );
+
+    console.log(updatedCourse.rating);
 
     res.status(200).json({
       success: true,

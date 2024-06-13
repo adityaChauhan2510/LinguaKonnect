@@ -1,19 +1,15 @@
 import { Tutor } from "../model/tutor.js";
 import bcrypt from "bcrypt";
-import jwt from "jsonwebtoken";
 import { sendCookie } from "../utils/feature.js";
 import ErrorHandler from "../middleware/error.js";
 
 export const login = async (req, res, next) => {
   try {
     const { email, password } = req.body;
-
     const tutor = await Tutor.findOne({ email }).select("+password");
-
     if (!tutor) return next(new ErrorHandler("Invalid Email or Password", 400));
 
     const isMatch = await bcrypt.compare(password, tutor.password);
-
     if (!isMatch)
       return next(new ErrorHandler("Invalid Email or Password", 400));
 
@@ -63,8 +59,6 @@ export const logout = (req, res) => {
 export const myCourses = async (req, res, next) => {
   try {
     const tutorId = req.tutor._id;
-    //console.log(tutorId);
-
     const tutor = await Tutor.findById(tutorId).populate("courses");
 
     if (!tutor) {
@@ -92,4 +86,11 @@ export const getProfile = async (req, res, next) => {
   } catch (err) {
     next(err);
   }
+};
+
+export const getMyProfile = (req, res) => {
+  res.status(200).json({
+    success: true,
+    user: req.tutor,
+  });
 };

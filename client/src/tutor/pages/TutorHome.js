@@ -2,18 +2,10 @@ import React, { useState, useEffect } from "react";
 import Navbar from "../components/TNavbar.js";
 import TutorCard from "../components/TutorCard.js";
 import axios from "axios";
-import {
-  Button,
-  Dialog,
-  DialogContent,
-  DialogTitle,
-  TextField,
-  Select,
-  MenuItem,
-  FormControl,
-  InputLabel,
-} from "@mui/material";
+import { Button } from "@mui/material";
 import toast, { Toaster } from "react-hot-toast";
+import Form from "../components/Form.js";
+// const URI = "https://linguakonnect.onrender.com"
 
 function TutorHome() {
   const [data, setData] = useState([]);
@@ -22,45 +14,34 @@ function TutorHome() {
   const [formData, setFormData] = useState({
     courseName: "",
     language: "",
-    duration: [],
+    duration: "",
+    start_time: "",
+    end_time: "",
     price: "",
-    timings: [],
+    image: null,
   });
 
-  useEffect(() => {
-    const fetchData = async () => {
-      setLoading(true);
-      try {
-        const response = await axios.get(
-          `http://localhost:8000/api/v1/tutor/tutorcourses`,
-          {
-            withCredentials: true,
-          }
-        );
-        console.log(response.data);
-        setData(response.data.takingCourses);
-      } catch (err) {
-        console.error("Error fetching data:", err.message);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchData();
-  }, []);
-
-  const handleSubmit = async (event) => {
+  const handleFormSubmit = async (event) => {
     event.preventDefault();
 
-    const { courseName, language, price, duration, timings } = formData;
+    const {
+      courseName,
+      language,
+      price,
+      duration,
+      start_time,
+      end_time,
+      image,
+    } = formData;
 
-    const requestData = {
-      name: courseName,
-      language: language,
-      pricing: parseInt(price),
-      slot_time_in_min: duration,
-      time_durations: timings,
-    };
+    const requestData = new FormData();
+    requestData.append("name", courseName);
+    requestData.append("language", language);
+    requestData.append("pricing", parseInt(price));
+    requestData.append("duration", duration);
+    requestData.append("start_time", start_time);
+    requestData.append("end_time", end_time);
+    requestData.append("image", image);
 
     try {
       const response = await axios.post(
@@ -76,65 +57,57 @@ function TutorHome() {
       setFormData({
         courseName: "",
         language: "",
-        duration: [],
+        duration: "",
+        start_time: "",
+        end_time: "",
         price: "",
-        timings: [],
+        image: null,
       });
 
       setOpenForm(false);
-      toast.success(response.data.message);
+      console.log(response.data.message);
     } catch (error) {
       console.error("Error submitting form:", error);
     }
   };
 
-  const handleChange = (event) => {
-    const { name, value } = event.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
-  };
+  useEffect(() => {
+    const fetchData = async () => {
+      setLoading(true);
+      try {
+        const response = await axios.get(
+          `http://localhost:8000/api/v1/tutor/tutorcourses`,
+          {
+            withCredentials: true,
+          }
+        );
+        setData(response.data.takingCourses);
+      } catch (err) {
+        console.error("Error fetching data:", err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  const handleDurationChange = (event) => {
-    const { value } = event.target;
-    setFormData({
-      ...formData,
-      duration: value,
-      timings: Array.from({ length: value.length }, () => ({
-        start_time: "",
-        end_time: "",
-      })),
-    });
-  };
+    fetchData();
+  }, []);
 
-  const handleTimeChange = (index, type) => (event) => {
-    const { value } = event.target;
-    setFormData((prevFormData) => ({
-      ...prevFormData,
-      timings: prevFormData.timings.map((timing, i) =>
-        i === index ? { ...timing, [type]: value } : timing
-      ),
-    }));
-  };
+  if (loading)
+    return <div className="mt-10 mx-10 text-xl font-semibold">Loading...</div>;
 
   return (
-    <div>
+    <>
       <Navbar />
-      <div className="my-10 mx-10">
+      <div className="mt-10">
         <h1 className="text-3xl font-bold mx-5 px-5">My Courses</h1>
-        <div className="mt-10">
+        <div className="my-2">
           <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 my-10">
-            {loading ? (
-              <p className="mt-10 mx-10">Loading...</p>
-            ) : (
-              data.map((course, index) => (
-                <TutorCard key={index} course={course} />
-              ))
-            )}
+            {data.map((course, index) => (
+              <TutorCard key={index} course={course} />
+            ))}
           </section>
 
-          <div className="mx-5 px-5">
+          <div className="px-5 mx-5">
             <Button
               variant="contained"
               color="success"
@@ -144,75 +117,16 @@ function TutorHome() {
             </Button>
           </div>
 
-          <Dialog open={openForm} onClose={() => setOpenForm(false)}>
-            <DialogTitle>Add Course</DialogTitle>
-            <DialogContent>
-              <form onSubmit={handleSubmit}>
-                <TextField
-                  label="Course Name"
-                  name="courseName"
-                  value={formData.courseName}
-                  onChange={handleChange}
-                  fullWidth
-                  margin="normal"
-                />
-                <TextField
-                  label="Language"
-                  name="language"
-                  value={formData.language}
-                  onChange={handleChange}
-                  fullWidth
-                  margin="normal"
-                />
-                <FormControl fullWidth margin="normal">
-                  <InputLabel>Duration</InputLabel>
-                  <Select
-                    multiple
-                    value={formData.duration}
-                    onChange={handleDurationChange}
-                    renderValue={(selected) => selected.join(", ")}
-                  >
-                    <MenuItem value={45}>45 mins</MenuItem>
-                    <MenuItem value={60}>60 mins</MenuItem>
-                    <MenuItem value={90}>90 mins</MenuItem>
-                  </Select>
-                </FormControl>
-                {formData.timings.map((timing, index) => (
-                  <div key={index}>
-                    <TextField
-                      label={`Start Time ${index + 1}`}
-                      value={timing.start_time}
-                      onChange={handleTimeChange(index, "start_time")}
-                      fullWidth
-                      margin="normal"
-                    />
-                    <TextField
-                      label={`End Time ${index + 1}`}
-                      value={timing.end_time}
-                      onChange={handleTimeChange(index, "end_time")}
-                      fullWidth
-                      margin="normal"
-                    />
-                  </div>
-                ))}
-                <TextField
-                  label="Price"
-                  name="price"
-                  value={formData.price}
-                  onChange={handleChange}
-                  fullWidth
-                  margin="normal"
-                />
-                <Button type="submit" variant="contained" color="primary">
-                  Submit
-                </Button>
-              </form>
-            </DialogContent>
-          </Dialog>
+          <Form
+            openForm={openForm}
+            setOpenForm={setOpenForm}
+            handleFormSubmit={handleFormSubmit}
+            formData={formData}
+            setFormData={setFormData}
+          />
         </div>
       </div>
-      <Toaster />
-    </div>
+    </>
   );
 }
 

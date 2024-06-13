@@ -1,35 +1,53 @@
-import * as React from "react";
-import Card from "@mui/material/Card";
-import CardHeader from "@mui/material/CardHeader";
-import CardMedia from "@mui/material/CardMedia";
-import Rating from "@mui/material/Rating";
+import React from "react";
+import { Card, CardMedia, Rating } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 
-export default function StudentCard({ course }) {
+export default function CourseCard({ course }) {
   const navigate = useNavigate();
 
   function handleClick() {
     navigate(`/course/${course._id}`);
   }
-
   return (
-    <div className="shadow-4xl my-7 px-5 mx-5 rounded-xl">
-      <Card sx={{ cursor: "pointer" }} onClick={handleClick}>
-        <CardHeader title={course.name} />
-        <CardMedia
-          component="img"
-          height="60"
-          image="images/bg2.jpg"
-          alt="Image"
-        />
+    course && (
+      <div className="shadow-4xl my-7 px-5 mx-5 rounded-xl">
+        <Card
+          sx={{
+            backgroundColor: "#ccc",
+            cursor: "pointer",
+            display: "flex",
+            flexDirection: "column",
+            height: "300px", // Set a fixed height for the card
+          }}
+          onClick={handleClick}
+        >
+          <div className="font-bold text-2xl py-2 px-3 uppercase">
+            {course.name}
+          </div>
 
-        <p className="mx-3 mt-2 text-md font-semibold">
-          Language : {course.language}
-        </p>
-        <p className="mx-3 text-md font-semibold py-2">
-          Ratings: <Rating name="half-rating" defaultValue={course.rating} />
-        </p>
-      </Card>
-    </div>
+          <div style={{ height: "200px", overflow: "hidden" }}>
+            <CardMedia
+              component="img"
+              sx={{ objectFit: "cover", height: "100%" }}
+              image={course.image || "images/bg2.jpg"}
+              alt="Image"
+            />
+          </div>
+
+          <p className="mt-1 mx-3 text-md font-semibold">
+            Language : {course.language}
+          </p>
+
+          <div className="flex">
+            <p className="ml-3 mr-1 text-md font-semibold">Ratings : </p>
+            <Rating
+              name="rating"
+              defaultValue={course.rating}
+              sx={{ height: "2px" }}
+            />
+          </div>
+        </Card>
+      </div>
+    )
   );
 }

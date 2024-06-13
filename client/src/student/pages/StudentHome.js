@@ -5,6 +5,7 @@ import DiscreteSlider from "../components/DiscreteSlider";
 import Experience from "../components/Experience";
 import axios from "axios";
 import StudentCard from "../components/StudentCard";
+const URI = "https://linguakonnect.onrender.com";
 
 export default function StudentHome() {
   const [courses, setCourses] = useState({});
@@ -53,7 +54,7 @@ export default function StudentHome() {
         );
 
         setCourses(() => courses);
-        //console.log(courses);
+        console.log(courses);
       } catch (err) {
         console.error("Error fetching data:", err.message);
       } finally {

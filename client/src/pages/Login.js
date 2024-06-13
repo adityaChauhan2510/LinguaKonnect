@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import toast, { Toaster } from "react-hot-toast";
 import axios from "axios";
+const URI = "https://linguakonnect.onrender.com";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -28,14 +29,10 @@ export default function Login() {
       toast.success(response.data.message);
       navigate("/studenthome");
     } catch (error) {
-      console.log(error)
       toast.error(error.response?.data?.message || "An error occurred");
-    }
-    finally{
+    } finally {
       setLoading(false);
     }
-
-    
   };
 
   return (
@@ -49,7 +46,7 @@ export default function Login() {
           </label>
           <br />
           <input
-            className="my-4"
+            className="my-4 px-2"
             type="email"
             id="email"
             onChange={(e) => setEmail(e.target.value)}
@@ -63,7 +60,7 @@ export default function Login() {
           </label>
           <br />
           <input
-            className="my-4"
+            className="my-4 px-2"
             type="password"
             id="password"
             onChange={(e) => setPassword(e.target.value)}
@@ -71,7 +68,7 @@ export default function Login() {
           />
         </div>
 
-        <div>
+        <div className="py-4">
           <button
             id="sub_btn"
             type="submit"
@@ -85,9 +82,13 @@ export default function Login() {
 
       <footer>
         <p>
-          First time? <Link to="/signup">Create an account</Link>.
+          First time?{" "}
+          <Link to="/signup" className="font-semibold">
+            Create an account
+          </Link>
+          .
         </p>
-        <p>
+        <p className="font-semibold">
           <Link to="/">Back to Homepage</Link>.
         </p>
       </footer>

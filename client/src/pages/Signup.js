@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import { useNavigate, Link, Navigate } from "react-router-dom";
 import axios from "axios";
+const URI = "https://linguakonnect.onrender.com";
 
 export default function SignUp() {
   const [name, setName] = useState("");
@@ -46,9 +47,10 @@ export default function SignUp() {
           </label>
           <br />
           <input
-            className="my-4"
+            className="my-4 px-2"
             type="text"
             id="name"
+            required
             onChange={(e) => setName(e.target.value)}
             value={name}
           />
@@ -60,9 +62,10 @@ export default function SignUp() {
           </label>
           <br />
           <input
-            className="my-4"
+            className="my-4 px-2"
             type="email"
             id="email"
+            required
             onChange={(e) => setEmail(e.target.value)}
             value={email}
           />
@@ -74,9 +77,10 @@ export default function SignUp() {
           </label>
           <br />
           <input
-            className="my-4"
+            className="my-4 px-2"
             type="password"
             id="password"
+            required
             onChange={(e) => setPassword(e.target.value)}
             value={password}
           />

@@ -18,7 +18,7 @@ const HeaderStyle = {
 
 export default function LandingPage() {
   return (
-    <>
+    <div>
       <header style={HeaderStyle}>
         <h1 className="main-title text-center">Lingua-Konnect</h1>
         <p className="main-para text-center">
@@ -58,6 +58,6 @@ export default function LandingPage() {
           </Select>
         </FormControl>
       </div>
-    </>
+    </div>
   );
 }

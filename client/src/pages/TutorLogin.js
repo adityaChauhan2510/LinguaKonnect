@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import toast, { Toaster } from "react-hot-toast";
 import axios from "axios";
+const URI = "https://linguakonnect.onrender.com";
 
 export default function TutorLogin() {
   const [email, setEmail] = useState("");
@@ -29,12 +30,9 @@ export default function TutorLogin() {
       navigate("/tutorhome");
     } catch (error) {
       toast.error(error.response?.data?.message || "An error occurred");
-    }
-    finally{
+    } finally {
       setLoading(false);
-
     }
-
   };
 
   return (
@@ -48,7 +46,7 @@ export default function TutorLogin() {
           </label>
           <br />
           <input
-            className="my-4"
+            className="my-4 px-2"
             type="email"
             id="email"
             onChange={(e) => setEmail(e.target.value)}
@@ -62,7 +60,7 @@ export default function TutorLogin() {
           </label>
           <br />
           <input
-            className="my-4"
+            className="my-4 px-2"
             type="password"
             id="password"
             onChange={(e) => setPassword(e.target.value)}
@@ -84,9 +82,13 @@ export default function TutorLogin() {
 
       <footer>
         <p>
-          First time? <Link to="/tutorsignup">Create an account</Link>.
+          First time?{" "}
+          <Link to="/signup" className="font-semibold">
+            Create an account
+          </Link>
+          .
         </p>
-        <p>
+        <p className="font-semibold">
           <Link to="/">Back to Homepage</Link>.
         </p>
       </footer>

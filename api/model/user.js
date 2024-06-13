@@ -21,18 +21,12 @@ const schema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: "Course",
       },
-      notes: [
-        {
-          type: String,
-          required: false,
-        },
-      ],
+      rating: {
+        type: Number,
+        default: 0,
+      },
     },
   ],
-  createdAt: {
-    type: Date,
-    default: Date.now,
-  },
 });
 
 export const User = mongoose.model("User", schema);

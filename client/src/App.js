@@ -13,6 +13,10 @@ import CourseDetails from "./student/pages/CourseDetails";
 import TutorCourseDetails from "./tutor/pages/TutorCourseDetails.js";
 import { Toaster } from "react-hot-toast";
 
+import CourseHome from "./tutor/pages/CourseHome.js";
+import ChapterPage from "./tutor/pages/ChapterPage.js";
+import UploadNewChapter from "./tutor/pages/UploadNewChapter.js";
+
 export default function App() {
   return (
     <BrowserRouter>
@@ -25,12 +29,17 @@ export default function App() {
         <Route path="tutorhome" element={<TutorHome />} />
         <Route path="tutorprofile" element={<TutorProfile />} />
 
+        <Route path="tutorcourse/:id" element={<TutorCourseDetails />}>
+          <Route path="" element={<CourseHome />} />
+          <Route path="new" element={<UploadNewChapter />} />
+          <Route path=":chapter" element={<ChapterPage />} />
+        </Route>
+
         <Route path="studenthome" element={<StudentHome />} />
         <Route path="mycart" element={<MyCart />} />
         <Route path="course/:id" element={<CourseDetails />} />
-        <Route path="tutorcourse/:id" element={<TutorCourseDetails />} />
       </Routes>
-      <Toaster />
+      {/* <Toaster /> */}
     </BrowserRouter>
   );
 }
