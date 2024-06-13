@@ -39,7 +39,7 @@ export default function App() {
         <Route path="mycart" element={<MyCart />} />
         <Route path="course/:id" element={<CourseDetails />} />
       </Routes>
-      {/* <Toaster /> */}
+      <Toaster />
     </BrowserRouter>
   );
 }

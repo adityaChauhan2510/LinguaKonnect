@@ -3,17 +3,13 @@ import { User } from "../model/user.js";
 import { Tutor } from "../model/tutor.js";
 import { sendCookie } from "../utils/feature.js";
 import ErrorHandler from "../middleware/error.js";
-import { uploadOnCloudinary } from "../middleware/cloudinary.js";
 import axios from "axios";
 
 export const addCourse = async (req, res, next) => {
   try {
-    const { name, language, pricing, duration, start_time, end_time } =
+    const { name, language, pricing, duration, start_time, end_time, image } =
       req.body;
     const tutorId = req.tutor._id;
-
-    const imageFilePath = req.file.path;
-    const cloudinary_response = await uploadOnCloudinary(imageFilePath);
 
     const course = await Course.create({
       name,
@@ -25,7 +21,7 @@ export const addCourse = async (req, res, next) => {
         start_time,
         end_time,
       },
-      image: cloudinary_response.url,
+      image,
     });
 
     const tutor = await Tutor.findByIdAndUpdate(

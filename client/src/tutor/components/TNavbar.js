@@ -27,7 +27,7 @@ const Navbar = () => {
 
   return (
     <div className="bg-black flex justify-between items-center w-[100%] text-white">
-      <h1 className="w-full text-4xl font-bold py-3 text-[#00df9a] mx-5">
+      <h1 className="w-full text-4xl font-bold py-3 text-[#00df9a] px-10">
         LinguaKonnect
       </h1>
 

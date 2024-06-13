@@ -112,7 +112,7 @@ export default function TutorCourseDetails() {
           <Navbar />
           <div className="mx-5">
             <h1
-              className="text-3xl font-extrabold my-5 cursor-pointer"
+              className="text-3xl font-extrabold my-5 px-5 cursor-pointer"
               onClick={handleNavigate}
             >
               {course.name}

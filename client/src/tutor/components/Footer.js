@@ -2,7 +2,7 @@ import { Typography } from "@material-tailwind/react";
 
 export function Footer() {
   return (
-    <footer className="w-full p-8 bg-gray-200">
+    <footer className="w-full p-10 bg-neutral-900">
       <div className="flex flex-row flex-wrap items-center justify-center gap-y-6 gap-x-12 text-center md:justify-between">
         <img
           src="https://docs.material-tailwind.com/img/logo-ct-dark.png"
@@ -13,9 +13,9 @@ export function Footer() {
           <li>
             <Typography
               as="a"
-              href="#"
+              href=""
               color="blue-gray"
-              className="font-normal transition-colors hover:text-blue-500 focus:text-blue-500"
+              className="transition-colors text-white font-semibold hover:text-blue-500 focus:text-blue-500"
             >
               Home
             </Typography>
@@ -23,9 +23,9 @@ export function Footer() {
           <li>
             <Typography
               as="a"
-              href="#"
+              href=""
               color="blue-gray"
-              className="font-normal transition-colors hover:text-blue-500 focus:text-blue-500"
+              className="text-white font-semibold transition-colors hover:text-blue-500 focus:text-blue-500"
             >
               License
             </Typography>
@@ -33,16 +33,19 @@ export function Footer() {
           <li>
             <Typography
               as="a"
-              href="#"
+              href=""
               color="blue-gray"
-              className="font-normal transition-colors hover:text-blue-500 focus:text-blue-500"
+              className="text-white font-semibold transition-colors hover:text-blue-500 focus:text-blue-500"
             >
               Contact Us
             </Typography>
           </li>
         </ul>
       </div>
-      <Typography color="blue-gray" className="text-center font-normal">
+      <Typography
+        color="blue-gray"
+        className="text-center text-white font-bold mt-10"
+      >
         &copy; 2024 LinguaKonnect
       </Typography>
     </footer>

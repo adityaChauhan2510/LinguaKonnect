@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import toast, { Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
 import axios from "axios";
 const URI = "https://linguakonnect.onrender.com";
 
@@ -92,7 +92,6 @@ export default function TutorLogin() {
           <Link to="/">Back to Homepage</Link>.
         </p>
       </footer>
-      <Toaster />
     </div>
   );
 }
