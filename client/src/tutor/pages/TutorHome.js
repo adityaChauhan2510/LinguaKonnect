@@ -115,16 +115,18 @@ function TutorHome() {
   return (
     <>
       {data && (
-        <div>
+        <div className="">
           <Navbar />
           <div className="my-10">
-            <h1 className="text-3xl font-bold mx-5 px-5">My Courses</h1>
+            <h1 className="text-4xl text-neutral-800 font-extrabold text-center mx-5 px-5">
+              My Courses
+            </h1>
             <div className="my-2">
-              <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 md:gap-2 lg:gap-10 my-10">
+              <div className="grid px-10 sm:px-0 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 md:gap-2 lg:gap-10 my-10">
                 {data.map((course, index) => (
                   <TutorCard key={index} course={course} />
                 ))}
-              </section>
+              </div>
 
               {/* EMPTY-DIV */}
               <div className="h-[5rem]"></div>

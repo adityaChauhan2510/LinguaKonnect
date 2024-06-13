@@ -41,7 +41,7 @@ export default function TutorCard({ course }) {
               Language : {course.language}
             </p>
 
-            <div className="flex">
+            <div className="flex gap-3">
               <p className="ml-3 mr-1 text-md font-semibold">Ratings : </p>
               <Rating
                 name={`rating-${course._id}`}
