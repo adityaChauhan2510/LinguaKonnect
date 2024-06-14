@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { TextField, Button } from "@mui/material";
 
-export default function ReviewForm({ review, setReview, handleSubmitReview }) {
+export default function WriteReview({ review, setReview, handleSubmitReview }) {
   const handleReviewChange = (e) => {
     setReview(e.target.value);
   };
@@ -9,7 +9,7 @@ export default function ReviewForm({ review, setReview, handleSubmitReview }) {
   return (
     <form onSubmit={handleSubmitReview}>
       <TextField
-        label="Write your review"
+        label="Leave Feedback"
         variant="outlined"
         fullWidth
         multiline
@@ -17,9 +17,9 @@ export default function ReviewForm({ review, setReview, handleSubmitReview }) {
         value={review}
         onChange={handleReviewChange}
       />
-      <div className="mt-3">
-        <Button type="submit" variant="contained" color="primary">
-          Submit Review
+      <div className="my-5">
+        <Button type="submit" variant="contained" color="primary" className="">
+          Submit Feedback
         </Button>
       </div>
     </form>

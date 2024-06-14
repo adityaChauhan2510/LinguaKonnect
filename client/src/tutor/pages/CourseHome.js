@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useOutletContext } from "react-router-dom";
-import CourseDetails from "../components/CourseDetails";
-import Image from "../components/Image";
+
 import CourseDescription from "../components/CourseDescription";
-import Review from "../components/Review";
-import axios from "axios";
+import Image from "../../shared-ui/Image";
+import CourseDetails from "../../shared-ui/CourseDetails";
+import Review from "../../shared-ui/Review";
 
 export default function CourseHome() {
   const { id, course } = useOutletContext();

@@ -1,12 +1,31 @@
 import React from "react";
 import { Card, CardMedia, Rating } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 export default function CourseCard({ course }) {
   const navigate = useNavigate();
 
-  function handleClick() {
-    navigate(`/course/${course._id}`);
+  async function handleClick() {
+    try {
+      const res = await axios.get(
+        `http://localhost:8000/api/v1/user/getcourses`,
+        {
+          withCredentials: true,
+        }
+      );
+
+      const { enrolledCourses } = res.data;
+      const Ids = enrolledCourses.map((course) => course.courseId._id);
+
+      if (Ids.includes(course._id)) {
+        navigate(`/purchased/${course._id}`);
+      } else {
+        navigate(`/course/${course._id}`);
+      }
+    } catch (err) {
+      console.error("Error fetching data:", err.message);
+    }
   }
   return (
     course && (
@@ -17,7 +36,7 @@ export default function CourseCard({ course }) {
             cursor: "pointer",
             display: "flex",
             flexDirection: "column",
-            height: "300px", // Set a fixed height for the card
+            height: "300px",
           }}
           onClick={handleClick}
         >
@@ -29,7 +48,7 @@ export default function CourseCard({ course }) {
             <CardMedia
               component="img"
               sx={{ objectFit: "cover", height: "100%" }}
-              image={course.image || "images/bg2.jpg"}
+              image={course.image}
               alt="Image"
             />
           </div>

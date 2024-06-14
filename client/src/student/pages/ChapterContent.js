@@ -1,16 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useOutletContext, useNavigate } from "react-router-dom";
-import PDFCard from "../../shared-ui/PDFCard";
-import VideoPlayer from "../../shared-ui/VideoPlayer";
-import axios from "axios";
-import UploadPDF from "../components/UploadPDF";
 
-export default function ChapterPage() {
+import VideoPlayer from "../../shared-ui/VideoPlayer";
+import PDFCard from "../../shared-ui/PDFCard";
+
+export default function ChapterContent() {
   const { chapter } = useParams();
   const { id, course } = useOutletContext();
   const [unit, setUnit] = useState({});
-  const [pdfFile, setPdfFile] = useState(null);
-  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -29,58 +26,6 @@ export default function ChapterPage() {
     link.href = url;
     link.download = `Resource_${index + 1}.pdf`;
     link.click();
-  };
-
-  const handleFileChange = (event) => {
-    setPdfFile(event.target.files[0]);
-  };
-
-  const uploadPdf = async () => {
-    const data = new FormData();
-    data.append("file", pdfFile);
-    data.append("upload_preset", "pdf_preset");
-
-    try {
-      const response = await axios.post(
-        "https://api.cloudinary.com/v1_1/dokxv4qdm/auto/upload",
-        data
-      );
-
-      return response.data.secure_url;
-    } catch (err) {
-      console.log(err);
-    }
-  };
-
-  const handleUpload = async () => {
-    if (!pdfFile) {
-      alert("Please select a file to upload");
-      return;
-    }
-
-    try {
-      setLoading(true);
-      const pdf_url = await uploadPdf();
-      console.log(pdf_url);
-
-      const response = await axios.post(
-        `http://localhost:8000/api/v1/course/add-pdf`,
-        {
-          unit_id: unit._id,
-          pdf_url,
-          id,
-        },
-        { withCredentials: true }
-      );
-
-      console.log(response.data);
-    } catch (err) {
-      console.log(err);
-    } finally {
-      setPdfFile(null);
-      setLoading(false);
-      navigate(`/tutorcourse/${id}`);
-    }
   };
 
   return (
@@ -102,14 +47,6 @@ export default function ChapterPage() {
           {unit.pdf_urls && unit.pdf_urls.length > 0 && (
             <PDFCard unit={unit} handlePdfDownload={handlePdfDownload} />
           )}
-
-          <div className="my-5">
-            <UploadPDF
-              loading={loading}
-              handleFileChange={handleFileChange}
-              handleUpload={handleUpload}
-            />
-          </div>
 
           {/* COMMENTS-SECTION */}
           <div className="h-[5rem]"></div>

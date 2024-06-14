@@ -49,7 +49,7 @@ export default function CourseDescription({ value, id }) {
         <TextField
           fullWidth
           multiline
-          maxRows={15}
+          rows={9}
           variant="outlined"
           value={description}
           onChange={handleChange}

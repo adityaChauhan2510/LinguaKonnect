@@ -12,7 +12,7 @@ import io from "socket.io-client";
 import axios from "axios";
 
 import SidebarComp from "../components/SidebarComp.js";
-import { Footer } from "../components/Footer.js";
+import { Footer } from "../../shared-ui/Footer.js";
 const URI = "https://linguakonnect.onrender.com";
 
 const socket = io("http://localhost:5000", {

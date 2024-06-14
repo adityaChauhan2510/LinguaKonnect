@@ -6,7 +6,8 @@ import { Button } from "@mui/material";
 import toast from "react-hot-toast";
 import Form from "../components/Form.js";
 import Loading from "../components/Loading.js";
-import { Footer } from "../components/Footer.js";
+import { Footer } from "../../shared-ui/Footer.js";
+
 // const URI = "https://linguakonnect.onrender.com"
 
 function TutorHome() {

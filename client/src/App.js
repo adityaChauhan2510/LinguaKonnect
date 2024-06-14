@@ -14,8 +14,12 @@ import TutorCourseDetails from "./tutor/pages/TutorCourseDetails.js";
 import { Toaster } from "react-hot-toast";
 
 import CourseHome from "./tutor/pages/CourseHome.js";
+
 import ChapterPage from "./tutor/pages/ChapterPage.js";
 import UploadNewChapter from "./tutor/pages/UploadNewChapter.js";
+import CoursePage from "./student/pages/CoursePage.js";
+import CourseDashboard from "./student/pages/CourseDashboard.js";
+import ChapterContent from "./student/pages/ChapterContent.js";
 
 export default function App() {
   return (
@@ -38,8 +42,12 @@ export default function App() {
         <Route path="studenthome" element={<StudentHome />} />
         <Route path="mycart" element={<MyCart />} />
         <Route path="course/:id" element={<CourseDetails />} />
+        <Route path="purchased/:id" element={<CoursePage />}>
+          <Route path="" element={<CourseDashboard />} />
+          <Route path=":chapter" element={<ChapterContent />} />
+        </Route>
       </Routes>
-      {/* <Toaster /> */}
+      <Toaster />
     </BrowserRouter>
   );
 }

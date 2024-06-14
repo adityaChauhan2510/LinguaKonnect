@@ -5,6 +5,8 @@ import DiscreteSlider from "../components/DiscreteSlider";
 import Experience from "../components/Experience";
 import axios from "axios";
 import StudentCard from "../components/StudentCard";
+import Loading from "../components/Loading";
+import { Footer } from "../../shared-ui/Footer";
 const URI = "https://linguakonnect.onrender.com";
 
 export default function StudentHome() {
@@ -65,30 +67,39 @@ export default function StudentHome() {
     fetchData();
   }, []);
 
-  if (loading)
-    return <div className="mt-10 mx-10 text-xl font-semibold">Loading...</div>;
+  if (loading) return <Loading />;
 
   return (
     <>
-      <Navbar />
-      <SearchField searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
+      {filteredCourses && (
+        <>
+          <Navbar />
+          <SearchField
+            searchQuery={searchQuery}
+            setSearchQuery={setSearchQuery}
+          />
 
-      <div className="flex flex-row gap-2">
-        <DiscreteSlider price={price} setPrice={setPrice} />
-        <Experience experience={experience} setExperience={setExperience} />
-      </div>
+          <div className="flex flex-row gap-2">
+            <DiscreteSlider price={price} setPrice={setPrice} />
+            <Experience experience={experience} setExperience={setExperience} />
+          </div>
 
-      <div className="mt-10">
-        <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 my-10">
-          {filteredCourses.length > 0 ? (
-            filteredCourses.map((course) => (
-              <StudentCard key={course._id} course={course} />
-            ))
-          ) : (
-            <h1 className="text-3xl font-bold mx-10">No courses found</h1>
-          )}
-        </section>
-      </div>
+          <div className="my-10">
+            <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 my-10">
+              {filteredCourses.length > 0 ? (
+                filteredCourses.map((course) => (
+                  <StudentCard key={course._id} course={course} />
+                ))
+              ) : (
+                <h1 className="text-3xl font-bold mx-10">No courses found</h1>
+              )}
+            </section>
+          </div>
+
+          <div className="h-[5rem]"></div>
+          <Footer />
+        </>
+      )}
     </>
   );
 }
