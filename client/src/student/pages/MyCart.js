@@ -2,35 +2,34 @@ import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import Navbar from "../components/Navbar";
 import StudentCard from "../components/StudentCard";
-import toast, { Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
 import Loading from "../components/Loading";
-const URI = "https://linguakonnect.onrender.com";
 
 export default function MyCart() {
   const [enrolledCourses, setEnrolledCourses] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  const fetchData = async () => {
+    setLoading(true);
+    try {
+      const { data } = await axios.get(
+        `${process.env.REACT_APP_BACKEND_URL}/api/v1/user/getcourses`,
+        {
+          withCredentials: true,
+        }
+      );
+
+      setEnrolledCourses(data.enrolledCourses);
+      toast.success(data.message);
+    } catch (err) {
+      console.error("Error fetching data:", err.message);
+      toast.error(err.data?.message || "An error occurred");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
-    const fetchData = async () => {
-      setLoading(true);
-      try {
-        const { data } = await axios.get(
-          `http://localhost:8000/api/v1/user/getcourses`,
-          {
-            withCredentials: true,
-          }
-        );
-
-        setEnrolledCourses(data.enrolledCourses);
-        toast.success(data.message);
-      } catch (err) {
-        console.error("Error fetching data:", err.message);
-        toast.error(err.data?.message || "An error occurred");
-      } finally {
-        setLoading(false);
-      }
-    };
-
     fetchData();
   }, []);
 

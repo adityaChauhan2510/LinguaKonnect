@@ -10,14 +10,13 @@ export default function SignUp() {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-  const URI = "https://linguakonnect.onrender.com";
 
   const submitHandler = async (e) => {
     setLoading(true);
     e.preventDefault();
     try {
       const response = await axios.post(
-        "http://localhost:8000/api/v1/tutor/new",
+        `${process.env.REACT_APP_BACKEND_URL}/api/v1/tutor/new`,
         {
           name,
           email,

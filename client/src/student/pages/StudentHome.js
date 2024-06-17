@@ -40,15 +40,18 @@ export default function StudentHome() {
       try {
         const {
           data: { result: coursesData },
-        } = await axios.get(`http://localhost:8000/api/v1/course/getAll`, {
-          withCredentials: true,
-        });
+        } = await axios.get(
+          `${process.env.REACT_APP_BACKEND_URL}/api/v1/course/getAll`,
+          {
+            withCredentials: true,
+          }
+        );
 
         const courses = await Promise.all(
           coursesData.map(async (course) => {
             const tutor_id = course.tutor_id;
             const res = await axios.get(
-              `http://localhost:8000/api/v1/tutor/${tutor_id}`
+              `${process.env.REACT_APP_BACKEND_URL}/api/v1/tutor/${tutor_id}`
             );
             const tutorData = res.data.result;
             return { ...course, tutor: tutorData };

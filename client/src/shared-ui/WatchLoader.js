@@ -1,21 +1,23 @@
-import { Comment } from "react-loader-spinner";
+import React from "react";
+import { Watch } from "react-loader-spinner";
 
-export default function CommentLoader() {
+export default function WatchLoader() {
   return (
     <div
       style={{
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
+        height: "100vh",
       }}
     >
-      <Comment
+      <Watch
         visible={true}
         height="80"
         width="80"
-        ariaLabel="dna-loading"
+        ariaLabel="watch-loading"
         wrapperStyle={{}}
-        wrapperClass="dna-wrapper"
+        wrapperClass="watch-wrapper"
       />
     </div>
   );

@@ -1,10 +1,6 @@
 import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Landing from "./pages/Landing";
-import Login from "./pages/Login";
-import TutorLogin from "./pages/TutorLogin.js";
-import Signup from "./pages/Signup";
-import TutorSignUp from "./pages/TutorSignUp.js";
+
 import TutorHome from "./tutor/pages/TutorHome";
 import StudentHome from "./student/pages/StudentHome";
 import MyCart from "./student/pages/MyCart.js";
@@ -20,14 +16,18 @@ import UploadNewChapter from "./tutor/pages/UploadNewChapter.js";
 import CoursePage from "./student/pages/CoursePage.js";
 import CourseDashboard from "./student/pages/CourseDashboard.js";
 import ChapterContent from "./student/pages/ChapterContent.js";
-
+import LandingPage from "./shared-pages/Landing.js";
+import Login from "./shared-pages/Login.js";
+import SignUp from "./shared-pages/Signup.js";
+import TutorLogin from "./shared-pages/TutorLogin.js";
+import TutorSignUp from "./shared-pages/TutorSignUp.js";
 export default function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Landing />} />
+        <Route path="/" element={<LandingPage />} />
         <Route path="login" element={<Login />} />
-        <Route path="signup" element={<Signup />} />
+        <Route path="signup" element={<SignUp />} />
         <Route path="tutorlogin" element={<TutorLogin />} />
         <Route path="tutorsignup" element={<TutorSignUp />} />
         <Route path="tutorhome" element={<TutorHome />} />

@@ -14,7 +14,6 @@ import Details from "../components/Details";
 import Loading from "../components/Loading";
 import { Footer } from "../../shared-ui/Footer";
 import Review from "../../shared-ui/Review";
-const URI = "https://linguakonnect.onrender.com";
 
 // const socket = io("http://localhost:5000", {
 //   autoConnect: false,
@@ -40,7 +39,7 @@ export default function CourseDetails() {
     try {
       setLoading(true);
       const response = await axios.post(
-        "http://localhost:8000/api/v1/course/ask-doubt",
+        `${process.env.REACT_APP_BACKEND_URL}/api/v1/course/ask-doubt`,
         { course_id: id, doubt },
         { withCredentials: true }
       );
@@ -87,7 +86,7 @@ export default function CourseDetails() {
     setLoading(true);
     try {
       const response = await axios.post(
-        "http://localhost:8000/api/v1/course/enroll",
+        `${process.env.REACT_APP_BACKEND_URL}/api/v1/course/enroll`,
         { course_id: id },
         { withCredentials: true }
       );
@@ -107,7 +106,7 @@ export default function CourseDetails() {
     const fetchData = async () => {
       try {
         const res = await axios.get(
-          `http://localhost:8000/api/v1/course/${id}`,
+          `${process.env.REACT_APP_BACKEND_URL}/api/v1/course/${id}`,
           {
             withCredentials: true,
           }

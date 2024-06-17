@@ -13,8 +13,6 @@ export default function ChapterContent() {
   const [loading, setLoading] = useState(false);
   const [unit, setUnit] = useState({});
 
-  console.log(unit);
-
   useEffect(() => {
     if (course && course.units && chapter) {
       const unitDetails = course.units.find(
@@ -37,7 +35,7 @@ export default function ChapterContent() {
     try {
       setLoading(true);
       const response = await axios.post(
-        `http://localhost:8000/api/v1/course/add-comment`,
+        `${process.env.REACT_APP_BACKEND_URL}/api/v1/course/add-comment`,
         {
           comment,
           course_id: id,

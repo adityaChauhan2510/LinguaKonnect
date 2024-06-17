@@ -1,6 +1,7 @@
-import { Comment } from "react-loader-spinner";
+import React from "react";
+import { RotatingLines } from "react-loader-spinner";
 
-export default function CommentLoader() {
+export default function RotatingLineLoader() {
   return (
     <div
       style={{
@@ -9,7 +10,7 @@ export default function CommentLoader() {
         alignItems: "center",
       }}
     >
-      <Comment
+      <RotatingLines
         visible={true}
         height="80"
         width="80"

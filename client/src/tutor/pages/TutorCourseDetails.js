@@ -13,7 +13,7 @@ import axios from "axios";
 
 import SidebarComp from "../components/SidebarComp.js";
 import { Footer } from "../../shared-ui/Footer.js";
-const URI = "https://linguakonnect.onrender.com";
+import Loading from "../components/Loading.js";
 
 const socket = io("http://localhost:5000", {
   autoConnect: false,
@@ -29,27 +29,27 @@ export default function TutorCourseDetails() {
   const { id } = useParams();
   const navigate = useNavigate();
 
-  useEffect(() => {
+  const fetchCourseData = async () => {
     setLoading(true);
-    const fetchData = async () => {
-      try {
-        const response = await axios.get(
-          `http://localhost:8000/api/v1/course/${id}`,
-          {
-            withCredentials: true,
-          }
-        );
+    try {
+      const response = await axios.get(
+        `${process.env.REACT_APP_BACKEND_URL}/api/v1/course/${id}`,
+        {
+          withCredentials: true,
+        }
+      );
 
-        setCourse(response.data.result);
-        setUserName(response.data.result.tutor_id.name);
-      } catch (err) {
-        console.error("Error fetching data:", err.message);
-      } finally {
-        setLoading(false);
-      }
-    };
+      setCourse(response.data.result);
+      setUserName(response.data.result.tutor_id.name);
+    } catch (err) {
+      console.error("Error fetching data:", err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-    fetchData();
+  useEffect(() => {
+    fetchCourseData();
   }, [id, setCourse]);
 
   const handleNavigate = useCallback(() => {
@@ -104,7 +104,7 @@ export default function TutorCourseDetails() {
   //   setStarted(!started);
   // };
 
-  if (loading) return <div className="text-xl mx-10 mt-10">Loading...</div>;
+  if (loading) return <Loading />;
   return (
     <>
       {course && (
@@ -122,7 +122,7 @@ export default function TutorCourseDetails() {
             <div className="flex flex-row gap-3  overflow-y-auto">
               <SidebarComp id={id} course={course} />
               <Outlet
-                context={{ id, course }}
+                context={{ id, course, fetchCourseData }}
                 className="overflow-y-auto sm:w-[100%]"
               />
             </div>

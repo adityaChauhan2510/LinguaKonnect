@@ -8,8 +8,6 @@ import Form from "../components/Form.js";
 import Loading from "../components/Loading.js";
 import { Footer } from "../../shared-ui/Footer.js";
 
-// const URI = "https://linguakonnect.onrender.com"
-
 function TutorHome() {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -62,7 +60,7 @@ function TutorHome() {
       requestData.append("image", image_url);
 
       const response = await axios.post(
-        "http://localhost:8000/api/v1/course/add",
+        `${process.env.REACT_APP_BACKEND_URL}/api/v1/course/add`,
         requestData,
         { withCredentials: true }
       );
@@ -95,7 +93,7 @@ function TutorHome() {
       setLoading(true);
       try {
         const response = await axios.get(
-          `http://localhost:8000/api/v1/tutor/tutorcourses`,
+          `${process.env.REACT_APP_BACKEND_URL}/api/v1/tutor/tutorcourses`,
           {
             withCredentials: true,
           }

@@ -36,20 +36,15 @@ export default function CourseHome() {
                 Course Description
               </h1>
 
-              {course.description && (
-                <CourseDescription value={course.description} id={id} />
-              )}
+              <CourseDescription value={course.description} id={id} />
             </div>
 
             {/* EMPTY-DIV */}
             <div className="h-[3rem]"></div>
             <div>
-              <h1 className="font-bold text-2xl tracking-wider py-5">
-                Reviews
-              </h1>
-
               <Review reviews={course.reviews} />
             </div>
+            <div className="h-[7rem]"></div>
           </div>
         </>
       )}

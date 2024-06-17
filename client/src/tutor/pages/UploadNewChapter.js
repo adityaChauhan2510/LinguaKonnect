@@ -2,16 +2,16 @@ import React, { useState } from "react";
 import { TextField, Button } from "@mui/material";
 import axios from "axios";
 import { useNavigate, useOutletContext } from "react-router-dom";
+import toast from "react-hot-toast";
+import WatchLoader from "../../shared-ui/WatchLoader";
 
 export default function UploadNewChapter() {
-  const { id } = useOutletContext();
+  const { id, fetchCourseData } = useOutletContext();
   const navigate = useNavigate();
   const [chapterName, setChapterName] = useState("");
   const [videoFile, setVideoFile] = useState(null);
   const [pdfFile, setPdfFile] = useState(null);
   const [loading, setLoading] = useState(false);
-
-  //console.log(id);
 
   const handleChapterNameChange = (e) => {
     setChapterName(e.target.value);
@@ -34,7 +34,7 @@ export default function UploadNewChapter() {
 
     try {
       const response = await axios.post(
-        "https://api.cloudinary.com/v1_1/dokxv4qdm/auto/upload",
+        `https://api.cloudinary.com/v1_1/${process.env.REACT_APP_CLOUD_NAME}/auto/upload`,
         data
       );
 
@@ -51,7 +51,7 @@ export default function UploadNewChapter() {
 
     try {
       const response = await axios.post(
-        "https://api.cloudinary.com/v1_1/dokxv4qdm/auto/upload",
+        `https://api.cloudinary.com/v1_1/${process.env.REACT_APP_CLOUD_NAME}/auto/upload`,
         data
       );
 
@@ -83,7 +83,7 @@ export default function UploadNewChapter() {
       console.log(video_url, pdf_url);
 
       const response = await axios.post(
-        `http://localhost:8000/api/v1/course/chapter`,
+        `${process.env.REACT_APP_BACKEND_URL}/api/v1/course/chapter`,
         {
           chapterName,
           video_url,
@@ -93,7 +93,8 @@ export default function UploadNewChapter() {
         { withCredentials: true }
       );
 
-      console.log(response.data);
+      toast.success(response.message);
+      await fetchCourseData();
     } catch (err) {
       console.log(err);
     } finally {
@@ -101,15 +102,11 @@ export default function UploadNewChapter() {
       setVideoFile(null);
       setPdfFile(null);
       setLoading(false);
-      navigate(`/tutorcourse/${id}`);
+      // navigate(`/tutorcourse/${id}`);
     }
   };
 
-  if (loading) {
-    return (
-      <div className=" mx-5 px-5 mt-5 text-xl font-semibold">Uploading...</div>
-    );
-  }
+  if (loading) return <WatchLoader />;
 
   return (
     <div className="mx-5 px-5 mt-5 overflow-y-auto w-full h-screen">

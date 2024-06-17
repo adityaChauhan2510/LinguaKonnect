@@ -9,7 +9,7 @@ export default function CourseCard({ course }) {
   async function handleClick() {
     try {
       const res = await axios.get(
-        `http://localhost:8000/api/v1/user/getcourses`,
+        `${process.env.REACT_APP_BACKEND_URL}/api/v1/user/getcourses`,
         {
           withCredentials: true,
         }

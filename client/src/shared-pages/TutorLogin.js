@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import toast from "react-hot-toast";
 import axios from "axios";
-const URI = "https://linguakonnect.onrender.com";
 
 export default function TutorLogin() {
   const [email, setEmail] = useState("");
@@ -16,7 +15,7 @@ export default function TutorLogin() {
 
     try {
       const response = await axios.post(
-        "http://localhost:8000/api/v1/tutor/login",
+        `${process.env.REACT_APP_BACKEND_URL}/api/v1/tutor/login`,
         {
           email,
           password,

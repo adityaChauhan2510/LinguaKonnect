@@ -21,7 +21,7 @@ export default function CoursePage() {
     setLoading(true);
     try {
       const response = await axios.get(
-        `http://localhost:8000/api/v1/course/${id}`,
+        `${process.env.REACT_APP_BACKEND_URL}/api/v1/course/${id}`,
         {
           withCredentials: true,
         }

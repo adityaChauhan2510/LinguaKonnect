@@ -1,11 +1,9 @@
 import React, { useState } from "react";
+import { useNavigate, Link } from "react-router-dom";
 import toast, { Toaster } from "react-hot-toast";
-import { useNavigate, Link, Navigate } from "react-router-dom";
 import axios from "axios";
-const URI = "https://linguakonnect.onrender.com";
 
-export default function SignUp() {
-  const [name, setName] = useState("");
+export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
@@ -14,11 +12,11 @@ export default function SignUp() {
   const submitHandler = async (e) => {
     e.preventDefault();
     setLoading(true);
+
     try {
       const response = await axios.post(
-        "http://localhost:8000/api/v1/user/new",
+        `${process.env.REACT_APP_BACKEND_URL}/api/v1/user/login`,
         {
-          name,
           email,
           password,
         },
@@ -28,44 +26,28 @@ export default function SignUp() {
       const { token } = response.data;
       sessionStorage.setItem("token", token);
       toast.success(response.data.message);
+      navigate("/studenthome");
     } catch (error) {
-      toast.error(error.response.data.message);
+      toast.error(error.response?.data?.message || "An error occurred");
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
-    navigate("/studenthome");
   };
 
-  if (loading) return <div>Loading...</div>;
-
   return (
-    <div className="text-center my-5">
-      <h2 className="text-2xl font-bold">Student Register</h2>
-      <form onSubmit={submitHandler} className="login-form">
-        <div>
-          <label htmlFor="name" className="text-lg font-bold py-2">
-            UserName
-          </label>
-          <br />
-          <input
-            className="my-4 px-2"
-            type="text"
-            id="name"
-            required
-            onChange={(e) => setName(e.target.value)}
-            value={name}
-          />
-        </div>
+    <div className="text-center my-20">
+      <h2 className="text-2xl font-bold">Login</h2>
 
-        <div>
+      <form onSubmit={submitHandler} className="login-form">
+        <div className="my-2 px-2">
           <label htmlFor="email" className="text-lg font-bold py-2">
-            Email address
+            Email Address
           </label>
           <br />
           <input
             className="my-4 px-2"
             type="email"
             id="email"
-            required
             onChange={(e) => setEmail(e.target.value)}
             value={email}
           />
@@ -80,37 +62,34 @@ export default function SignUp() {
             className="my-4 px-2"
             type="password"
             id="password"
-            required
             onChange={(e) => setPassword(e.target.value)}
             value={password}
           />
         </div>
 
-        <p>
-          <input type="checkbox" name="checkbox" id="checkbox" required />{" "}
-          <span>I agree to all statements in terms of service</span>.
-        </p>
-
-        <div className="mt-5">
+        <div className="py-4">
           <button
+            id="sub_btn"
             type="submit"
+            disabled={loading}
             className="bg-green-800 px-10 py-2 text-white rounded-lg"
           >
-            Register
+            {loading ? "Logging in..." : "Login"}
           </button>
         </div>
       </form>
 
       <footer>
-        <button>
-          <Link
-            to="/"
-            className="bg-yellow-600 px-10 py-2 text-white rounded-lg"
-          >
-            Back to Homepage
+        <p>
+          First time?{" "}
+          <Link to="/signup" className="font-semibold">
+            Create an account
           </Link>
           .
-        </button>
+        </p>
+        <p className="font-semibold">
+          <Link to="/">Back to Homepage</Link>.
+        </p>
       </footer>
       <Toaster />
     </div>

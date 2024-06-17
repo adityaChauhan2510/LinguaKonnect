@@ -42,7 +42,7 @@ export default function ChapterPage() {
 
     try {
       const response = await axios.post(
-        "https://api.cloudinary.com/v1_1/dokxv4qdm/auto/upload",
+        `https://api.cloudinary.com/v1_1/${process.env.REACT_APP_CLOUD_NAME}/auto/upload`,
         data
       );
 
@@ -64,7 +64,7 @@ export default function ChapterPage() {
       console.log(pdf_url);
 
       const response = await axios.post(
-        `http://localhost:8000/api/v1/course/add-pdf`,
+        `${process.env.REACT_APP_BACKEND_URL}/api/v1/course/add-pdf`,
         {
           unit_id: unit._id,
           pdf_url,

@@ -14,7 +14,7 @@ export default function CourseDescription({ value, id }) {
     try {
       setLoading(true);
       const response = await axios.post(
-        `http://localhost:8000/api/v1/course/description`,
+        `${process.env.REACT_APP_BACKEND_URL}/api/v1/course/description`,
         {
           description,
           id,
