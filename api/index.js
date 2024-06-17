@@ -1,10 +1,19 @@
 import { app } from "./app.js";
-import { connectDB } from "./data/database.js";
+import { connectDB, connectRedis } from "./data/database.js";
 
-connectDB();
+const startServer = async () => {
+  try {
+    await connectDB();
+    await connectRedis();
 
-const PORT = process.env.PORT;
+    const PORT = process.env.PORT || 3000;
+    app.listen(PORT, () => {
+      console.log(`Server listening on port ${PORT}`);
+    });
+  } catch (error) {
+    console.error("Failed to start server:", error);
+    process.exit(1); // Exit the process with failure
+  }
+};
 
-app.listen(PORT, () => {
-  console.log(`Server listening on port ${PORT}`);
-});
+startServer();

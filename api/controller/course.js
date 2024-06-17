@@ -2,6 +2,7 @@ import { Course } from "../model/course.js";
 import { User } from "../model/user.js";
 import { Tutor } from "../model/tutor.js";
 import { sendCookie } from "../utils/feature.js";
+import { getRedisClient } from "../data/database.js";
 import ErrorHandler from "../middleware/error.js";
 import axios from "axios";
 
@@ -171,11 +172,21 @@ export const enrollCourse = async (req, res, next) => {
     const tutor = await Tutor.findById(tutorId);
     const tutorEmail = tutor.email;
 
-    const response = await axios.post("http://localhost:6000/api/purchase", {
+    const task = {
       tutor_email: tutorEmail,
       course_name: course.name,
       student_name: user.name,
-    });
+    };
+
+    const redisClient = getRedisClient();
+    await redisClient.lPush("courseEnrollment", JSON.stringify(task));
+    // console.log(result);
+
+    // const response = await axios.post("http://localhost:6000/api/purchase", {
+    //   tutor_email: tutorEmail,
+    //   course_name: course.name,
+    //   student_name: user.name,
+    // });
     //console.log(response.data);
 
     sendCookie(user, res, `Course enrolled successfully...Start learning`, 200);

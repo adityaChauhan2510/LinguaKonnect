@@ -1,11 +1,44 @@
 import mongoose from "mongoose";
+import { createClient } from "redis";
 
-export const connectDB = () => {
+let redisClient;
+
+export const connectDB = async () => {
   const MONGO_URI = process.env.MONGO_URI;
-  mongoose
-    .connect(`${MONGO_URI}`, {
+  try {
+    const connection = await mongoose.connect(`${MONGO_URI}`, {
       dbName: "backend_db",
-    })
-    .then((c) => console.log(`Database Connected with ${c.connection.host}`))
-    .catch((e) => console.log(e));
+    });
+    console.log(`Database Connected with ${connection.connection.host}`);
+  } catch (error) {
+    console.log("Error connecting to MongoDB:", error);
+  }
+};
+
+export const connectRedis = async () => {
+  if (!redisClient) {
+    redisClient = createClient({
+      password: process.env.REDIS_PASSWORD,
+      socket: {
+        host: process.env.REDIS_HOSTNAME,
+        port: process.env.REDIS_PORT,
+      },
+    });
+
+    redisClient.on("error", (err) => console.log("Redis Client Error", err));
+
+    try {
+      await redisClient.connect();
+      console.log("Connected to our Redis instance!!");
+    } catch (error) {
+      console.log("Error connecting to Redis:", error);
+    }
+  }
+};
+
+export const getRedisClient = () => {
+  if (!redisClient) {
+    throw new Error("Redis client not connected");
+  }
+  return redisClient;
 };
