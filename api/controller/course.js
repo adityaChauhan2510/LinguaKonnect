@@ -86,6 +86,39 @@ export const addPDF = async (req, res, next) => {
   }
 };
 
+export const addComment = async (req, res, next) => {
+  try {
+    const { comment, course_id, unit_id } = req.body;
+    const name = req.user.name;
+
+    const newComment = {
+      user_name: name,
+      user_comment: comment,
+      created_at: new Date(), // Ensure the created_at timestamp is set
+    };
+
+    const course = await Course.findOneAndUpdate(
+      { _id: course_id, "units._id": unit_id },
+      { $push: { "units.$.comments": newComment } },
+      { new: true }
+    );
+
+    if (!course) {
+      return res.status(404).json({ message: "Course or unit not found" });
+    }
+
+    console.log(course);
+
+    res.status(200).json({
+      success: true,
+      message: "Comment added to course successfully",
+      course,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
 export const updateDescription = async (req, res, next) => {
   try {
     const { description, id } = req.body;
