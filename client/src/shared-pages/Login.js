@@ -2,10 +2,11 @@ import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import toast, { Toaster } from "react-hot-toast";
 import axios from "axios";
+import Loading from "../student/components/Loading";
 
 export default function Login() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("fakeuser@gmail.com");
+  const [password, setPassword] = useState("password");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
@@ -33,6 +34,8 @@ export default function Login() {
       setLoading(false);
     }
   };
+
+  if (loading) return <Loading />;
 
   return (
     <div className="text-center my-20">

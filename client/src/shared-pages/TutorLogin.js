@@ -4,8 +4,8 @@ import toast from "react-hot-toast";
 import axios from "axios";
 
 export default function TutorLogin() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("fakeuser005jake@gmail.com");
+  const [password, setPassword] = useState("password");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 

@@ -203,9 +203,12 @@ export default function CourseDetails() {
             />
           </div>
 
+          {/* EMPTY_DIV */}
+
+          <div className="h-[5rem]"></div>
+
           {course && course.reviews && course.reviews.length > 0 && (
             <div className="mt-10 mx-10">
-              <h1 className="text-3xl mt-20 mb-10">What Others Say!!</h1>
               <Review reviews={course.reviews} />
             </div>
           )}

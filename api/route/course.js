@@ -15,11 +15,10 @@ import {
   addComment,
 } from "../controller/course.js";
 import { isAuthenticated } from "../middleware/auth.js";
-import { upload } from "../middleware/multer.middleware.js";
 
 const router = express.Router();
 
-router.post("/add", isAuthenticated, upload.single("image"), addCourse); //tutor will add
+router.post("/add", isAuthenticated, addCourse); //tutor will add
 
 router.post("/chapter", isAuthenticated, addChapter);
 router.post("/enroll", isAuthenticated, enrollCourse); // user will enroll
