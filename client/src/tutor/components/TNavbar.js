@@ -60,7 +60,7 @@ const Navbar = () => {
       <div className="md:hidden">
         {/* MENU BUTTON */}
         <button
-          className="w-10 h-4 mx-2 flex flex-col justify-between z-50 relative"
+          className="h-4 flex flex-col justify-between z-50 relative"
           onClick={() => setOpen((prev) => !prev)}
         >
           <div className="w-5 h-[2px] bg-white rounded"></div>

@@ -1,25 +1,20 @@
 import { app } from "./app.js";
 import { connectDB, connectRedis } from "./data/database.js";
 
-const connectWithRetry = async (connectFunction, name) => {
-  while (true) {
-    try {
-      await connectFunction();
-      console.log(`${name} connected successfully.`);
-      break;
-    } catch (error) {
-      console.error(`Failed to connect to ${name}: ${error.message}`);
-      console.log(`Retrying ${name} connection in 5 seconds...`);
-      await new Promise((resolve) => setTimeout(resolve, 5000));
-    }
+const connectOnce = async (connectFunction, name) => {
+  try {
+    await connectFunction();
+    console.log(`${name} connected successfully.`);
+  } catch (error) {
+    console.error(`Failed to connect to ${name}: ${error.message}`);
   }
 };
 
 const startServer = async () => {
   console.log("Starting server...");
 
-  await connectWithRetry(connectDB, "MongoDB");
-  await connectWithRetry(connectRedis, "Redis");
+  await connectOnce(connectDB, "MongoDB");
+  await connectOnce(connectRedis, "Redis");
 
   const PORT = process.env.PORT || 5000;
   app.listen(PORT, () => {

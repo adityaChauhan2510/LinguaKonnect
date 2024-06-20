@@ -87,7 +87,7 @@ export default function StudentHome() {
             <Experience experience={experience} setExperience={setExperience} />
           </div>
 
-          <div className="my-10">
+          <div className="my-10 h-screen">
             <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 my-10">
               {filteredCourses.length > 0 ? (
                 filteredCourses.map((course) => (

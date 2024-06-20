@@ -59,6 +59,10 @@ function TutorHome() {
       const image_url = await uploadImage();
       requestData.append("image", image_url);
 
+      // for (let [key, value] of requestData.entries()) {
+      //   console.log(`${key}: ${value}`);
+      // }
+
       const response = await axios.post(
         `${process.env.REACT_APP_BACKEND_URL}/api/v1/course/add`,
         requestData,
@@ -120,6 +124,7 @@ function TutorHome() {
             <h1 className="text-4xl text-neutral-800 font-extrabold text-center mx-5 px-5">
               My Courses
             </h1>
+
             <div className="my-2">
               <div className="grid px-10 sm:px-0 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 md:gap-2 lg:gap-10 my-10">
                 {data.map((course, index) => (
@@ -128,8 +133,11 @@ function TutorHome() {
               </div>
 
               {/* EMPTY-DIV */}
-              <div className="h-[5rem]"></div>
-              <div className="px-5 mx-5">
+              <div
+                className={data.length === 0 ? "h-screen" : "h-[5rem]"}
+              ></div>
+
+              <div className="px-5 mx-auto text-center justify-center">
                 <Button
                   variant="contained"
                   color="success"
