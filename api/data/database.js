@@ -11,7 +11,8 @@ export const connectDB = async () => {
     });
     console.log(`Database Connected with ${connection.connection.host}`);
   } catch (error) {
-    console.log("Error connecting to MongoDB:", error);
+    console.log("Error connecting to MongoDB:", error.message);
+    throw new Error("Failed to connect to MongoDB");
   }
 };
 
@@ -25,13 +26,12 @@ export const connectRedis = async () => {
       },
     });
 
-    redisClient.on("error", (err) => console.log("Redis Client Error", err));
-
     try {
       await redisClient.connect();
       console.log("Connected to our Redis instance!!");
     } catch (error) {
-      console.log("Error connecting to Redis:", error);
+      console.log("Error connecting to Redis:", error.message);
+      throw new Error("Failed to connect to Redis");
     }
   }
 };
