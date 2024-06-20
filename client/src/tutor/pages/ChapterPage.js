@@ -4,6 +4,7 @@ import PDFCard from "../../shared-ui/PDFCard";
 import VideoPlayer from "../../shared-ui/VideoPlayer";
 import axios from "axios";
 import UploadPDF from "../components/UploadPDF";
+import CommentSection from "../../shared-ui/CommentSection";
 
 export default function ChapterPage() {
   const { chapter } = useParams();
@@ -113,9 +114,12 @@ export default function ChapterPage() {
 
           {/* COMMENTS-SECTION */}
           <div className="h-[5rem]"></div>
-          <div className="my-5">
-            <h1 className="text-xl font-semibold tracking-wider">Comments</h1>
+
+          <div>
+            <CommentSection unit={unit} />
           </div>
+
+          <div className="h-[5rem]"></div>
         </div>
       )}
     </>

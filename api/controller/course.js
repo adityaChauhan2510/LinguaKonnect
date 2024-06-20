@@ -87,6 +87,7 @@ export const addPDF = async (req, res, next) => {
   }
 };
 
+//add-comment to each unit
 export const addComment = async (req, res, next) => {
   try {
     const { comment, course_id, unit_id } = req.body;
@@ -108,11 +109,35 @@ export const addComment = async (req, res, next) => {
       return res.status(404).json({ message: "Course or unit not found" });
     }
 
-    console.log(course);
-
     res.status(200).json({
       success: true,
       message: "Comment added to course successfully",
+      course,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const deleteComment = async (req, res, next) => {
+  try {
+    const { course_id, unit_id, comment_id } = req.body;
+
+    const course = await Course.findOneAndUpdate(
+      { _id: course_id, "units._id": unit_id },
+      { $pull: { "units.$.comments": { _id: comment_id } } },
+      { new: true }
+    );
+
+    if (!course) {
+      return res
+        .status(404)
+        .json({ message: "Course, unit, or comment not found" });
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "Comment deleted from course successfully",
       course,
     });
   } catch (error) {
@@ -299,6 +324,7 @@ export const getAllCourse = async (req, res, next) => {
   }
 };
 
+//review for each course on course-dashboard
 export const addReview = async (req, res, next) => {
   try {
     const { course_id, review } = req.body;

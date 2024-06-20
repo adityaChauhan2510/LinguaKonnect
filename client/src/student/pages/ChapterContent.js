@@ -5,10 +5,12 @@ import axios from "axios";
 import VideoPlayer from "../../shared-ui/VideoPlayer";
 import PDFCard from "../../shared-ui/PDFCard";
 import CommentSection from "../../shared-ui/CommentSection";
+import toast from "react-hot-toast";
+import CommentLoader from "../../shared-ui/CommentLoader";
 
 export default function ChapterContent() {
   const { chapter } = useParams();
-  const { id, course } = useOutletContext();
+  const { id, course, fetchCourseData } = useOutletContext();
   const [comment, setComment] = useState("");
   const [loading, setLoading] = useState(false);
   const [unit, setUnit] = useState({});
@@ -24,7 +26,7 @@ export default function ChapterContent() {
     }
   }, [course, chapter]);
 
-  const handleComment = async (e) => {
+  const handleCommentSubmit = async (e) => {
     e.preventDefault();
 
     if (!comment) {
@@ -34,7 +36,7 @@ export default function ChapterContent() {
 
     try {
       setLoading(true);
-      const response = await axios.post(
+      const { data } = await axios.post(
         `${process.env.REACT_APP_BACKEND_URL}/api/v1/course/add-comment`,
         {
           comment,
@@ -44,7 +46,9 @@ export default function ChapterContent() {
         { withCredentials: true }
       );
 
-      console.log(response.message);
+      toast.success(data.message);
+      setComment("");
+      fetchCourseData();
     } catch (err) {
       console.log(err);
     } finally {
@@ -58,6 +62,37 @@ export default function ChapterContent() {
     link.download = `Resource_${index + 1}.pdf`;
     link.click();
   };
+
+  const handleCommentDelete = async (e, comment_id) => {
+    e.preventDefault();
+
+    try {
+      setLoading(true);
+      const { data } = await axios.post(
+        `${process.env.REACT_APP_BACKEND_URL}/api/v1/course/delete-comment`,
+        {
+          course_id: id,
+          unit_id: unit._id,
+          comment_id,
+        },
+        { withCredentials: true }
+      );
+      toast.success(data.message);
+      setComment("");
+      fetchCourseData();
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  if (loading)
+    return (
+      <div className="h-screen mx-auto">
+        <CommentLoader />
+      </div>
+    );
 
   return (
     <>
@@ -83,7 +118,13 @@ export default function ChapterContent() {
             {/* COMMENTS-SECTION */}
             <div className="h-[3rem]"></div>
             <div className="my-5">
-              <CommentSection unit={unit} />
+              <CommentSection
+                unit={unit}
+                comment={comment}
+                setComment={setComment}
+                handleCommentSubmit={handleCommentSubmit}
+                handleCommentDelete={handleCommentDelete}
+              />
             </div>
             <div className="h-[3rem]"></div>
           </div>

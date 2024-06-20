@@ -106,7 +106,13 @@ export default function UploadNewChapter() {
     }
   };
 
-  if (loading) return <WatchLoader />;
+  if (loading)
+    return (
+      <div className="mx-auto">
+        <h1 className="text-2xl p-5 text-center font-bold">Uploading...</h1>
+        <WatchLoader />
+      </div>
+    );
 
   return (
     <div className="mx-5 px-5 mt-5 overflow-y-auto w-full h-screen">

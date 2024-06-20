@@ -13,6 +13,7 @@ import {
   updateDescription,
   addPDF,
   addComment,
+  deleteComment,
 } from "../controller/course.js";
 import { isAuthenticated } from "../middleware/auth.js";
 import { upload } from "../middleware/multer.middleware.js";
@@ -29,6 +30,7 @@ router.post("/ask-doubt", isAuthenticated, askDoubt);
 router.post("/description", isAuthenticated, updateDescription);
 router.post("/add-pdf", isAuthenticated, addPDF);
 router.post("/add-comment", isAuthenticated, addComment);
+router.post("/delete-comment", isAuthenticated, deleteComment);
 
 router.get("/getAll", getAllCourse);
 router.post("/checkEnroll", checkEnroll);

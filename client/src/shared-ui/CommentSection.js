@@ -1,76 +1,87 @@
 import React from "react";
-import {
-  Card,
-  CardContent,
-  Avatar,
-  Button,
-  Typography,
-  TextField,
-  Box,
-} from "@mui/material";
+import { Box, Typography, TextField, Button, Avatar } from "@mui/material";
+import { formatDistanceToNow } from "date-fns";
+import { FaTrash } from "react-icons/fa";
 
-export default function CommentSection({ unit }) {
+export default function CommentSection({
+  unit,
+  comment,
+  setComment,
+  handleCommentSubmit,
+  handleCommentDelete,
+}) {
+  const handleCommentChange = (e) => {
+    setComment(e.target.value);
+  };
+
   return (
     <Box maxWidth="2xl" mx="auto" sm={{ px: 3 }} lg={{ px: 4 }}>
-      <Card>
-        <CardContent>
-          {unit &&
-            unit.comments &&
-            unit.comments.length > 0 &&
-            unit.comments.map((comment, index) => (
-              <>
-                <h2 className="font-bold text-xl tracking-wider py-3">
-                  Comments Section
-                </h2>
-                <Box key={index} display="grid" gap={2}>
-                  <Box display="flex" alignItems="flex-start" gap={2}>
-                    <Avatar
-                      src="/placeholder-user.jpg"
-                      alt={comment.user_name}
-                    />
-                    <Box>
-                      <Box display="flex" alignItems="center" gap={1}>
-                        <Typography variant="body2" fontWeight="bold">
-                          @{comment.user_name}
-                        </Typography>
-                        <Typography variant="caption" color="textSecondary">
-                          {comment.created_at}{" "}
-                          {/* Use the relative time here */}
-                        </Typography>
-                      </Box>
-                      <Typography variant="body2">
-                        {comment.user_comment}
-                      </Typography>
-                      <Button
-                        variant="text"
-                        size="small"
-                        startIcon={<ArrowUpIcon />}
-                      >
-                        Upvote (0) {/* You can use actual upvote count here */}
-                      </Button>
-                    </Box>
-                  </Box>
-                </Box>
-              </>
-            ))}
-        </CardContent>
-      </Card>
-      <Box mt={4}>
-        <Typography variant="subtitle1" fontWeight="bold">
+      <Box py={3}>
+        <Typography variant="h5" fontWeight="bold">
           Add a comment
         </Typography>
         <TextField
           placeholder="Type your comment here."
           multiline
           fullWidth
-          minRows={3}
+          rows={3}
           variant="outlined"
           margin="normal"
+          value={comment}
+          onChange={handleCommentChange}
         />
-        <Button variant="contained" size="medium">
+        <Button variant="contained" size="medium" onClick={handleCommentSubmit}>
           Post Comment
         </Button>
       </Box>
+
+      {unit && unit.comments && unit.comments.length > 0 && (
+        <Box py={4} display="grid" border={1} borderRadius={2}>
+          {unit.comments.map((commentItem) => (
+            <Box key={commentItem._id} display="grid" gap={2} px={4}>
+              <Box display="flex" alignItems="flex-start" gap={2}>
+                <Avatar
+                  src="/placeholder-user.jpg"
+                  alt={commentItem.user_name}
+                />
+                <Box>
+                  <div className="flex flex-row gap-5 md:gap-[12rem] items-center">
+                    <p className="font-bold text-sm py-1 text-gray-700">
+                      @{commentItem.user_name}
+                    </p>
+                    <p>
+                      {formatDistanceToNow(new Date(commentItem.created_at), {
+                        addSuffix: true,
+                      })}
+                    </p>
+                    <Button
+                      variant="text"
+                      size="small"
+                      color="error"
+                      startIcon={<FaTrash />}
+                      onClick={(e) => handleCommentDelete(e, commentItem._id)}
+                    >
+                      Delete
+                    </Button>
+                  </div>
+                  <p className="font-bold text-md py-3 capitalize">
+                    {commentItem.user_comment}
+                  </p>
+                  <div className="py-1">
+                    <Button
+                      variant="text"
+                      size="small"
+                      startIcon={<ArrowUpIcon />}
+                    >
+                      Upvote (0) {/* You can use actual upvote count here */}
+                    </Button>
+                  </div>
+                </Box>
+              </Box>
+            </Box>
+          ))}
+        </Box>
+      )}
     </Box>
   );
 }
