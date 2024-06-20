@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import { useNavigate, Link, Navigate } from "react-router-dom";
 import axios from "axios";
+import Loading from "../student/components/Loading";
 
 export default function SignUp() {
   const [name, setName] = useState("");
@@ -34,7 +35,7 @@ export default function SignUp() {
     navigate("/studenthome");
   };
 
-  if (loading) return <div>Loading...</div>;
+  if (loading) return <Loading />;
 
   return (
     <div className="text-center my-5">

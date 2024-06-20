@@ -91,12 +91,15 @@ export const addPDF = async (req, res, next) => {
 export const addComment = async (req, res, next) => {
   try {
     const { comment, course_id, unit_id } = req.body;
-    const name = req.user.name;
+    let name;
+
+    if (req.user) name = req.user.name;
+    else name = req.tutor.name;
 
     const newComment = {
       user_name: name,
       user_comment: comment,
-      created_at: new Date(), // Ensure the created_at timestamp is set
+      created_at: new Date(),
     };
 
     const course = await Course.findOneAndUpdate(

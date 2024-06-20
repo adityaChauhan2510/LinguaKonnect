@@ -17,8 +17,9 @@ export default function CourseCard({ course }) {
 
       const { enrolledCourses } = res.data;
       const Ids = enrolledCourses.map((course) => course.courseId._id);
+      console.log(Ids);
 
-      if (Ids.includes(course._id)) {
+      if (course && Ids.includes(course._id)) {
         navigate(`/purchased/${course._id}`);
       } else {
         navigate(`/course/${course._id}`);
@@ -28,45 +29,47 @@ export default function CourseCard({ course }) {
     }
   }
   return (
-    course && (
-      <div className="shadow-4xl my-7 px-5 mx-5 rounded-xl">
-        <Card
-          sx={{
-            backgroundColor: "#ccc",
-            cursor: "pointer",
-            display: "flex",
-            flexDirection: "column",
-            height: "300px",
-          }}
-          onClick={handleClick}
-        >
-          <div className="font-bold text-2xl py-2 px-3 uppercase">
-            {course.name}
-          </div>
+    <>
+      {course && course._id && (
+        <div className="shadow-4xl my-7 px-5 mx-5 rounded-xl">
+          <Card
+            sx={{
+              backgroundColor: "#ccc",
+              cursor: "pointer",
+              display: "flex",
+              flexDirection: "column",
+              height: "300px",
+            }}
+            onClick={handleClick}
+          >
+            <div className="font-bold text-2xl py-2 px-3 uppercase">
+              {course.name}
+            </div>
 
-          <div style={{ height: "200px", overflow: "hidden" }}>
-            <CardMedia
-              component="img"
-              sx={{ objectFit: "cover", height: "100%" }}
-              image={course.image}
-              alt="Image"
-            />
-          </div>
+            <div style={{ height: "200px", overflow: "hidden" }}>
+              <CardMedia
+                component="img"
+                sx={{ objectFit: "cover", height: "100%" }}
+                image={course.image}
+                alt="Image"
+              />
+            </div>
 
-          <p className="mt-1 mx-3 text-md font-semibold">
-            Language : {course.language}
-          </p>
+            <p className="mt-1 mx-3 text-md font-semibold">
+              Language : {course.language}
+            </p>
 
-          <div className="flex">
-            <p className="ml-3 mr-1 text-md font-semibold">Ratings : </p>
-            <Rating
-              name="rating"
-              defaultValue={course.rating}
-              sx={{ height: "2px" }}
-            />
-          </div>
-        </Card>
-      </div>
-    )
+            <div className="flex">
+              <p className="ml-3 mr-1 text-md font-semibold">Ratings : </p>
+              <Rating
+                name="rating"
+                defaultValue={course.rating}
+                sx={{ height: "2px" }}
+              />
+            </div>
+          </Card>
+        </div>
+      )}
+    </>
   );
 }

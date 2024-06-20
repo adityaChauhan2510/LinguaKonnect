@@ -80,7 +80,6 @@ export default function UploadNewChapter() {
       setLoading(true);
       const video_url = await uploadVideo();
       const pdf_url = await uploadPdf();
-      console.log(video_url, pdf_url);
 
       const response = await axios.post(
         `${process.env.REACT_APP_BACKEND_URL}/api/v1/course/chapter`,

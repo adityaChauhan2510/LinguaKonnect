@@ -59,7 +59,6 @@ export default function StudentHome() {
         );
 
         setCourses(() => courses);
-        console.log(courses);
       } catch (err) {
         console.error("Error fetching data:", err.message);
       } finally {
