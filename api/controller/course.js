@@ -235,14 +235,20 @@ export const askDoubt = async (req, res, next) => {
     const tutor = await Tutor.findById(tutorId);
     const tutorEmail = tutor.email;
 
-    const response = await axios.post("http://localhost:6000/api/ask-doubt", {
+    const task = {
       tutor_email: tutorEmail,
       course_name: course.name,
       student_name: user.name,
       student_email: user.email,
       doubt,
-    });
-    //console.log(response.data);
+    };
+
+    const redisClient = getRedisClient();
+    const result = await redisClient.lPush(
+      "studentDoubt",
+      JSON.stringify(task)
+    );
+    //console.log(result);
 
     sendCookie(user, res, `Doubt was sent successfully`, 200);
   } catch (error) {

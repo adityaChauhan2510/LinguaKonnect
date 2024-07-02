@@ -29,6 +29,7 @@ export default function TutorLogin() {
       navigate("/tutorhome");
     } catch (error) {
       toast.error(error.response?.data?.message || "An error occurred");
+      console.log(error);
     } finally {
       setLoading(false);
     }

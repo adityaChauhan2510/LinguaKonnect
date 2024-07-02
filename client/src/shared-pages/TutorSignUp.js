@@ -28,12 +28,13 @@ export default function SignUp() {
 
       const { token } = response.data;
       sessionStorage.setItem("token", token);
+      navigate("/tutorhome");
       toast.success(response.data.message);
     } catch (error) {
-      toast.error(error.response.data.message);
+      toast.error(error.response?.data?.message || "An error occurred");
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
-    navigate("/tutorhome");
   };
 
   return (

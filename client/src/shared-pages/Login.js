@@ -30,6 +30,7 @@ export default function Login() {
       navigate("/studenthome");
     } catch (error) {
       toast.error(error.response?.data?.message || "An error occurred");
+      console.log(error);
     } finally {
       setLoading(false);
     }

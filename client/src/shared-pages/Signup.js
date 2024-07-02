@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import toast, { Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
 import { useNavigate, Link, Navigate } from "react-router-dom";
 import axios from "axios";
 import Loading from "../student/components/Loading";
@@ -28,11 +28,13 @@ export default function SignUp() {
       const { token } = response.data;
       sessionStorage.setItem("token", token);
       toast.success(response.data.message);
+      navigate("/studenthome");
     } catch (error) {
-      toast.error(error.response.data.message);
+      toast.error(error.response?.data?.message || "An error occurred");
+      console.log(error);
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
-    navigate("/studenthome");
   };
 
   if (loading) return <Loading />;
@@ -112,7 +114,6 @@ export default function SignUp() {
           .
         </button>
       </footer>
-      <Toaster />
     </div>
   );
 }
