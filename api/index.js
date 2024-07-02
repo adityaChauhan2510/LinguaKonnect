@@ -1,5 +1,5 @@
 import { app } from "./app.js";
-import { connectDB, connectRedis } from "./data/database.js";
+import { connectDB, connectRedis } from "./db/database.js";
 
 const connectOnce = async (connectFunction, name) => {
   try {

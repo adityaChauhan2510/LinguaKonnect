@@ -151,7 +151,7 @@ export default function CourseDetails() {
     <>
       <Navbar />
       {course && (
-        <div className="mx-10">
+        <div className="mx-2">
           <h1 className="text-2xl sm:text-3xl tracking-wide md:text-4xl font-bold mx-10 my-10">
             {`Welcome to ${course.name}`}
           </h1>

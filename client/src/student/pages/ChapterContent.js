@@ -110,6 +110,8 @@ export default function ChapterContent() {
               </div>
             </div>
 
+            <div className="h-[3rem]"></div>
+
             {/* DISPLAY ALL PDFS */}
             {unit.pdf_urls && unit.pdf_urls.length > 0 && (
               <PDFCard unit={unit} handlePdfDownload={handlePdfDownload} />

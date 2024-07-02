@@ -45,7 +45,7 @@ export default function CourseDashboard() {
       {course && (
         <>
           <div className="mx-5 overflow-y-auto">
-            <h1 className="font-bold text-2xl tracking-wider py-5">
+            <h1 className="font-bold text-3xl tracking-wider py-5">
               Course Home
             </h1>
 

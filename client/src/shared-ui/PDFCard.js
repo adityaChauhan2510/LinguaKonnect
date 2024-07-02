@@ -3,7 +3,9 @@ import React from "react";
 export default function PDFCard({ unit, handlePdfDownload }) {
   return (
     <div className="my-10">
-      <h2 className="font-bold text-xl tracking-wider py-3">Resources</h2>
+      <h2 className="font-bold text-2xl tracking-wider py-3 text-center border-b-[1.5px]">
+        Resources
+      </h2>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 py-5">
         {unit.pdf_urls.map((pdf_url, index) => (
           <div

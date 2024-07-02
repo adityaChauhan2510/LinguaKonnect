@@ -10,9 +10,6 @@ export default function CourseDetails({ course }) {
       <p className="m-2 text-md font-semibold">
         Ratings: <span className="font-semibold">{course.rating}</span>
       </p>
-      <p className="m-2 text-md font-semibold">
-        Price: <span className="font-semibold">{course.pricing}</span>
-      </p>
 
       {course.time_durations && course.time_durations.length > 0 && (
         <>

@@ -2,7 +2,7 @@ import { Course } from "../model/course.js";
 import { User } from "../model/user.js";
 import { Tutor } from "../model/tutor.js";
 import { sendCookie } from "../utils/feature.js";
-import { getRedisClient } from "../data/database.js";
+import { getRedisClient } from "../db/database.js";
 import ErrorHandler from "../middleware/error.js";
 import axios from "axios";
 
