@@ -21,6 +21,9 @@ import Login from "./shared-pages/Login.js";
 import SignUp from "./shared-pages/Signup.js";
 import TutorLogin from "./shared-pages/TutorLogin.js";
 import TutorSignUp from "./shared-pages/TutorSignUp.js";
+import LiveClass from "./tutor/pages/LiveClass.js";
+import JoinLiveClass from "./student/pages/JoinLiveClass.js";
+
 export default function App() {
   return (
     <BrowserRouter>
@@ -36,6 +39,7 @@ export default function App() {
         <Route path="tutorcourse/:id" element={<TutorCourseDetails />}>
           <Route path="" element={<CourseHome />} />
           <Route path="new" element={<UploadNewChapter />} />
+          <Route path="live-class" element={<LiveClass />} />
           <Route path=":chapter" element={<ChapterPage />} />
         </Route>
 
@@ -44,6 +48,7 @@ export default function App() {
         <Route path="course/:id" element={<CourseDetails />} />
         <Route path="purchased/:id" element={<CoursePage />}>
           <Route path="" element={<CourseDashboard />} />
+          <Route path="join-live-class" element={<JoinLiveClass />} />
           <Route path=":chapter" element={<ChapterContent />} />
         </Route>
       </Routes>

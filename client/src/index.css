@@ -134,3 +134,39 @@ body {
   cursor: pointer;
   text-transform: capitalize;
 }
+
+.no-cursor {
+  cursor: none !important;
+}
+
+/* LIVE_CLASS */
+.video-contain video {
+  object-fit: contain;
+  overflow: hidden;
+}
+
+.video-contain video {
+  object-fit: contain;
+  overflow: hidden;
+}
+textarea:focus {
+  outline: none;
+  border-color: none;
+  box-shadow: none;
+}
+
+input:focus-visible {
+  outline: none;
+  border-color: none;
+  box-shadow: none;
+}
+
+.video-cover video {
+  position: absolute;
+  object-fit: cover;
+}
+
+input[type="radio"]:checked + label span {
+  background-color: #fff;
+  box-shadow: 0px 0px 0px 2px black inset;
+}

@@ -5,6 +5,7 @@ import {
   register,
   myCourses,
   getProfile,
+  getMyProfile,
 } from "../controller/tutor.js";
 import { isAuthenticated } from "../middleware/auth.js";
 
@@ -14,5 +15,6 @@ router.post("/new", register);
 router.post("/login", login);
 router.get("/logout", logout);
 router.get("/tutorcourses", isAuthenticated, myCourses);
+router.get("/me", isAuthenticated, getMyProfile);
 router.get("/:id", getProfile);
 export default router;
