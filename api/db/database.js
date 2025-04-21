@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
-import { createClient } from "redis";
+import pkg from "redis";
+const { createClient } = pkg;
 
 let redisClient;
 
