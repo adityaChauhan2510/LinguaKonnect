@@ -7,12 +7,14 @@ import {
   logout,
   register,
   getEnrolledCourses,
+  verifyOTP,
 } from "../controller/user.js";
 import { isAuthenticated } from "../middleware/auth.js";
 
 const router = express.Router();
 
 router.post("/new", register);
+router.post("/verify", verifyOTP);
 router.post("/login", login);
 router.get("/logout", logout);
 

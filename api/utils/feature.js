@@ -1,7 +1,14 @@
 import jwt from "jsonwebtoken";
 
-export const sendCookie = (person, res, message, statusCode = 200) => {
+export const sendCookie = (
+  person,
+  res,
+  message,
+  statusCode = 200,
+  extraData = {}
+) => {
   const token = jwt.sign({ _id: person._id }, process.env.JWT_SECRET);
+
   res
     .status(statusCode)
     .cookie("token", token, {
@@ -13,5 +20,7 @@ export const sendCookie = (person, res, message, statusCode = 200) => {
     .json({
       success: true,
       message,
+      token,
+      ...extraData, // Include any extra data such as role
     });
 };

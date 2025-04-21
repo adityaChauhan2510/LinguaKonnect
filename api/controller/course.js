@@ -2,9 +2,9 @@ import { Course } from "../model/course.js";
 import { User } from "../model/user.js";
 import { Tutor } from "../model/tutor.js";
 import { sendCookie } from "../utils/feature.js";
-import { getRedisClient } from "../db/database.js";
 import ErrorHandler from "../middleware/error.js";
-import axios from "axios";
+import { processDoubt, processEnrollment } from "../utils/email.js";
+import { Quiz } from "../model/quiz.js";
 
 export const addCourse = async (req, res, next) => {
   try {
@@ -151,7 +151,6 @@ export const deleteComment = async (req, res, next) => {
 export const updateDescription = async (req, res, next) => {
   try {
     const { description, id } = req.body;
-    console.log(id);
 
     const course = await Course.findByIdAndUpdate(
       id,
@@ -198,24 +197,14 @@ export const enrollCourse = async (req, res, next) => {
 
     const tutorId = course.tutor_id;
     const tutor = await Tutor.findById(tutorId);
-    const tutorEmail = tutor.email;
 
-    const task = {
-      tutor_email: tutorEmail,
-      course_name: course.name,
-      student_name: user.name,
-    };
-
-    const redisClient = getRedisClient();
-    await redisClient.lPush("courseEnrollment", JSON.stringify(task));
-    // console.log(result);
-
-    // const response = await axios.post("http://localhost:6000/api/purchase", {
-    //   tutor_email: tutorEmail,
-    //   course_name: course.name,
-    //   student_name: user.name,
-    // });
-    //console.log(response.data);
+    try {
+      await processEnrollment(tutor.email, course.name, user.name);
+    } catch (err) {
+      return next(
+        new ErrorHandler("Failed to purchase course. Try again later.", 500)
+      );
+    }
 
     sendCookie(user, res, `Course enrolled successfully...Start learning`, 200);
   } catch (error) {
@@ -223,6 +212,7 @@ export const enrollCourse = async (req, res, next) => {
   }
 };
 
+//ask doubt before purchasing via mail
 export const askDoubt = async (req, res, next) => {
   try {
     const { course_id, doubt } = req.body;
@@ -233,22 +223,20 @@ export const askDoubt = async (req, res, next) => {
 
     const tutorId = course.tutor_id;
     const tutor = await Tutor.findById(tutorId);
-    const tutorEmail = tutor.email;
 
-    const task = {
-      tutor_email: tutorEmail,
-      course_name: course.name,
-      student_name: user.name,
-      student_email: user.email,
-      doubt,
-    };
-
-    const redisClient = getRedisClient();
-    const result = await redisClient.lPush(
-      "studentDoubt",
-      JSON.stringify(task)
-    );
-    //console.log(result);
+    try {
+      await processDoubt(
+        tutor.email,
+        course.name,
+        user.name,
+        user.email,
+        doubt
+      );
+    } catch (err) {
+      return next(
+        new ErrorHandler("Failed to send doubt. Try again later.", 500)
+      );
+    }
 
     sendCookie(user, res, `Doubt was sent successfully`, 200);
   } catch (error) {
@@ -302,8 +290,6 @@ export const addRating = async (req, res, next) => {
       { $set: { rating: nrating } },
       { new: true }
     );
-
-    console.log(updatedCourse.rating);
 
     res.status(200).json({
       success: true,
@@ -397,5 +383,250 @@ export const deleteCourse = async (req, res, next) => {
     res.status(200).json({ message: "Course deleted successfully" });
   } catch (error) {
     next(error);
+  }
+};
+
+//create a quiz for a course by tutor.
+export const createQuiz = async (req, res, next) => {
+  try {
+    const { title, description, type, questions } = req.body;
+    const { id } = req.params; //course ID
+
+    // Validate input
+    if (!title || !type || !questions || questions.length === 0 || !id) {
+      return next(new ErrorHandler("All fields are required!", 400));
+    }
+
+    // Check if course exists
+    const course = await Course.findById(id);
+    if (!course) {
+      return next(new ErrorHandler("Course not found!", 404));
+    }
+
+    // Create the quiz
+    const quiz = {
+      title,
+      description,
+      type,
+      questions,
+      participated: 0,
+      flawless: 0,
+      createdAt: new Date(),
+      participants: [],
+    };
+
+    // Add the quiz to the course
+    course.quizzes.push(quiz);
+    course.quizCurated += 1; // Increment the quiz count
+    await course.save();
+
+    res.status(200).json({
+      success: true,
+      message: "Quiz created successfully!",
+      result: quiz,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+//quiz analytics for each quiz.
+export const getQuizAnalytics = async (req, res) => {
+  const { id, quizId } = req.params; // id = Course ID, quizId = Quiz ID
+  try {
+    const course = await Course.findById(id);
+    if (!course) {
+      return res.status(404).json({ message: "Course not found" });
+    }
+    const quiz = course.quizzes.find((q) => q._id.toString() === quizId);
+    if (!quiz) {
+      return res.status(404).json({ message: "Quiz not found" });
+    }
+
+    const participantsWithNames = await Promise.all(
+      quiz.participants.map(async (participant) => {
+        const user = await User.findById(participant.userId).select("name");
+        return {
+          name: user ? user.name : "Unknown User",
+          score: participant.score,
+          attemptedAt: participant.attemptedAt,
+        };
+      })
+    );
+
+    const analyticsData = {
+      title: quiz.title,
+      description: quiz.description,
+      totalParticipants: quiz.participants.length,
+      questions: quiz.questions,
+      participants: participantsWithNames,
+    };
+
+    res.status(200).json(analyticsData);
+  } catch (error) {
+    console.error("Error fetching quiz analytics:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+export const submitQuiz = async (req, res, next) => {
+  try {
+    const { quizId } = req.params;
+    const { id, userID, responses } = req.body; // responses is an array of selected options
+
+    const user = await User.findById(userID);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    const course = await Course.findById(id);
+    if (!course) {
+      return res.status(404).json({ message: "Course not found" });
+    }
+
+    const quiz = course.quizzes.find((q) => q._id.toString() === quizId);
+    if (!quiz) {
+      return res.status(404).json({ message: "Quiz not found" });
+    }
+
+    //**Compute Score & Process Responses**
+    let score = 0;
+    const processedResponses = quiz.questions.map((question, index) => {
+      const selectedOption = responses[index]; // Map response to the question using index
+      const isCorrect = selectedOption === question.answer;
+
+      if (isCorrect) score += 1;
+
+      return {
+        questionId: question.id,
+        selectedOption,
+        isCorrect,
+      };
+    });
+
+    // **Update User Schema (attemptedQuizzes)**
+    user.attemptedQuizzes.push({
+      quizId,
+      score,
+      responses: processedResponses,
+      attemptedAt: new Date(),
+    });
+
+    //**Update Quiz Schema (participants)**
+    quiz.participants.push({
+      userId: user._id,
+      score,
+      responses: processedResponses,
+      attemptedAt: new Date(),
+    });
+
+    quiz.participated += 1;
+    if (score === quiz.questions.length) {
+      quiz.flawless += 1;
+    }
+
+    await user.save();
+    await course.save();
+
+    res.status(200).json({ message: "Quiz submitted successfully", score });
+  } catch (error) {
+    console.error("Error submitting quiz:", error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+};
+
+export const getQuizAnswers = async (req, res) => {
+  try {
+    const { quizId } = req.params;
+    const { userID, id } = req.body;
+
+    const course = await Course.findById(id);
+    if (!course) {
+      return res.status(404).json({ message: "Course not found" });
+    }
+
+    const quiz = course.quizzes.find((q) => q._id.toString() === quizId);
+    if (!quiz) {
+      return res.status(404).json({ message: "Quiz not found" });
+    }
+
+    const user = await User.findById(userID).select("attemptedQuizzes");
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    const userAttempt = user.attemptedQuizzes.find(
+      (attempt) => attempt.quizId.toString() === quizId
+    );
+
+    if (!userAttempt) {
+      return res
+        .status(404)
+        .json({ message: "No attempt found for this quiz" });
+    }
+
+    //Prepare the response with questions, options, correct answers, and user answers
+    const response = {
+      quizDetails: {
+        _id: quiz._id,
+        title: quiz.title,
+        questions: quiz.questions.map((q) => ({
+          id: q.id,
+          title: q.title,
+          options: q.options,
+          answer: q.answer, // Correct answer
+        })),
+      },
+      userResponses: userAttempt.responses,
+      userScore: userAttempt.score,
+    };
+
+    return res.status(200).json(response);
+  } catch (error) {
+    console.error("Error fetching quiz answers:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+export const attemptedQuizzes = async (req, res) => {
+  try {
+    const { userID } = req.params;
+
+    // Find user by studentID and get attempted quizzes
+    const user = await User.findById(userID).select("attemptedQuizzes");
+
+    if (!user) {
+      return res
+        .status(404)
+        .json({ success: false, message: "User not found" });
+    }
+
+    // Extract quiz IDs from attemptedQuizzes
+    const attemptedQuizIds = user.attemptedQuizzes.map((quiz) => quiz.quizId);
+
+    res.status(200).json({ success: true, attemptedQuizIds });
+  } catch (error) {
+    console.error("Error fetching attempted quizzes:", error);
+    res.status(500).json({ success: false, message: "Server error" });
+  }
+};
+
+export const deleteQuiz = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const course = await Course.findById(id);
+    if (!course) {
+      return res.status(404).json({ message: "Course not found" });
+    }
+
+    course.quizzes = [];
+    await course.save();
+    await User.updateMany({}, { $set: { attemptedQuizzes: [] } });
+    return res
+      .status(200)
+      .json({ message: "Quiz deleted and all attempts cleared" });
+  } catch (error) {
+    console.error("Error deleting quiz:", error);
+    return res.status(500).json({ message: "Internal server error" });
   }
 };

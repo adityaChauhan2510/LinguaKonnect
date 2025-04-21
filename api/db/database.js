@@ -19,10 +19,10 @@ export const connectDB = async () => {
 export const connectRedis = async () => {
   if (!redisClient) {
     redisClient = createClient({
-      password: process.env.REDIS_PASSWORD,
+      //password: process.env.REDIS_PASSWORD,
       socket: {
-        host: process.env.REDIS_HOSTNAME,
-        port: process.env.REDIS_PORT,
+        host: process.env.REDIS_HOSTNAME || "localhost",
+        port: process.env.REDIS_PORT ? Number(process.env.REDIS_PORT) : 6379,
       },
     });
 

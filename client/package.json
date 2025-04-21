@@ -23,6 +23,7 @@
     "date-fns": "^3.6.0",
     "dotenv": "^16.4.5",
     "formik": "^2.4.6",
+    "framer-motion": "^12.4.12",
     "hls.js": "^1.5.13",
     "lottie-react": "^2.4.0",
     "postcss-flexbugs-fixes": "^5.0.2",

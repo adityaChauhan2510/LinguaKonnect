@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import axios from "axios";
-import toast, { Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
 
 export default function CourseDescription({ value, id }) {
   const [description, setDescription] = useState(value);
@@ -46,6 +46,9 @@ export default function CourseDescription({ value, id }) {
   return (
     <>
       <div>
+        <h1 className="font-bold text-2xl text-center tracking-wider py-6 uppercase text-gray-800 drop-shadow-lg">
+          Course Description
+        </h1>
         <TextField
           fullWidth
           multiline

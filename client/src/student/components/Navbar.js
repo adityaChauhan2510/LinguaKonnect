@@ -26,8 +26,8 @@ const Navbar = () => {
   };
 
   return (
-    <div className="bg-black flex justify-between items-center h-24 mx-auto px-4 text-white">
-      <h1 className="text-4xl font-bold p-2 text-[#00df9a] mx-5">
+    <div className="bg-black flex justify-between items-center h-24 mx-auto px-5 text-white">
+      <h1 className="text-4xl font-bold p-2 text-[#00df9a] px-5">
         LinguaKonnect
       </h1>
 

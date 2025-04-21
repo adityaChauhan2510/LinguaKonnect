@@ -8,12 +8,15 @@ export default function RotatingLineLoader() {
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
+        height: "100vh",
+        width: "100vw",
       }}
     >
       <RotatingLines
         visible={true}
         height="80"
         width="80"
+        strokeColor="black"
         ariaLabel="dna-loading"
         wrapperStyle={{}}
         wrapperClass="dna-wrapper"

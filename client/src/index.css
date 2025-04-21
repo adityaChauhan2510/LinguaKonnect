@@ -91,55 +91,7 @@ code {
   right: 0;
 }
 
-/***    Login Page     ***/
-
-h2 {
-  font-weight: 300;
-}
-
-.login-form {
-  display: inline-block;
-  background: #f3f3f3;
-  border: 1px solid #ddd;
-  border-radius: 2px;
-  padding: 2rem;
-  margin: 2rem 0 1rem 0;
-}
-
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-  font-family: "Roboto", sans-serif;
-}
-
-body {
-  margin: 0 auto;
-}
-
-.m-5-auto {
-  margin: 5rem auto;
-}
-
-.primary-button {
-  margin-top: 5rem;
-  margin-right: 1rem;
-  padding: 0.6rem;
-  width: 10rem;
-  background: #222;
-  border: none;
-  color: #fff;
-  font-size: 1.2rem;
-  transition: all 0.5s;
-  cursor: pointer;
-  text-transform: capitalize;
-}
-
-.no-cursor {
-  cursor: none !important;
-}
-
-/* LIVE_CLASS */
+/***** LIVE_CLASS ******/
 .video-contain video {
   object-fit: contain;
   overflow: hidden;

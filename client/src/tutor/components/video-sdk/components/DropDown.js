@@ -153,7 +153,7 @@ export default function DropDown({
   };
 
   const stopRecording = () => {
-    if (mediaRecorder.current.state != "inactive") {
+    if (mediaRecorder.current.state !== "inactive") {
       setRecordingProgress(0);
       setRecordingStatus("stopped recording");
       clearInterval(intervalRef.current);
@@ -185,7 +185,7 @@ export default function DropDown({
               onClick={() => {
                 if (
                   mediaRecorder.current != null &&
-                  mediaRecorder.current.state == "recording"
+                  mediaRecorder.current.state === "recording"
                 ) {
                   stopRecording();
                 }
@@ -246,7 +246,8 @@ export default function DropDown({
                                     changeMic(item?.deviceId);
                                     if (
                                       mediaRecorder.current != null &&
-                                      mediaRecorder.current.state == "recording"
+                                      mediaRecorder.current.state ===
+                                        "recording"
                                     ) {
                                       stopRecording();
                                     }
@@ -280,7 +281,7 @@ export default function DropDown({
                               ></div>
                             </div>
 
-                            {recordingStatus == "inactive" && (
+                            {recordingStatus === "inactive" && (
                               <button
                                 className="w-16 h-7 text-xs rounded ml-5 bg-gray-450"
                                 onClick={startRecording}
@@ -289,7 +290,7 @@ export default function DropDown({
                               </button>
                             )}
 
-                            {recordingStatus == "stopped recording" && (
+                            {recordingStatus === "stopped recording" && (
                               <button
                                 className="w-16 h-7 text-xs rounded ml-5 bg-gray-450"
                                 onClick={handlePlaying}
@@ -298,7 +299,7 @@ export default function DropDown({
                               </button>
                             )}
 
-                            {recordingStatus == "recording" && (
+                            {recordingStatus === "recording" && (
                               <button
                                 className="w-16 h-7 text-xs rounded ml-5 bg-gray-450 relative z-0"
                                 onClick={stopRecording}
@@ -312,7 +313,7 @@ export default function DropDown({
                               </button>
                             )}
 
-                            {recordingStatus == "playing" && (
+                            {recordingStatus === "playing" && (
                               <button
                                 className="w-16 h-7 text-xs rounded ml-5 bg-gray-450 relative z-0"
                                 onClick={handlePlaying}

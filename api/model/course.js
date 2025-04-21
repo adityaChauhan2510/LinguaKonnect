@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import { unitSchema } from "./unit.js";
+import { quizSchema } from "./quiz.js";
 
 const schema = new mongoose.Schema({
   name: {
@@ -14,6 +15,9 @@ const schema = new mongoose.Schema({
   description: {
     type: String,
   },
+  image: {
+    type: String,
+  },
 
   tutor_id: {
     type: mongoose.Schema.Types.ObjectId,
@@ -25,10 +29,30 @@ const schema = new mongoose.Schema({
     type: Number,
     default: 0,
   },
+
   pricing: {
     type: Number,
     required: true,
   },
+
+  rating: {
+    type: Number,
+    default: 0,
+  },
+
+  quizCurated: {
+    type: Number,
+    default: 0,
+  },
+  quizAttended: {
+    type: Number,
+    default: 0,
+  },
+  quizFlawless: {
+    type: Number,
+    default: 0,
+  },
+
   time_durations: [
     {
       duration: {
@@ -45,10 +69,7 @@ const schema = new mongoose.Schema({
       },
     },
   ],
-  rating: {
-    type: Number,
-    default: 0,
-  },
+
   reviews: [
     {
       user_name: {
@@ -60,11 +81,13 @@ const schema = new mongoose.Schema({
     },
   ],
 
-  image: {
-    type: String,
-  },
-
   units: [unitSchema],
+  quizzes: [quizSchema],
+
+  createdAt: {
+    type: Date,
+    default: Date.now,
+  },
 });
 
 export const Course = mongoose.model("Course", schema);

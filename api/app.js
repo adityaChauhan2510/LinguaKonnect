@@ -6,6 +6,7 @@ import cors from "cors";
 import userRouter from "./route/user.js";
 import tutorRouter from "./route/tutor.js";
 import courseRouter from "./route/course.js";
+
 export const app = express();
 
 dotenv.config();
@@ -13,6 +14,7 @@ dotenv.config();
 // Using Middlewares
 app.use(express.json());
 app.use(cookieParser());
+
 app.use(
   cors({
     credentials: true,

@@ -10,8 +10,10 @@ export default function Experience({ experience, setExperience }) {
   };
 
   return (
-    <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
-      <InputLabel id="demo-select-small-label">Experience</InputLabel>
+    <FormControl sx={{ ml: 3, minWidth: 120 }} size="small">
+      <InputLabel id="demo-select-small-label" sx={{ fontSize: "0.95rem" }}>
+        Experience
+      </InputLabel>
       <Select
         labelId="demo-select-small-label"
         id="demo-select-small"
@@ -22,9 +24,9 @@ export default function Experience({ experience, setExperience }) {
         <MenuItem value="">
           <em>None</em>
         </MenuItem>
-        <MenuItem value={1}>1 year</MenuItem>
-        <MenuItem value={3}>3 years</MenuItem>
-        <MenuItem value={15}>{">"}5 years</MenuItem>
+        <MenuItem value={1}>{"<"} 1 year</MenuItem>
+        <MenuItem value={3}>{"<"} 3 years</MenuItem>
+        <MenuItem value={15}>{">"} 5 years</MenuItem>
       </Select>
     </FormControl>
   );

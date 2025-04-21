@@ -13,7 +13,7 @@ export default function Review({ reviews }) {
     <div className="">
       {reviews && reviews.length > 0 && (
         <>
-          <h1 className="font-bold text-2xl tracking-wider py-5">
+          <h1 className="font-bold text-2xl tracking-wider py-6 uppercase text-gray-800 drop-shadow-lg">
             What Other's say..
           </h1>
           <List

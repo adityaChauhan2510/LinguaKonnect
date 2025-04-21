@@ -27,6 +27,42 @@ const schema = new mongoose.Schema({
       },
     },
   ],
+  attemptedQuizzes: [
+    {
+      quizId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Quiz",
+      },
+      score: {
+        type: Number,
+        required: true,
+      },
+      attemptedAt: {
+        type: Date,
+        default: Date.now,
+      },
+      responses: [
+        {
+          questionId: {
+            type: Number,
+            required: true,
+          },
+          selectedOption: {
+            type: Number,
+            required: true,
+          },
+          isCorrect: {
+            type: Boolean,
+            required: true,
+          },
+        },
+      ],
+    },
+  ],
+  createdAt: {
+    type: Date,
+    default: Date.now,
+  },
 });
 
 export const User = mongoose.model("User", schema);

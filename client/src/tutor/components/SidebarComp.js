@@ -1,11 +1,15 @@
-import React, { useState } from "react";
+import React from "react";
 import { Sidebar, Menu, MenuItem } from "react-pro-sidebar";
 import { Link } from "react-router-dom";
-import { FaUpload, FaVideo, FaBroadcastTower, FaEdit } from "react-icons/fa"; // Import icons from react-icons
+import {
+  FaUpload,
+  FaVideo,
+  FaBroadcastTower,
+  FaEdit,
+  FaClipboardList,
+} from "react-icons/fa";
 
-export default function SidebarComp({ id, course }) {
-  const [selected, setSelected] = useState(null);
-
+export default function SidebarComp({ course, selected, setSelected }) {
   const handleSelect = (index) => {
     setSelected(index);
   };
@@ -13,21 +17,22 @@ export default function SidebarComp({ id, course }) {
   return (
     <>
       {course && course.units && (
-        <Sidebar className="m-5 text-black font-md flex-col hidden md:flex md:w-[15%] overflow-y-auto bg-gray-100">
+        <Sidebar className="text-black flex-col hidden md:flex md:w-[15%] overflow-y-auto bg-gradient-to-b from-gray-300 to-gray-400">
           <div className="flex flex-col justify-between h-full">
-            <div>
+            <div className="flex flex-col">
               <Menu>
                 {course.units.map((unit, index) => (
                   <MenuItem
                     key={index}
                     component={<Link to={`${index + 1}`} />}
                     icon={<FaVideo />}
-                    className={`font-semibold tracking-wide py-3 ${
+                    className={`font-semibold tracking-wide rounded-lg py-3 transition-all duration-30 ${
                       selected === index
-                        ? "bg-gray-200 cursor-default"
-                        : "cursor-pointer"
+                        ? "bg-gray-400 shadow-md !cursor-default"
+                        : "cursor-pointer hover:bg-gray-100"
                     }`}
                     onClick={() => handleSelect(index)}
+                    style={selected === index ? { pointerEvents: "none" } : {}}
                   >
                     {unit.name}
                   </MenuItem>
@@ -37,31 +42,56 @@ export default function SidebarComp({ id, course }) {
 
             <div className="my-[2.5rem]">
               <Menu>
+                {/* Quizzes Menu Item */}
+                <MenuItem
+                  component={<Link to="create-quiz" />}
+                  icon={<FaClipboardList />}
+                  className={`font-semibold tracking-wide rounded-lg py-3 transition-all duration-300 ${
+                    selected === "create-quiz"
+                      ? "bg-gray-400 shadow-md !cursor-default"
+                      : "cursor-pointer hover:bg-gray-100"
+                  }`}
+                  onClick={() => handleSelect("create-quiz")}
+                  style={
+                    selected === "create-quiz" ? { pointerEvents: "none" } : {}
+                  }
+                >
+                  Create Quiz
+                </MenuItem>
+
+                {/* Join Live Class */}
                 <MenuItem
                   component={<Link to="live-class" />}
                   icon={<FaBroadcastTower />}
-                  className={`font-semibold tracking-wide py-3 ${
+                  className={`font-semibold tracking-wide rounded-lg py-3 ${
                     selected === "live-class"
-                      ? "bg-gray-200 cursor-default"
-                      : "cursor-pointer"
+                      ? "bg-gray-400 shadow-md !cursor-default"
+                      : "cursor-pointer hover:bg-gray-100"
                   }`}
+                  style={
+                    selected === "live-class" ? { pointerEvents: "none" } : {}
+                  }
                   onClick={() => handleSelect("live-class")}
                 >
                   Start Live Class
                 </MenuItem>
+
+                {/* Add new unit */}
                 <MenuItem
                   component={<Link to="new" />}
                   icon={<FaUpload />}
-                  className={`font-semibold tracking-wide py-3 ${
+                  className={`font-semibold tracking-wide rounded-lg py-3 ${
                     selected === "new"
-                      ? "bg-gray-200 cursor-default"
-                      : "cursor-pointer"
+                      ? "bg-gray-400 shadow-md !cursor-default"
+                      : "cursor-pointer hover:bg-gray-100"
                   }`}
+                  style={selected === "new" ? { pointerEvents: "none" } : {}}
                   onClick={() => handleSelect("new")}
                 >
                   Add Unit
                 </MenuItem>
-                <MenuItem
+
+                {/* <MenuItem
                   component={<Link to="update" />}
                   icon={<FaEdit />}
                   className={`font-semibold tracking-wide py-3 ${
@@ -72,7 +102,7 @@ export default function SidebarComp({ id, course }) {
                   onClick={() => handleSelect("update")}
                 >
                   Update
-                </MenuItem>
+                </MenuItem> */}
               </Menu>
             </div>
           </div>

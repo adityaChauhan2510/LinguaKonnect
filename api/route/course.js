@@ -14,6 +14,12 @@ import {
   addPDF,
   addComment,
   deleteComment,
+  createQuiz,
+  getQuizAnalytics,
+  submitQuiz,
+  getQuizAnswers,
+  attemptedQuizzes,
+  deleteQuiz,
 } from "../controller/course.js";
 import { isAuthenticated } from "../middleware/auth.js";
 import { upload } from "../middleware/multer.middleware.js";
@@ -36,5 +42,13 @@ router.get("/getAll", getAllCourse);
 router.post("/checkEnroll", checkEnroll);
 router.get("/:id", getCourseData); // user will enroll
 router.delete("/:id", deleteCourse);
+
+router.post("/create-quiz/:id", isAuthenticated, createQuiz);
+router.get("/quiz-analytics/:id/:quizId", isAuthenticated, getQuizAnalytics);
+
+router.get("/attempted-quizzes/:userID", isAuthenticated, attemptedQuizzes);
+router.post("/submit-quiz/:quizId", isAuthenticated, submitQuiz);
+router.post("/answers/:quizId", isAuthenticated, getQuizAnswers);
+router.delete("/quizzes/delete/:id", isAuthenticated, deleteQuiz);
 
 export default router;
